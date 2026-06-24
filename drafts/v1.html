@@ -1,0 +1,858 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Ethan Tse — A Digital Garden</title>
+<meta name="description" content="The digital garden of Ethan Tse — a place to muse on strategy, operations, business development, and innovation." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+<style>
+/* ============================================================
+   A DIGITAL GARDEN — Ethan Tse
+   Grounded "herbarium" identity: cool botanical paper, deep
+   green-black ink, moss + a single clay spark. Organic serif
+   (Young Serif) against a clean humanist sans (Hanken Grotesk).
+   All copy below is editable.
+   ============================================================ */
+
+:root{
+  /* surfaces — cool herbarium paper, tinted toward the brand green (not warm-cream) */
+  --ground:   oklch(0.930 0.012 140);
+  --ground-2: oklch(0.900 0.014 140);
+  --surface:  oklch(0.965 0.009 140);
+  /* ink — deep green-black */
+  --ink:   oklch(0.250 0.014 150);
+  --ink-2: oklch(0.420 0.013 150);   /* body secondary — ~6:1 on ground */
+  --ink-3: oklch(0.495 0.013 150);   /* tertiary — still ≥4.5:1 on ground */
+  /* botanical accents */
+  --moss:      oklch(0.520 0.072 150);
+  --moss-deep: oklch(0.410 0.066 150); /* link / interactive text — high contrast */
+  --clay:      oklch(0.600 0.110 50);  /* warm spark — large text + marks only */
+  --clay-deep: oklch(0.520 0.115 48);
+  /* hairlines */
+  --line:   oklch(0.250 0.014 150 / 0.14);
+  --line-2: oklch(0.250 0.014 150 / 0.24);
+  /* type */
+  --display:'Young Serif', Georgia, 'Times New Roman', serif;
+  --body:'Hanken Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  /* spacing scale */
+  --s1:.5rem; --s2:.75rem; --s3:1rem; --s4:1.5rem; --s5:2rem;
+  --s6:3rem; --s7:4.5rem; --s8:7rem; --s9:10rem;
+  /* shadows — green-tinted, layered, low opacity */
+  --shadow-soft:0 1px 2px oklch(0.25 0.02 150 / .05), 0 10px 26px -12px oklch(0.25 0.02 150 / .18);
+  --shadow-lift:0 1px 1px oklch(0.25 0.02 150 / .05), 0 22px 44px -22px oklch(0.41 0.066 150 / .30);
+  /* z-index scale (semantic, no arbitrary 9999) */
+  --z-base:1; --z-content:2; --z-sticky:10; --z-menu:50; --z-toggle:60; --z-intro:70; --z-skip:80;
+  --maxw:1240px;
+  --reader-w:40rem;
+  /* botanical leaf mark, used as a mask for decorative flourishes */
+  --leaf-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2C6.5 6.5 4.5 13.5 11.4 22 11.7 16 12 9 12 2Z' fill='black'/%3E%3Cpath d='M12 2C17.5 6.5 19.5 13.5 12.6 22 12.3 16 12 9 12 2Z' fill='black'/%3E%3C/svg%3E");
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth; -webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  font-family:var(--body);
+  color:var(--ink);
+  background-color:var(--ground);
+  /* faint botanical atmosphere — cool light, a breath of moss at the foot */
+  background-image:
+    radial-gradient(120% 80% at 82% -8%, oklch(0.975 0.01 140 / .8), transparent 60%),
+    radial-gradient(90% 60% at 0% 4%, oklch(0.60 0.11 50 / .05), transparent 55%),
+    radial-gradient(120% 90% at 50% 122%, oklch(0.52 0.072 150 / .12), transparent 60%);
+  background-attachment:fixed;
+  line-height:1.7;
+  font-size:17px;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+  overflow-x:hidden;
+}
+
+/* faint paper grain for depth */
+.grain{
+  position:fixed; inset:0; z-index:var(--z-base); pointer-events:none;
+  opacity:.04; mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+::selection{background:oklch(0.52 0.072 150 / .24); color:var(--ink)}
+a{color:var(--moss-deep); text-decoration:none}
+
+.skip-link{
+  position:fixed; left:var(--s3); top:-100px; z-index:var(--z-skip);
+  background:var(--ink); color:var(--ground); padding:.7rem 1.1rem;
+  border-radius:3px; font-size:.85rem; font-weight:600;
+  transition:top .2s ease;
+}
+.skip-link:focus{top:var(--s3)}
+:focus-visible{outline:2px solid var(--moss-deep); outline-offset:3px; border-radius:3px}
+/* active / pressed feedback */
+.toc-mark:active,.toc-link:active,.toc-sublink:active,.reader-back:active,.contact-lines a:active,.intro-skip:active{opacity:.6}
+.system:active,.entry:active{transform:scale(.995)}
+
+/* small botanical mark reused as the brand motif */
+.sprig{display:inline-block; width:1em; height:1em; vertical-align:-.12em; color:var(--moss)}
+
+/* ============================================================
+   INTRO — text resolves, then scatters on the wind like seed
+   ============================================================ */
+#intro{
+  position:fixed; inset:0; z-index:var(--z-intro);
+  background:var(--ground);
+  background-image:
+    radial-gradient(120% 90% at 50% 42%, oklch(0.975 0.01 140 / .7), transparent 65%),
+    radial-gradient(120% 90% at 50% 122%, oklch(0.52 0.072 150 / .12), transparent 60%);
+  display:flex; align-items:center; justify-content:center;
+  transition:opacity .6s ease;
+}
+#intro.done{opacity:0; pointer-events:none}
+#introCanvas{display:block; width:100%; height:100%}
+.intro-skip{
+  position:absolute; bottom:var(--s5); left:50%; transform:translateX(-50%);
+  font-size:.78rem; letter-spacing:.16em; text-transform:uppercase; font-weight:600;
+  color:var(--ink-3); background:none; border:0; cursor:pointer; padding:.6rem 1rem;
+  opacity:0; animation:skipFade 1s ease 2.2s forwards; transition:color .25s ease;
+}
+.intro-skip:hover{color:var(--moss-deep)}
+@keyframes skipFade{to{opacity:1}}
+.intro-fallback{
+  text-align:center; padding:var(--s4);
+  font-family:var(--display);
+  font-size:clamp(1.9rem,5.5vw,3.4rem); color:var(--ink);
+  letter-spacing:-.01em; line-height:1.25; max-width:18ch; text-wrap:balance;
+  opacity:0; animation:fbIn 1s ease forwards;
+}
+.intro-fallback span{color:var(--moss)}
+@keyframes fbIn{to{opacity:1}}
+
+/* ============================================================
+   APP SHELL + LAYOUT
+   ============================================================ */
+.app{position:relative; z-index:var(--z-content); opacity:0; transition:opacity .8s ease}
+.app.revealed{opacity:1}
+
+.layout{
+  max-width:var(--maxw); margin:0 auto; padding:0 var(--s6);
+  display:grid; grid-template-columns:minmax(220px,15.5rem) minmax(0,1fr); gap:var(--s8);
+}
+
+/* ---------- ToC — the garden's index ---------- */
+.toc{position:relative}
+.toc-inner{position:sticky; top:0; padding:var(--s8) 0 var(--s6)}
+.toc-brand{margin-bottom:var(--s7)}
+.toc-mark{
+  font-family:var(--display); font-size:1.55rem; letter-spacing:-.01em; line-height:1.05;
+  color:var(--ink); display:inline-flex; align-items:center; gap:.45rem;
+  background:none; border:0; padding:0; cursor:pointer; text-align:left;
+  transition:color .25s ease;
+}
+.toc-mark .sprig{width:.9em; height:.9em}
+.toc-mark:hover{color:var(--moss-deep)}
+.toc-tagline{font-size:.82rem; color:var(--ink-3); margin-top:.85rem; line-height:1.6; max-width:18ch}
+
+.toc-nav{position:relative; margin:0 0 var(--s6)}
+.toc-list{list-style:none; margin:0; padding:0}
+.toc-marker{
+  position:absolute; left:0; top:0; width:7px; height:7px; border-radius:50%;
+  background:var(--moss); opacity:0;
+  transition:transform .42s cubic-bezier(.16,1,.3,1), opacity .3s ease;
+}
+.toc-link{
+  display:flex; align-items:baseline; gap:.7rem; padding:.55rem 0 .55rem 1.3rem;
+  color:var(--ink-2); font-size:.98rem; font-weight:500;
+  border:0; background:none; width:100%; text-align:left; cursor:pointer;
+  font-family:var(--body); transition:color .25s ease, transform .25s ease;
+}
+.toc-link .ix{font-size:.7rem; color:var(--ink-3); font-variant-numeric:tabular-nums; min-width:1.4em; transition:color .25s ease; font-weight:600; letter-spacing:.02em}
+.toc-link:hover{color:var(--ink); transform:translateX(3px)}
+.toc-link:hover .ix{color:var(--clay-deep)}
+.toc-link.active{color:var(--moss-deep)}
+.toc-link.active .ix{color:var(--moss-deep)}
+.toc-sub{list-style:none; margin:.1rem 0 .5rem; padding:0; max-height:0; overflow:hidden; opacity:0; transition:max-height .42s ease, opacity .3s ease}
+.toc-item.open .toc-sub{max-height:16rem; opacity:1}
+.toc-sublink{
+  display:block; padding:.4rem 0 .4rem 2.6rem; color:var(--ink-3); font-size:.86rem;
+  cursor:pointer; background:none; border:0; text-align:left; width:100%; font-family:var(--body);
+  transition:color .22s ease, transform .22s ease; line-height:1.4;
+}
+.toc-sublink::before{content:""; position:absolute; margin-left:-1.1rem; margin-top:.55em; width:.55rem; height:1px; background:var(--line-2); transition:background .22s, width .22s}
+.toc-sublink:hover{color:var(--ink); transform:translateX(2px)}
+.toc-sublink:hover::before{background:var(--clay); width:.85rem}
+.toc-sublink.active{color:var(--moss-deep)}
+.toc-sublink.active::before{background:var(--moss); width:.9rem}
+.toc-foot{font-size:.78rem; color:var(--ink-3); line-height:1.85; letter-spacing:.01em}
+.toc-foot a{color:var(--ink-3); border-bottom:1px solid var(--line-2); padding-bottom:1px}
+.toc-foot a:hover{color:var(--moss-deep); border-color:var(--moss)}
+
+/* ---------- Content ---------- */
+.content{padding:var(--s8) 0 0; min-width:0}
+.section{padding:var(--s8) 0; border-top:1px solid var(--line)}
+.section:first-child{border-top:0}
+
+/* a small, optional named label — used sparingly, NOT on every section */
+.kicker{font-size:.74rem; letter-spacing:.16em; text-transform:uppercase; font-weight:600; color:var(--clay-deep); margin:0 0 var(--s3); display:inline-flex; align-items:center; gap:.5rem}
+
+h1,h2,h3,h4{font-family:var(--display); font-weight:400; color:var(--ink); margin:0; text-wrap:balance}
+.h-display{font-size:clamp(2.7rem,6vw,4.6rem); line-height:1.02; letter-spacing:-.018em}
+.h-section{font-size:clamp(2.1rem,4.3vw,3.2rem); line-height:1.06; letter-spacing:-.012em; margin-bottom:var(--s4)}
+
+p{margin:0 0 var(--s3); color:var(--ink-2); text-wrap:pretty}
+.lede{font-size:clamp(1.18rem,2vw,1.42rem); line-height:1.55; color:var(--ink); max-width:32ch; margin-bottom:var(--s6)}
+.prose{max-width:60ch}
+.prose p{margin-bottom:var(--s4)}
+
+/* North Star — full-width rule block, no side-stripe */
+.northstar{margin:var(--s6) 0; padding:var(--s5) 0; border-top:1px solid var(--line-2); border-bottom:1px solid var(--line-2)}
+.northstar .label{font-size:.74rem; letter-spacing:.16em; text-transform:uppercase; font-weight:600; color:var(--moss-deep); margin-bottom:.9rem; display:flex; align-items:center; gap:.5rem}
+.northstar .quote{font-family:var(--display); font-size:clamp(1.6rem,3.1vw,2.3rem); line-height:1.22; color:var(--ink); letter-spacing:-.01em; max-width:20ch; margin:0}
+.northstar .quote::before{content:"“"; color:var(--clay); margin-right:.04em}
+.northstar .quote::after{content:"”"; color:var(--clay)}
+
+/* Philosophy — open matrix, hairline grid (not cards) */
+.pillars{margin-top:var(--s6); display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--line)}
+.pillar{background:var(--ground); padding:var(--s5) var(--s5) var(--s5) 0; transition:background .3s ease}
+.pillar:nth-child(odd){padding-right:var(--s6)}
+.pillar:nth-child(even){padding-left:var(--s5)}
+.pillar:hover{background:var(--surface)}
+.pillar .pl{font-size:.74rem; letter-spacing:.16em; text-transform:uppercase; font-weight:600; color:var(--clay-deep); display:block; margin-bottom:.6rem}
+.pillar h3{font-size:1.5rem; letter-spacing:-.01em; margin-bottom:.5rem; line-height:1.1}
+.pillar p{font-size:.96rem; margin:0}
+
+/* ---------- 25 Learnings ---------- */
+.learn-head{display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:var(--s3)}
+.learn-note{font-size:.8rem; letter-spacing:.04em; color:var(--ink-3); font-weight:500}
+.learnings{margin-top:var(--s6); columns:2; column-gap:var(--s7); list-style:none; padding:0}
+.learning{break-inside:avoid; padding:var(--s3) 0; border-top:1px solid var(--line); display:flex; gap:1rem; align-items:baseline; transition:transform .25s ease}
+.learning:hover{transform:translateX(4px)}
+.learning .ln{font-family:var(--display); font-size:1.15rem; color:var(--clay-deep); font-variant-numeric:tabular-nums; min-width:1.9em; line-height:1.4}
+.learning:hover .ln{color:var(--moss-deep)}
+.learning p{margin:0; font-size:1rem; color:var(--ink); line-height:1.5}
+
+/* ---------- Systems ---------- */
+.system{
+  margin-top:var(--s6); display:block; width:100%; text-align:left; cursor:pointer; color:inherit;
+  font-family:var(--body); background:linear-gradient(118deg, oklch(0.52 0.072 150 / .09), var(--surface) 60%);
+  border:1px solid var(--line); border-radius:4px; padding:var(--s6);
+  transition:transform .4s cubic-bezier(.16,1,.3,1), box-shadow .4s ease, border-color .4s ease;
+}
+.system:hover{transform:translateY(-3px); box-shadow:var(--shadow-lift); border-color:var(--line-2)}
+.system .kicker{margin-bottom:var(--s4)}
+.system h3{font-size:clamp(1.7rem,3vw,2.2rem); letter-spacing:-.012em; line-height:1.08; margin-bottom:.7rem}
+.system h3 .acro{color:var(--moss-deep)}
+.system p{font-size:1.02rem; color:var(--ink-2); margin:0 0 var(--s4); max-width:54ch}
+.go{font-size:.8rem; letter-spacing:.1em; text-transform:uppercase; font-weight:600; color:var(--moss-deep); display:inline-flex; align-items:center; gap:.55rem}
+.go .arr{transition:transform .3s ease; display:inline-block}
+.system:hover .go .arr, .entry:hover .go .arr{transform:translateX(5px)}
+
+/* ---------- Articles — editorial index (not a card grid) ---------- */
+.index{margin-top:var(--s6); border-top:1px solid var(--line-2)}
+.entry{
+  display:grid; grid-template-columns:1fr auto; gap:var(--s4) var(--s5); align-items:start;
+  width:100%; text-align:left; background:none; border:0; border-bottom:1px solid var(--line);
+  padding:var(--s5) var(--s2); cursor:pointer; color:inherit; font-family:var(--body);
+  transition:background .3s ease;
+}
+.entry > div{transition:transform .35s cubic-bezier(.16,1,.3,1)}
+.entry:hover{background:linear-gradient(90deg, oklch(0.52 0.072 150 / .06), transparent 70%)}
+.entry:hover > div{transform:translateX(8px)}
+.entry-tag{font-size:.72rem; letter-spacing:.16em; text-transform:uppercase; font-weight:600; color:var(--clay-deep); margin-bottom:.7rem; display:block}
+.entry h3{font-size:clamp(1.5rem,2.7vw,2rem); letter-spacing:-.012em; line-height:1.1; margin-bottom:.5rem; transition:color .25s ease}
+.entry:hover h3{color:var(--moss-deep)}
+.entry p{font-size:.98rem; color:var(--ink-2); margin:0; max-width:52ch}
+.entry .go{align-self:center; white-space:nowrap}
+
+/* ---------- Contact ---------- */
+.contact-grid{display:grid; grid-template-columns:1.15fr 1fr; gap:var(--s7); align-items:start; margin-top:var(--s5)}
+.contact-lines{list-style:none; margin:0; padding:0}
+.contact-lines li{border-top:1px solid var(--line)}
+.contact-lines li:last-child{border-bottom:1px solid var(--line)}
+.contact-lines .ck{font-size:.72rem; letter-spacing:.16em; text-transform:uppercase; font-weight:600; color:var(--ink-3); display:block; margin-bottom:.2rem}
+.contact-lines a{display:block; padding:var(--s3) 0; font-size:1.15rem; color:var(--ink); transition:color .25s, transform .25s}
+.contact-lines a .ck{transition:color .25s}
+.contact-lines a:hover{color:var(--moss-deep); transform:translateX(3px)}
+
+.foot{border-top:1px solid var(--line); margin-top:var(--s7); padding:var(--s6) 0 var(--s8); display:flex; justify-content:space-between; flex-wrap:wrap; gap:var(--s3); align-items:center; font-size:.8rem; letter-spacing:.02em; color:var(--ink-3)}
+.foot .sprig{width:1.1em; height:1.1em; opacity:.7}
+
+/* ---------- reveal-on-scroll (enhances already-visible content) ---------- */
+.reveal{opacity:0; transform:translateY(16px)}
+.reveal.in{opacity:1; transform:none; transition:opacity .8s ease, transform .8s cubic-bezier(.16,1,.3,1)}
+.reveal.in.d1{transition-delay:.08s} .reveal.in.d2{transition-delay:.16s}
+.reveal.in.d3{transition-delay:.24s} .reveal.in.d4{transition-delay:.32s}
+
+/* ============================================================
+   READER (sub-pages)
+   ============================================================ */
+.reader{position:relative; z-index:var(--z-content); max-width:var(--maxw); margin:0 auto; padding:var(--s6) var(--s6) var(--s9)}
+.reader-page{max-width:var(--reader-w); margin:0 auto}
+.reader-back{font-size:.78rem; letter-spacing:.12em; text-transform:uppercase; font-weight:600; color:var(--ink-2); cursor:pointer; background:none; border:0; padding:.4rem 0; display:inline-flex; align-items:center; gap:.6rem; margin-bottom:var(--s7); transition:color .25s; font-family:var(--body)}
+.reader-back .arr{transition:transform .3s ease; display:inline-block}
+.reader-back:hover{color:var(--moss-deep)}
+.reader-back:hover .arr{transform:translateX(-4px)}
+.reader-page .kicker{display:block; margin-bottom:var(--s4)}
+.reader-title{font-size:clamp(2.4rem,5vw,3.6rem); line-height:1.04; letter-spacing:-.018em; margin-bottom:var(--s4)}
+.reader-title .acro{color:var(--moss-deep)}
+.reader-meta{font-size:.76rem; letter-spacing:.08em; text-transform:uppercase; font-weight:600; color:var(--ink-3); display:flex; gap:var(--s4); flex-wrap:wrap; padding-bottom:var(--s5); margin-bottom:var(--s5); border-bottom:1px solid var(--line)}
+.reader-body{font-size:1.13rem; line-height:1.75}
+.reader-body p{margin:0 0 var(--s4); color:var(--ink-2)}
+.reader-body .drop::first-letter{font-family:var(--display); font-size:3.4em; line-height:.72; float:left; padding:.08em .12em 0 0; color:var(--moss-deep)}
+.reader-body h3{font-size:1.65rem; letter-spacing:-.01em; margin:var(--s6) 0 var(--s3)}
+/* pull-quote — centered, no side-stripe */
+.reader-body blockquote{margin:var(--s6) 0; padding:0; text-align:center; max-width:30ch; margin-inline:auto}
+.reader-body blockquote p{font-family:var(--display); font-size:1.5rem; line-height:1.3; color:var(--ink); margin:0}
+.reader-body blockquote::before{content:""; display:block; width:1.4rem; height:1.4rem; margin:0 auto var(--s3); color:var(--clay); background:currentColor;
+  -webkit-mask:var(--leaf-mask) center/contain no-repeat; mask:var(--leaf-mask) center/contain no-repeat}
+.editable-note{margin-top:var(--s7); padding:var(--s4); border:1px dashed var(--line-2); border-radius:4px; font-size:.82rem; letter-spacing:.01em; color:var(--ink-3); line-height:1.7; background:oklch(0.52 0.072 150 / .03)}
+.editable-note b{color:var(--moss-deep); font-weight:600}
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
+.toc-toggle{
+  display:none; position:fixed; top:var(--s3); right:var(--s3); z-index:var(--z-toggle);
+  font-size:.78rem; letter-spacing:.1em; text-transform:uppercase; font-weight:600;
+  color:var(--ground); background:var(--ink); border:0; cursor:pointer;
+  padding:.8rem 1.1rem; min-height:44px; border-radius:4px; box-shadow:var(--shadow-soft);
+  align-items:center; gap:.6rem;
+}
+.toc-toggle .bars{display:inline-flex; flex-direction:column; gap:3.5px}
+.toc-toggle .bars i{display:block; width:15px; height:1.5px; background:var(--ground); transition:transform .3s, opacity .3s}
+body.menu-open .toc-toggle .bars i:nth-child(1){transform:translateY(5px) rotate(45deg)}
+body.menu-open .toc-toggle .bars i:nth-child(2){opacity:0}
+body.menu-open .toc-toggle .bars i:nth-child(3){transform:translateY(-5px) rotate(-45deg)}
+
+@media (max-width:920px){
+  .layout{grid-template-columns:1fr; gap:0; padding:0 var(--s5)}
+  .toc-toggle{display:inline-flex}
+  .toc{position:fixed; inset:0; z-index:var(--z-menu); background:var(--ground);
+    background-image:radial-gradient(120% 80% at 82% 0%, oklch(0.975 0.01 140 / .9), transparent 60%);
+    transform:translateY(-101%); transition:transform .45s cubic-bezier(.16,1,.3,1); overflow-y:auto}
+  body.menu-open .toc{transform:translateY(0)}
+  .toc-inner{position:static; min-height:auto; padding:var(--s8) var(--s5) var(--s6); max-width:34rem; margin:0 auto}
+  .toc-marker{display:none}
+  .toc-link{font-size:1.3rem; padding:.8rem 0 .8rem 1.3rem; min-height:44px}
+  .toc-sublink{font-size:1.02rem; padding:.65rem 0 .65rem 2.6rem; min-height:44px}
+  .toc-sublink::before{margin-top:.95em}
+  .toc-sub{max-height:none; opacity:1; overflow:visible}
+  .content{padding-top:var(--s8)}
+  .pillars{grid-template-columns:1fr}
+  .pillar, .pillar:nth-child(odd), .pillar:nth-child(even){padding:var(--s4) 0}
+  .learnings{columns:1}
+  .entry{grid-template-columns:1fr; gap:var(--s3)}
+  .entry .go{align-self:start}
+  .contact-grid{grid-template-columns:1fr; gap:var(--s5)}
+}
+@media (max-width:560px){
+  body{font-size:16px}
+  .layout{padding:0 var(--s4)}
+  .reader{padding:var(--s8) var(--s4) var(--s8)}
+  .section{padding:var(--s7) 0}
+  .system{padding:var(--s5)}
+}
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.001ms!important; animation-iteration-count:1!important; transition-duration:.001ms!important}
+  .reveal{opacity:1; transform:none}
+}
+</style>
+<noscript><style>
+  /* without JS the intro never resolves — reveal the garden directly */
+  #intro,.toc-toggle{display:none!important}
+  .app{opacity:1!important}
+  .reveal{opacity:1!important; transform:none!important}
+  .toc-marker{display:none}
+  .toc-sub{max-height:none!important; opacity:1!important}
+</style></noscript>
+</head>
+<body>
+<div class="grain" aria-hidden="true"></div>
+<a class="skip-link" href="#about">Skip to content</a>
+
+<!-- shared botanical mark -->
+<svg width="0" height="0" aria-hidden="true" style="position:absolute">
+  <symbol id="leaf" viewBox="0 0 24 24">
+    <path d="M12 2C6.5 6.5 4.5 13.5 11.4 22 11.7 16 12 9 12 2Z" fill="currentColor"/>
+    <path d="M12 2C17.5 6.5 19.5 13.5 12.6 22 12.3 16 12 9 12 2Z" fill="currentColor" opacity=".55"/>
+  </symbol>
+</svg>
+
+<!-- ===================== INTRO ===================== -->
+<div id="intro" role="presentation">
+  <canvas id="introCanvas" aria-hidden="true"></canvas>
+  <button class="intro-skip" id="introSkip" type="button">Enter the garden →</button>
+</div>
+
+<!-- ===================== MOBILE TOC TOGGLE ===================== -->
+<button class="toc-toggle" id="tocToggle" type="button" aria-expanded="false" aria-controls="toc">
+  <span class="bars" aria-hidden="true"><i></i><i></i><i></i></span>
+  <span class="toc-toggle-label">Index</span>
+</button>
+
+<!-- ===================== APP ===================== -->
+<div class="app" id="app">
+  <div class="layout">
+
+    <aside class="toc" id="toc">
+      <div class="toc-inner">
+        <div class="toc-brand">
+          <button class="toc-mark" data-link="about" type="button">
+            <svg class="sprig" aria-hidden="true"><use href="#leaf"/></svg>Ethan&nbsp;Tse
+          </button>
+          <p class="toc-tagline">A digital garden — where I go to muse.</p>
+        </div>
+
+        <nav class="toc-nav" aria-label="Sections">
+          <span class="toc-marker" id="tocMarker" aria-hidden="true"></span>
+          <ul class="toc-list">
+            <li class="toc-item"><button class="toc-link" data-link="about" type="button"><span class="ix">01</span><span>About</span></button></li>
+            <li class="toc-item"><button class="toc-link" data-link="learnings" type="button"><span class="ix">02</span><span>25 Learnings</span></button></li>
+            <li class="toc-item" data-parent="systems">
+              <button class="toc-link" data-link="systems" type="button"><span class="ix">03</span><span>Systems</span></button>
+              <ul class="toc-sub">
+                <li><button class="toc-sublink" data-link="atom" type="button">ATOM — Agentic Task Ontology Model</button></li>
+              </ul>
+            </li>
+            <li class="toc-item" data-parent="articles">
+              <button class="toc-link" data-link="articles" type="button"><span class="ix">04</span><span>Articles</span></button>
+              <ul class="toc-sub">
+                <li><button class="toc-sublink" data-link="urban-farm" type="button">How a small urban farm changed my life</button></li>
+                <li><button class="toc-sublink" data-link="public-health" type="button">Why I studied Public Health</button></li>
+                <li><button class="toc-sublink" data-link="one-person-company" type="button">The ontology of a 1-person company</button></li>
+                <li><button class="toc-sublink" data-link="designing-career" type="button">Designing a career</button></li>
+              </ul>
+            </li>
+            <li class="toc-item"><button class="toc-link" data-link="contact" type="button"><span class="ix">05</span><span>Contact</span></button></li>
+          </ul>
+        </nav>
+
+        <div class="toc-foot">
+          Tending since 2024<br/>
+          <a href="mailto:ethantse15@gmail.com">ethantse15@gmail.com</a>
+        </div>
+      </div>
+    </aside>
+
+    <main class="content" id="main">
+
+      <!-- ABOUT -->
+      <section class="section" id="about" aria-labelledby="about-h">
+        <h1 class="h-display reveal" id="about-h">Hi, I'm Ethan&nbsp;Tse.</h1>
+        <p class="lede reveal d1">I live at the intersection of Strategy, Operations, Business Development, and Innovation — across technology, healthcare, and beyond.</p>
+
+        <figure class="northstar reveal d2">
+          <figcaption class="label"><svg class="sprig" aria-hidden="true" style="width:.95em;height:.95em"><use href="#leaf"/></svg>My North Star</figcaption>
+          <blockquote class="quote">Be a force multiplier for the people shaping real progress.</blockquote>
+        </figure>
+
+        <div class="pillars reveal d3">
+          <div class="pillar"><span class="pl">Strategy</span><h3>The domain &amp; the story</h3><p>Mastering the domain and articulating stories that matter.</p></div>
+          <div class="pillar"><span class="pl">Operations</span><h3>The engine room</h3><p>Executing and maintaining workflows efficiently.</p></div>
+          <div class="pillar"><span class="pl">Business Development</span><h3>Growth that lasts</h3><p>Growing organizations ambitiously and sustainably.</p></div>
+          <div class="pillar"><span class="pl">Innovation</span><h3>Until something breaks</h3><p>Experimenting with novel methods until something breaks.</p></div>
+        </div>
+      </section>
+
+      <!-- 25 LEARNINGS -->
+      <section class="section" id="learnings" aria-labelledby="learn-h">
+        <div class="learn-head">
+          <h2 class="h-section reveal" id="learn-h" style="margin-bottom:0">25&nbsp;Learnings</h2>
+          <span class="learn-note reveal">A living list — tended over time</span>
+        </div>
+        <ol class="learnings reveal d1" id="learnings-list">
+          <li class="learning"><span class="ln">01</span><p>Clarity is a kindness; ambiguity is a tax everyone pays.</p></li>
+          <li class="learning"><span class="ln">02</span><p>Strategy is choosing what not to do — out loud.</p></li>
+          <li class="learning"><span class="ln">03</span><p>A system you can explain in one breath is one that will survive.</p></li>
+          <li class="learning"><span class="ln">04</span><p>Momentum compounds. So does neglect.</p></li>
+          <li class="learning"><span class="ln">05</span><p>Trust scales fastest by doing small things exactly when you said you would.</p></li>
+          <li class="learning"><span class="ln">06</span><p>Most "innovation" is removing a step nobody was defending.</p></li>
+          <li class="learning"><span class="ln">07</span><p>Write it down, or watch it drift.</p></li>
+          <li class="learning"><span class="ln">08</span><p>The org chart is fiction; the real map is who answers whose messages.</p></li>
+          <li class="learning"><span class="ln">09</span><p>Optimize the constraint, not the comfortable part.</p></li>
+          <li class="learning"><span class="ln">10</span><p>Ambition without maintenance is a fire without a hearth.</p></li>
+          <li class="learning"><span class="ln">11</span><p>Tell the story before you build the deck.</p></li>
+          <li class="learning"><span class="ln">12</span><p>Every workflow is a hypothesis about how work actually happens.</p></li>
+          <li class="learning"><span class="ln">13</span><p>Hire for slope, not intercept.</p></li>
+          <li class="learning"><span class="ln">14</span><p>The expensive mistakes are quiet; the cheap ones are loud.</p></li>
+          <li class="learning"><span class="ln">15</span><p>If it's only measured, it isn't led.</p></li>
+          <li class="learning"><span class="ln">16</span><p>Borrow models from biology, cities, and kitchens; copy nothing wholesale.</p></li>
+          <li class="learning"><span class="ln">17</span><p>A force multiplier removes friction they'll never be thanked for.</p></li>
+          <li class="learning"><span class="ln">18</span><p>Revisit the decisions you made when you knew the least.</p></li>
+          <li class="learning"><span class="ln">19</span><p>Distribution beats brilliance more often than we admit.</p></li>
+          <li class="learning"><span class="ln">20</span><p>Make the default the right thing to do.</p></li>
+          <li class="learning"><span class="ln">21</span><p>You can't delegate a problem you can't describe.</p></li>
+          <li class="learning"><span class="ln">22</span><p>Break it on purpose, in a place you can watch.</p></li>
+          <li class="learning"><span class="ln">23</span><p>Slow is smooth, smooth is fast — but only after you've practiced.</p></li>
+          <li class="learning"><span class="ln">24</span><p>Care is a competitive advantage that's surprisingly hard to copy.</p></li>
+          <li class="learning"><span class="ln">25</span><p>Build the thing that makes the next thing easier.</p></li>
+        </ol>
+      </section>
+
+      <!-- SYSTEMS -->
+      <section class="section" id="systems" aria-labelledby="sys-h">
+        <h2 class="h-section reveal" id="sys-h">Frameworks I build &amp; run.</h2>
+        <p class="prose reveal">Operating systems for thinking and doing — named, documented, and stress-tested in the real world.</p>
+        <button class="system reveal d1" data-link="atom" type="button">
+          <span class="kicker"><svg class="sprig" aria-hidden="true" style="width:.95em;height:.95em;color:var(--clay)"><use href="#leaf"/></svg>Framework — first of the garden</span>
+          <h3><span class="acro">ATOM</span> — Agentic Task Ontology Model</h3>
+          <p>A model for decomposing work into agentic, ontologically-typed tasks — so humans and machines can reason about the same map.</p>
+          <span class="go">Open the system <span class="arr">→</span></span>
+        </button>
+      </section>
+
+      <!-- ARTICLES -->
+      <section class="section" id="articles" aria-labelledby="art-h">
+        <h2 class="h-section reveal" id="art-h">Things I'm thinking through.</h2>
+        <p class="prose reveal">Essays from the garden — half-finished thoughts, tended over time.</p>
+        <div class="index reveal d1">
+          <button class="entry" data-link="urban-farm" type="button">
+            <div><span class="entry-tag">Life</span><h3>How a small urban farm changed my life</h3><p>On soil, systems, and what a few square metres of vegetables taught me about patience.</p></div>
+            <span class="go">Read <span class="arr">→</span></span>
+          </button>
+          <button class="entry" data-link="public-health" type="button">
+            <div><span class="entry-tag">Origins</span><h3>Why I studied Public Health</h3><p>The path from individuals to populations — and why prevention is the ultimate leverage.</p></div>
+            <span class="go">Read <span class="arr">→</span></span>
+          </button>
+          <button class="entry" data-link="one-person-company" type="button">
+            <div><span class="entry-tag">Work</span><h3>The ontology of a 1-person company</h3><p>What it really means to be the strategy, the ops, and the biz dev — all at once.</p></div>
+            <span class="go">Read <span class="arr">→</span></span>
+          </button>
+          <button class="entry" data-link="designing-career" type="button">
+            <div><span class="entry-tag">Craft</span><h3>Designing a career</h3><p>Treating a career as a designed object — with constraints, iterations, and intent.</p></div>
+            <span class="go">Read <span class="arr">→</span></span>
+          </button>
+        </div>
+      </section>
+
+      <!-- CONTACT -->
+      <section class="section" id="contact" aria-labelledby="con-h">
+        <div class="contact-grid">
+          <div>
+            <h2 class="h-section reveal" id="con-h">Let's make something grow.</h2>
+            <p class="prose reveal">If you're shaping real progress and want a force multiplier in your corner, I'd love to hear from you. The door to the garden is always open.</p>
+          </div>
+          <ul class="contact-lines reveal d1">
+            <li><a href="mailto:ethantse15@gmail.com"><span class="ck">Email</span>ethantse15@gmail.com</a></li>
+            <li><a href="#" data-editable><span class="ck">LinkedIn</span>/in/ethantse</a></li>
+            <li><a href="#" data-editable><span class="ck">Elsewhere</span>@ethantse</a></li>
+          </ul>
+        </div>
+
+        <footer class="foot">
+          <span>© <span id="year"></span> Ethan Tse</span>
+          <span style="display:inline-flex;align-items:center;gap:.5rem"><svg class="sprig" aria-hidden="true"><use href="#leaf"/></svg>Grown by hand · tended with intent</span>
+        </footer>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<!-- ===================== READER (sub-pages) ===================== -->
+<div class="reader" id="reader" hidden>
+
+  <article class="reader-page" data-slug="atom" hidden tabindex="-1">
+    <button class="reader-back" data-back="systems" type="button"><span class="arr">←</span> Back to Systems</button>
+    <p class="kicker">Framework — System 01</p>
+    <h1 class="reader-title"><span class="acro">ATOM</span> — Agentic Task Ontology Model</h1>
+    <div class="reader-meta"><span>Framework</span><span>Living draft</span><span>8 min read</span></div>
+    <div class="reader-body">
+      <p class="drop">ATOM is a model for decomposing work into agentic, ontologically-typed tasks — a shared map that both humans and machines can reason over. This page is a scaffold; the full framework lives here once you write it.</p>
+      <h3>The premise</h3>
+      <p>Describe the core problem ATOM solves. What breaks when tasks aren't typed? Why does an ontology matter for agentic systems?</p>
+      <blockquote><p>A task you can't name is a task you can't delegate — to a person or a machine.</p></blockquote>
+      <h3>The model</h3>
+      <p>Lay out the ontology: the task types, their relationships, and how agents move between them. Add diagrams, examples, and the vocabulary you want people to adopt.</p>
+      <h3>In practice</h3>
+      <p>Show ATOM applied to a real workflow. Where did it hold? Where did it break — and what did breaking teach you?</p>
+      <div class="editable-note"><b>Editable section.</b> This is placeholder structure for ATOM. Replace each block with your real content — headings, prose, diagrams, and links are all yours to shape.</div>
+    </div>
+  </article>
+
+  <article class="reader-page" data-slug="urban-farm" hidden tabindex="-1">
+    <button class="reader-back" data-back="articles" type="button"><span class="arr">←</span> Back to Articles</button>
+    <p class="kicker">Essay — Life</p>
+    <h1 class="reader-title">How a small urban farm changed my life</h1>
+    <div class="reader-meta"><span>Essay</span><span>Draft</span><span>6 min read</span></div>
+    <div class="reader-body">
+      <p class="drop">It started with a few square metres of soil and a stubborn idea that I could grow something. This page is ready for the real story.</p>
+      <p>Open with the moment it began. What drew you to the farm? What did you expect — and what actually happened?</p>
+      <h3>What the soil taught me</h3>
+      <p>Draw the line between tending a garden and tending a system, a team, a life. The metaphors are yours to plant here.</p>
+      <div class="editable-note"><b>Editable section.</b> Replace this placeholder with your essay.</div>
+    </div>
+  </article>
+
+  <article class="reader-page" data-slug="public-health" hidden tabindex="-1">
+    <button class="reader-back" data-back="articles" type="button"><span class="arr">←</span> Back to Articles</button>
+    <p class="kicker">Essay — Origins</p>
+    <h1 class="reader-title">Why I studied Public Health</h1>
+    <div class="reader-meta"><span>Essay</span><span>Draft</span><span>5 min read</span></div>
+    <div class="reader-body">
+      <p class="drop">Public health is the art of caring at the scale of populations. Here is where you explain why that pulled you in.</p>
+      <p>Trace the path from individuals to populations. Why is prevention the ultimate form of leverage?</p>
+      <h3>The throughline</h3>
+      <p>Connect public health to how you work today — strategy, systems, force-multiplication.</p>
+      <div class="editable-note"><b>Editable section.</b> Replace this placeholder with your essay.</div>
+    </div>
+  </article>
+
+  <article class="reader-page" data-slug="one-person-company" hidden tabindex="-1">
+    <button class="reader-back" data-back="articles" type="button"><span class="arr">←</span> Back to Articles</button>
+    <p class="kicker">Essay — Work</p>
+    <h1 class="reader-title">The ontology of a 1-person company</h1>
+    <div class="reader-meta"><span>Essay</span><span>Draft</span><span>7 min read</span></div>
+    <div class="reader-body">
+      <p class="drop">When you are the strategy, the operations, and the business development all at once, the categories of work start to blur. What are the real primitives?</p>
+      <p>Define the ontology of a company of one. What roles persist? What collapses? What can be automated, delegated, or dropped?</p>
+      <div class="editable-note"><b>Editable section.</b> Replace this placeholder with your essay.</div>
+    </div>
+  </article>
+
+  <article class="reader-page" data-slug="designing-career" hidden tabindex="-1">
+    <button class="reader-back" data-back="articles" type="button"><span class="arr">←</span> Back to Articles</button>
+    <p class="kicker">Essay — Craft</p>
+    <h1 class="reader-title">Designing a career</h1>
+    <div class="reader-meta"><span>Essay</span><span>Draft</span><span>6 min read</span></div>
+    <div class="reader-body">
+      <p class="drop">A career is a designed object. It has constraints, materials, iterations, and intent — or it has none, and drifts.</p>
+      <p>Lay out your design method for a career. What are the constraints you optimize for? How do you prototype a direction before committing?</p>
+      <div class="editable-note"><b>Editable section.</b> Replace this placeholder with your essay.</div>
+    </div>
+  </article>
+
+</div>
+
+<script>
+(() => {
+  'use strict';
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const $ = (s, r=document) => r.querySelector(s);
+  const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
+
+  const READER = {
+    'atom':'systems',
+    'urban-farm':'articles','public-health':'articles',
+    'one-person-company':'articles','designing-career':'articles'
+  };
+  const SECTIONS = ['about','learnings','systems','articles','contact'];
+
+  const app = $('#app'), reader = $('#reader');
+  const marker = $('#tocMarker');
+  let reading = false, spyEnabled = false;
+
+  const topLevelFor = (id) => READER[id] || id;
+
+  function setActive(id){
+    const top = topLevelFor(id);
+    $$('.toc-link').forEach(l => {
+      const on = l.dataset.link === top;
+      l.classList.toggle('active', on);
+      if (on) l.setAttribute('aria-current','true'); else l.removeAttribute('aria-current');
+    });
+    $$('.toc-sublink').forEach(l => l.classList.toggle('active', l.dataset.link === id));
+    $$('.toc-item[data-parent]').forEach(item => item.classList.toggle('open', item.dataset.parent === top));
+    moveMarker(top);
+    const lbl = $('.toc-toggle-label');
+    if (lbl){ const a = $(`.toc-link[data-link="${top}"] span:last-child`); lbl.textContent = a ? a.textContent : 'Index'; }
+  }
+
+  function moveMarker(top){
+    const link = $(`.toc-link[data-link="${top}"]`);
+    if (!link || !marker) return;
+    const nav = link.closest('.toc-nav');
+    const lr = link.getBoundingClientRect(), nr = nav.getBoundingClientRect();
+    const y = (lr.top - nr.top) + lr.height/2 - marker.offsetHeight/2;
+    marker.style.transform = `translateY(${y}px)`;
+    marker.style.opacity = '1';
+  }
+
+  function openReader(slug){
+    const page = $(`.reader-page[data-slug="${slug}"]`);
+    if (!page) return;
+    reading = true; app.hidden = true; reader.hidden = false;
+    $$('.reader-page').forEach(p => p.hidden = (p !== page));
+    window.scrollTo(0, 0);
+    setActive(slug);
+    page.focus({preventScroll:true});
+    closeMenu();
+  }
+  function closeReader(){ if (!reading) return; reading = false; reader.hidden = true; app.hidden = false; }
+
+  function apply(id, push){
+    if (!id) id = 'about';
+    if (push){ try { history.pushState({}, '', '#' + id); } catch(e){ location.hash = id; } }
+    if (READER[id]){ openReader(id); return; }
+    closeReader();
+    if (SECTIONS.includes(id)){ const el = document.getElementById(id); if (el) el.scrollIntoView({behavior: reduce ? 'auto':'smooth', block:'start'}); }
+    setActive(id); closeMenu();
+  }
+
+  $$('[data-link]').forEach(el => el.addEventListener('click', e => { e.preventDefault(); apply(el.dataset.link, true); }));
+  $$('[data-back]').forEach(el => el.addEventListener('click', e => { e.preventDefault(); apply(el.dataset.back, true); }));
+  $$('[data-editable]').forEach(el => el.addEventListener('click', e => e.preventDefault()));
+  window.addEventListener('popstate', () => apply((location.hash || '').slice(1), false));
+
+  const toggle = $('#tocToggle');
+  function closeMenu(){ document.body.classList.remove('menu-open'); toggle.setAttribute('aria-expanded','false'); }
+  function openMenu(){ document.body.classList.add('menu-open'); toggle.setAttribute('aria-expanded','true'); }
+  toggle.addEventListener('click', () => document.body.classList.contains('menu-open') ? closeMenu() : openMenu());
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu(); });
+
+  function initSpy(){
+    const sections = SECTIONS.map(id => document.getElementById(id)).filter(Boolean);
+    const io = new IntersectionObserver((entries) => {
+      if (!spyEnabled || reading) return;
+      let best = null;
+      entries.forEach(en => { if (en.isIntersecting){ if (!best || en.intersectionRatio > best.intersectionRatio) best = en; } });
+      if (best) setActive(best.target.id);
+    }, { rootMargin:'-45% 0px -45% 0px', threshold:[0,.25,.5,1] });
+    sections.forEach(s => io.observe(s));
+  }
+
+  function initReveal(){
+    if (reduce || skipIntro){ $$('.reveal').forEach(el => el.classList.add('in')); return; }
+    const io = new IntersectionObserver((entries, obs) => {
+      entries.forEach(en => { if (en.isIntersecting){ en.target.classList.add('in'); obs.unobserve(en.target); } });
+    }, { rootMargin:'0px 0px -10% 0px', threshold:.1 });
+    $$('.reveal').forEach(el => io.observe(el));
+  }
+
+  function bootApp(){
+    app.classList.add('revealed');
+    spyEnabled = true;
+    initSpy(); initReveal();
+    const hash = (location.hash || '').slice(1);
+    if (hash) apply(hash, false); else setActive('about');
+    window.addEventListener('resize', () => {
+      const active = reading ? topLevelFor((location.hash||'').slice(1)) : ($('.toc-link.active')?.dataset.link || 'about');
+      moveMarker(active);
+    });
+  }
+
+  /* ---------------- INTRO ---------------- */
+  const intro = $('#intro'), introSkip = $('#introSkip');
+  let introFinished = false;
+
+  function finishIntro(){
+    if (introFinished) return;
+    introFinished = true;
+    intro.classList.add('done');
+    setTimeout(() => intro.remove(), 650);
+    bootApp();
+    const h1 = document.getElementById('about-h'); if (h1) h1.setAttribute('tabindex','-1');
+  }
+
+  const deepLinked = !!(location.hash && location.hash.length > 1);
+  const skipIntro = new URLSearchParams(location.search).has('nointro') || deepLinked;
+
+  function reducedIntro(){
+    const wrap = document.createElement('div');
+    wrap.className = 'intro-fallback';
+    wrap.innerHTML = 'My digital garden —<br/><span>where I go to muse</span>';
+    intro.insertBefore(wrap, introSkip);
+    setTimeout(finishIntro, deepLinked ? 150 : 2200);
+  }
+
+  async function runIntro(){
+    if (reduce){ reducedIntro(); return; }
+    const canvas = $('#introCanvas'), ctx = canvas.getContext('2d');
+    let W = 0, H = 0; const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const line1 = 'My digital garden —', line2 = 'where I go to muse';
+
+    function size(){
+      W = window.innerWidth; H = window.innerHeight;
+      canvas.width = W*dpr; canvas.height = H*dpr;
+      canvas.style.width = W+'px'; canvas.style.height = H+'px';
+      ctx.setTransform(dpr,0,0,dpr,0,0);
+    }
+    size();
+    const fontSize = () => Math.min(W*0.06, H*0.11, 74);
+
+    function drawText(alpha){
+      const fs = fontSize(), gap = fs*1.2, cx = W/2, cy = H/2;
+      ctx.clearRect(0,0,W,H);
+      ctx.textAlign='center'; ctx.textBaseline='middle';
+      ctx.font = `${fs}px "Young Serif", Georgia, serif`;
+      ctx.fillStyle = `rgba(33,40,32,${alpha})`;
+      ctx.fillText(line1, cx, cy - gap*0.55);
+      ctx.fillStyle = `rgba(58,86,62,${alpha})`;
+      ctx.fillText(line2, cx, cy + gap*0.55);
+    }
+
+    function buildParticles(){
+      const off = document.createElement('canvas'); off.width = W; off.height = H;
+      const o = off.getContext('2d');
+      const fs = fontSize(), gap = fs*1.2, cx = W/2, cy = H/2;
+      o.textAlign='center'; o.textBaseline='middle'; o.fillStyle='#000';
+      o.font = `${fs}px "Young Serif", Georgia, serif`;
+      o.fillText(line1, cx, cy - gap*0.55);
+      o.fillText(line2, cx, cy + gap*0.55);
+      const img = o.getImageData(0,0,W,H).data;
+      const gapPx = W > 900 ? 4 : 5;
+      const pts = []; const palette = ['33,40,32','33,40,32','58,86,62','58,86,62','150,84,52'];
+      let minX = W, maxX = 0;
+      for (let y=0;y<H;y+=gapPx) for (let x=0;x<W;x+=gapPx){
+        if (img[(y*W+x)*4+3] > 128){
+          if (x<minX) minX=x; if (x>maxX) maxX=x;
+          pts.push({hx:x, hy:y, x, y, vx:0, vy:0, c:palette[(Math.random()*palette.length)|0],
+            s:1.1+Math.random()*1.4, released:false, life:1, lifeMax:0.9+Math.random()*0.7});
+        }
+      }
+      const span = Math.max(1, maxX-minX);
+      pts.forEach(p => p.releaseAt = (p.hx-minX)/span);
+      return pts;
+    }
+
+    let particles = null;
+    const T_IN = 1500, T_HOLD = 2750, T_END = 4850;
+    const start = performance.now(); let blowStart = 0;
+
+    function frame(now){
+      if (introFinished) return;
+      const t = now - start;
+      if (t < T_HOLD){
+        const a = Math.min(1, t/T_IN);
+        drawText(1 - Math.pow(1-a, 3));
+        requestAnimationFrame(frame); return;
+      }
+      if (!particles){ particles = buildParticles(); blowStart = now; }
+      const since = now - blowStart;
+      const dt = Math.min(0.05, (now - (frame._last || now))/1000); frame._last = now;
+      ctx.clearRect(0,0,W,H);
+      let alive = 0;
+      for (let i=0;i<particles.length;i++){
+        const p = particles[i];
+        if (since >= p.releaseAt*850){
+          if (!p.released){ p.released = true; p.vx = 40+Math.random()*90; p.vy = (Math.random()-0.5)*60-10; p.ax = 260+Math.random()*220; p.phase = Math.random()*Math.PI*2; }
+          p.vx += p.ax*dt;
+          p.vy += (Math.sin((p.hy*0.02)+p.phase+since*0.004)*90 - 24)*dt;
+          p.x += p.vx*dt; p.y += p.vy*dt; p.life -= dt/p.lifeMax;
+        }
+        if (p.life > 0){ alive++; ctx.fillStyle = `rgba(${p.c},${p.released?Math.max(0,p.life):1})`; ctx.fillRect(p.x, p.y, p.s, p.s); }
+      }
+      if (t < T_END && alive > 0) requestAnimationFrame(frame); else finishIntro();
+    }
+
+    try { await Promise.race([document.fonts.ready, new Promise(r=>setTimeout(r,1200))]); } catch(e){}
+    size();
+    window.addEventListener('resize', () => { if (!introFinished && !particles) size(); });
+    requestAnimationFrame(frame);
+  }
+
+  introSkip.addEventListener('click', finishIntro);
+  intro.addEventListener('click', (e) => { if (e.target === intro || e.target.id === 'introCanvas') finishIntro(); });
+
+  $('#year').textContent = new Date().getFullYear();
+
+  function go(){ if (skipIntro){ finishIntro(); return; } runIntro(); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', go); else go();
+})();
+</script>
+</body>
+</html>

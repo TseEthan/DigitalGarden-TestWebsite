@@ -1,0 +1,1072 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Ethan Tse — A Digital Garden</title>
+<meta name="description" content="Ethan Tse — curious at the intersection of knowledge, execution, and people, across technology, healthcare, and beyond." />
+<meta property="og:title" content="Ethan Tse — A Digital Garden" />
+<meta property="og:description" content="Curious at the intersection of knowledge, execution, and people." />
+<meta property="og:type" content="website" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2C6.5 6.5 4.5 13.5 11.4 22 11.7 16 12 9 12 2Z' fill='%234a7553'/%3E%3Cpath d='M12 2C17.5 6.5 19.5 13.5 12.6 22 12.3 16 12 9 12 2Z' fill='%232e5437'/%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+<style>
+/* ============================================================
+   A DIGITAL GARDEN — Ethan Tse (v2, multi-page)
+   Grounded herbarium identity. Young Serif + Hanken Grotesk.
+   Each section / subsection is its own routed page.
+   ============================================================ */
+:root{
+  --ground:oklch(0.930 0.012 140); --ground-2:oklch(0.900 0.014 140); --surface:oklch(0.965 0.009 140);
+  --ink:oklch(0.250 0.014 150); --ink-2:oklch(0.420 0.013 150); --ink-3:oklch(0.495 0.013 150);
+  --moss:oklch(0.520 0.072 150); --moss-deep:oklch(0.410 0.066 150);
+  --clay:oklch(0.600 0.110 50); --clay-deep:oklch(0.520 0.115 48);
+  --line:oklch(0.250 0.014 150 / 0.14); --line-2:oklch(0.250 0.014 150 / 0.24);
+  --display:'Young Serif', Georgia, 'Times New Roman', serif;
+  --body:'Hanken Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --s1:.5rem; --s2:.75rem; --s3:1rem; --s4:1.5rem; --s5:2rem; --s6:3rem; --s7:4.5rem; --s8:7rem; --s9:10rem;
+  --shadow-soft:0 1px 2px oklch(0.25 0.02 150 / .05), 0 10px 26px -12px oklch(0.25 0.02 150 / .18);
+  --shadow-lift:0 1px 1px oklch(0.25 0.02 150 / .05), 0 22px 44px -22px oklch(0.41 0.066 150 / .30);
+  --z-base:1; --z-content:2; --z-menu:50; --z-toggle:60; --z-intro:70; --z-skip:80;
+  --maxw:77.5rem; --reader-w:42rem;
+  --leaf-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2C6.5 6.5 4.5 13.5 11.4 22 11.7 16 12 9 12 2Z' fill='black'/%3E%3Cpath d='M12 2C17.5 6.5 19.5 13.5 12.6 22 12.3 16 12 9 12 2Z' fill='black'/%3E%3C/svg%3E");
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+@media (min-width:921px){ html{font-size:20px} }   /* desktop "zoom" — scales rem-based type + spacing */
+body{margin:0; font-family:var(--body); color:var(--ink); background-color:var(--ground);
+  background-image:radial-gradient(120% 80% at 82% -8%, oklch(0.975 0.01 140 / .8), transparent 60%),radial-gradient(90% 60% at 0% 4%, oklch(0.60 0.11 50 / .05), transparent 55%),radial-gradient(120% 90% at 50% 122%, oklch(0.52 0.072 150 / .12), transparent 60%);
+  background-attachment:fixed; line-height:1.7; font-size:1.0625rem; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; overflow-x:hidden;}
+.grain{position:fixed; inset:0; z-index:var(--z-base); pointer-events:none; opacity:.04; mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");}
+::selection{background:oklch(0.52 0.072 150 / .24); color:var(--ink)}
+a{color:var(--moss-deep); text-decoration:none}
+.skip-link{position:fixed; left:var(--s3); top:-100px; z-index:var(--z-skip); background:var(--ink); color:var(--ground); padding:.7rem 1.1rem; border-radius:3px; font-size:.85rem; font-weight:600; transition:top .2s ease}
+.skip-link:focus{top:var(--s3)}
+:focus-visible{outline:2px solid var(--moss-deep); outline-offset:3px; border-radius:3px}
+.page:focus, .page:focus-visible{outline:none}            /* no box around content */
+.toc-mark:active,.toc-link:active,.toc-sublink:active,.reader-back:active,.contact-lines a:active,.intro-skip:active,.tool:active{opacity:.6}
+.system-card:active,.entry:active,.fw:active{transform:scale(.995)}
+.sprig{display:inline-block; width:1em; height:1em; vertical-align:-.12em; color:var(--moss)}
+
+/* jitter emoji */
+@keyframes jitter{0%,100%{transform:rotate(0)}20%{transform:rotate(-14deg) scale(1.08)}40%{transform:rotate(11deg)}60%{transform:rotate(-8deg)}80%{transform:rotate(5deg)}}
+.jit{display:inline-block; cursor:pointer; transform-origin:50% 70%}
+.jit:hover{animation:jitter .5s ease}
+
+/* INTRO */
+#intro{position:fixed; inset:0; z-index:var(--z-intro); background:var(--ground);
+  background-image:radial-gradient(120% 90% at 50% 42%, oklch(0.975 0.01 140 / .7), transparent 65%),radial-gradient(120% 90% at 50% 122%, oklch(0.52 0.072 150 / .12), transparent 60%);
+  display:flex; align-items:center; justify-content:center; transition:opacity .5s ease}
+#intro.done{opacity:0; pointer-events:none}
+#introCanvas{display:block; width:100%; height:100%}
+.intro-skip{position:absolute; bottom:var(--s5); left:50%; transform:translateX(-50%); font-size:.76rem; letter-spacing:.16em; text-transform:uppercase; font-weight:600; color:var(--ink-3); background:none; border:0; cursor:pointer; padding:.6rem 1rem; opacity:0; animation:skipFade .8s ease 1.6s forwards; transition:color .25s ease}
+.intro-skip:hover{color:var(--moss-deep)}
+@keyframes skipFade{to{opacity:1}}
+.intro-fallback{text-align:center; padding:var(--s4); font-family:var(--display); font-size:clamp(1.9rem,5.5vw,3.4rem); color:var(--ink); letter-spacing:-.01em; line-height:1.25; max-width:18ch; text-wrap:balance; opacity:0; animation:fbIn 1s ease forwards}
+.intro-fallback span{color:var(--moss)}
+@keyframes fbIn{to{opacity:1}}
+
+/* SHELL */
+.app{position:relative; z-index:var(--z-content); opacity:0; transition:opacity .8s ease}
+.app.revealed{opacity:1}
+.layout{max-width:var(--maxw); margin:0 auto; padding:0 var(--s6); display:grid; grid-template-columns:minmax(220px,16rem) minmax(0,1fr); gap:var(--s8)}
+
+/* ToC */
+.toc{position:relative}
+.toc-inner{position:sticky; top:0; padding:var(--s8) 0 var(--s6)}
+.toc-brand{margin-bottom:var(--s7); display:flex; flex-direction:column; gap:.6rem; align-items:flex-start; background:none; border:0; padding:0; cursor:pointer; text-align:left}
+.toc-brand .sprig{width:1.5rem; height:1.5rem; color:var(--moss)}
+.toc-brand .gw{font-family:var(--display); font-size:1.05rem; line-height:1.3; color:var(--ink); letter-spacing:-.005em; max-width:12.5rem; transition:color .25s ease}
+.toc-brand .gw em{font-style:normal; color:var(--moss-deep)}
+.toc-brand:hover .gw{color:var(--moss-deep)}
+.toc-nav{position:relative; margin:0 0 var(--s6)}
+.toc-list{list-style:none; margin:0; padding:0}
+.toc-marker{position:absolute; left:0; top:0; width:7px; height:7px; border-radius:50%; background:var(--moss); opacity:0; transition:transform .42s cubic-bezier(.16,1,.3,1), opacity .3s ease}
+.toc-link{display:flex; align-items:baseline; gap:.7rem; padding:.55rem 0 .55rem 1.3rem; color:var(--ink-2); font-size:.98rem; font-weight:500; border:0; background:none; width:100%; text-align:left; cursor:pointer; font-family:var(--body); transition:color .25s ease, transform .25s ease}
+.toc-link .ix{font-size:.7rem; color:var(--ink-3); font-variant-numeric:tabular-nums; min-width:1.4em; transition:color .25s ease; font-weight:600; letter-spacing:.02em}
+.toc-link:hover{color:var(--ink); transform:translateX(3px)}
+.toc-link:hover .ix{color:var(--clay-deep)}
+.toc-link.active{color:var(--moss-deep)}
+.toc-link.active .ix{color:var(--moss-deep)}
+.toc-sub{list-style:none; margin:.1rem 0 .5rem; padding:0; max-height:0; overflow:hidden; opacity:0; transition:max-height .42s ease, opacity .3s ease}
+.toc-item.open .toc-sub{max-height:24rem; opacity:1}
+.toc-sublink{display:block; padding:.4rem 0 .4rem 2.6rem; color:var(--ink-3); font-size:.86rem; cursor:pointer; background:none; border:0; text-align:left; width:100%; font-family:var(--body); transition:color .22s ease, transform .22s ease; line-height:1.4; position:relative}
+.toc-sublink::before{content:""; position:absolute; left:1.6rem; top:.78em; width:.36rem; height:.36rem; border-radius:50%; background:var(--line-2); transition:background .22s, transform .22s}
+.toc-sublink:hover{color:var(--ink); transform:translateX(2px)}
+.toc-sublink:hover::before{background:var(--clay); transform:scale(1.3)}
+.toc-sublink.active{color:var(--moss-deep)}
+.toc-sublink.active::before{background:var(--moss); transform:scale(1.3)}
+.toc-foot{font-size:.8rem; color:var(--ink-3); line-height:2}
+.toc-foot a{display:block; color:var(--ink-3); transition:color .25s}
+.toc-foot a:hover{color:var(--moss-deep)}
+.night-hint{display:inline-flex; align-items:center; gap:.42em; margin-top:var(--s3); padding:0; background:none; border:0; cursor:pointer; font-family:var(--body); font-size:.7rem; letter-spacing:.03em; color:var(--ink-3); opacity:.55; transition:opacity .25s ease, color .25s ease}
+.night-hint:hover{opacity:1; color:var(--moss-deep)}
+.night-hint kbd{font-family:var(--body); font-size:.64rem; line-height:1; padding:.2em .45em; border:1px solid var(--line-2); border-radius:4px; color:var(--ink-2); background:oklch(0.52 0.072 150 / .05)}
+
+/* content + pages */
+.content{padding:var(--s8) 0 var(--s9); min-width:0; position:relative}
+.page{display:none}
+.page.is-active{display:block}
+.page.is-active .anim{animation:pageIn .7s cubic-bezier(.16,1,.3,1) both}
+.page.is-active .anim.d1{animation-delay:.06s} .page.is-active .anim.d2{animation-delay:.13s}
+.page.is-active .anim.d3{animation-delay:.2s} .page.is-active .anim.d4{animation-delay:.27s}
+@keyframes pageIn{from{opacity:0; transform:translateY(16px)} to{opacity:1; transform:none}}
+
+h1,h2,h3,h4{font-family:var(--display); font-weight:400; color:var(--ink); margin:0; text-wrap:balance}
+.h-display{font-size:clamp(2.7rem,6vw,4.6rem); line-height:1.02; letter-spacing:-.018em}
+.h-section{font-size:clamp(2.1rem,4.3vw,3.2rem); line-height:1.06; letter-spacing:-.012em; margin-bottom:var(--s4)}
+.kicker{font-size:.74rem; letter-spacing:.16em; text-transform:uppercase; font-weight:600; color:var(--clay-deep); margin:0 0 var(--s3); display:inline-flex; align-items:center; gap:.5rem}
+p{margin:0 0 var(--s3); color:var(--ink-2); text-wrap:pretty}
+.lede{font-size:clamp(1.18rem,2vw,1.42rem); line-height:1.55; color:var(--ink); max-width:38ch; margin-bottom:var(--s4)}
+.prose{max-width:60ch}
+.about-bio{max-width:60ch; margin-bottom:var(--s6)}
+.about-bio p{margin:0 0 var(--s4); color:var(--ink-2); font-size:1.05rem; line-height:1.65}
+.about-bio p:last-child{margin:0}
+.about-bio .lead-in{color:var(--ink); margin-top:var(--s5)}
+.muted{color:var(--ink-3)}
+
+/* name hover photo */
+.name-pop{position:relative; white-space:nowrap; z-index:20}   /* raise so the hover photo sits in front of the words below */
+.name-pop .pop{position:absolute; left:50%; top:112%; width:140px; aspect-ratio:1/1; border-radius:12px; overflow:hidden; opacity:0; pointer-events:none; box-shadow:var(--shadow-lift); border:3px solid var(--surface); transform:translate(-50%,-10px) rotate(-3deg) scale(.9); transition:opacity .35s ease, transform .45s cubic-bezier(.16,1,.3,1); z-index:5}
+.name-pop .pop img{width:100%; height:100%; object-fit:cover; display:block}
+.name-pop:hover .pop{opacity:1; transform:translate(-50%,0) rotate(-2deg) scale(1)}
+
+/* North Star */
+.northstar{margin:var(--s6) 0; padding:0; max-width:42rem}
+.northstar .label{font-size:.74rem; letter-spacing:.16em; text-transform:uppercase; font-weight:600; color:var(--moss-deep); margin-bottom:.9rem; display:flex; align-items:center; gap:.5rem}
+.northstar .quote{font-family:var(--display); font-size:clamp(1.6rem,3.1vw,2.3rem); line-height:1.22; color:var(--ink); letter-spacing:-.01em; max-width:20ch; margin:0}
+.northstar .quote::before{content:"“"; color:var(--clay)} .northstar .quote::after{content:"”"; color:var(--clay)}
+
+/* capability boxes */
+.caps{margin-top:var(--s6); display:grid; grid-template-columns:1fr 1fr; gap:var(--s4)}
+.cap{border:1px solid var(--line); border-radius:5px; padding:var(--s5); background:var(--surface); transition:transform .35s cubic-bezier(.16,1,.3,1), box-shadow .35s ease, border-color .35s ease, opacity .35s ease; font-family:inherit; text-align:left; width:100%; display:block; cursor:pointer; color:inherit; -webkit-appearance:none; appearance:none}
+.cap:hover{transform:translateY(-3px); box-shadow:var(--shadow-lift); border-color:var(--line-2)}
+.cap[aria-pressed="true"]{border-color:var(--clay); box-shadow:inset 0 0 0 1.5px var(--clay), var(--shadow-lift); transform:translateY(-4px)}
+.caps.has-active .cap:not([aria-pressed="true"]){opacity:.45}
+.caps.has-active .cap:not([aria-pressed="true"]):hover{opacity:.78; transform:translateY(-2px)}
+.cap .cl{font-size:.74rem; letter-spacing:.16em; text-transform:uppercase; font-weight:600; color:var(--clay-deep); display:block; margin-bottom:.6rem; transition:color .3s ease}
+.cap[aria-pressed="true"] .cl{color:var(--clay)}
+.cap h3{font-size:1.4rem; letter-spacing:-.01em; line-height:1.12; margin-bottom:.55rem}
+.cap p{font-size:.96rem; margin:0; color:var(--ink-2)}
+
+/* About — "Questions I've enjoyed facing" cue + panel */
+.qcue{margin-top:var(--s4); display:flex; flex-direction:column; align-items:center; gap:.45rem; text-align:center; max-height:8rem; overflow:hidden; transition:opacity .5s ease, max-height .5s ease, margin-top .5s ease}
+.qcue.is-dismissed{opacity:0; max-height:0; margin-top:0; pointer-events:none}
+.qcue-eyebrow{font-size:.74rem; letter-spacing:.16em; text-transform:uppercase; font-weight:600; color:var(--clay-deep); max-width:34ch; line-height:1.55}
+.qcue-arrow{display:inline-flex; color:var(--clay)}
+.qcue-arrow svg{width:1.05rem; height:1.05rem; animation:cueBob 1.9s ease-in-out infinite}
+@keyframes cueBob{0%,100%{transform:translateY(2px); opacity:.45} 50%{transform:translateY(-3px); opacity:1}}
+
+.qpanel{margin-top:var(--s3); padding-top:var(--s5); border-top:1px solid var(--line-2); max-width:46rem}
+.qpanel[hidden]{display:none}
+.qpanel-head{display:flex; justify-content:space-between; align-items:flex-start; gap:var(--s4); margin-bottom:var(--s4)}
+.qpanel-eyebrow{font-size:.74rem; letter-spacing:.16em; text-transform:uppercase; font-weight:600; color:var(--clay-deep); margin:0 0 .55rem; display:flex; align-items:center; gap:.7rem}
+.qpanel-eyebrow::after{content:""; height:1.5px; width:2.2rem; background:var(--clay); border-radius:2px; transform:scaleX(0); transform-origin:left}
+.qpanel-title{font-family:var(--display); font-weight:400; font-size:clamp(1.5rem,2.7vw,2rem); letter-spacing:-.01em; line-height:1.14; margin:0; color:var(--ink)}
+.qpanel-close{flex:none; font-family:var(--body); font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; font-weight:600; color:var(--ink-3); background:none; border:0; cursor:pointer; display:inline-flex; align-items:center; gap:.45rem; padding:.3rem .1rem; transition:color .25s ease}
+.qpanel-close:hover{color:var(--clay-deep)}
+.qlist{list-style:none; margin:0; padding:0}
+.qlist li{padding:.75rem 0; border-top:1px solid var(--line); color:var(--ink); line-height:1.55; font-size:1.02rem; max-width:62ch}
+.qlist li:first-child{border-top:0}
+.qpanel.is-in .qpanel-eyebrow{animation:qHeadIn .38s cubic-bezier(.16,1,.3,1) both}
+.qpanel.is-in .qpanel-eyebrow::after{animation:qLine .55s cubic-bezier(.16,1,.3,1) .14s both}
+.qpanel.is-in .qpanel-title{animation:qHeadIn .44s cubic-bezier(.16,1,.3,1) .06s both}
+.qlist li.q-anim{opacity:0; animation:qIn .42s cubic-bezier(.22,1.18,.36,1) both}
+.qpanel.is-out .qlist li,.qpanel.is-out .qpanel-eyebrow,.qpanel.is-out .qpanel-title{animation:qOut .2s ease-in forwards}
+@keyframes qHeadIn{from{opacity:0; transform:translateY(8px)} to{opacity:1; transform:translateY(0)}}
+@keyframes qIn{from{opacity:0; transform:translateY(12px)} to{opacity:1; transform:translateY(0)}}
+@keyframes qOut{from{opacity:1; transform:translateY(0)} to{opacity:0; transform:translateY(8px)}}
+@keyframes qLine{from{transform:scaleX(0)} to{transform:scaleX(1)}}
+
+/* index (sub-section / article links) */
+.index{margin-top:var(--s6); border-top:1px solid var(--line-2)}
+.entry{display:grid; grid-template-columns:1fr auto; gap:var(--s4) var(--s5); align-items:center; width:100%; text-align:left; background:none; border:0; border-bottom:1px solid var(--line); padding:var(--s5) var(--s2); cursor:pointer; color:inherit; font-family:var(--body); transition:background .3s ease}
+.entry > div{transition:transform .35s cubic-bezier(.16,1,.3,1)}
+.entry:hover{background:linear-gradient(90deg, oklch(0.52 0.072 150 / .06), transparent 70%)}
+.entry:hover > div{transform:translateX(8px)}
+.entry-tag{font-size:.72rem; letter-spacing:.16em; text-transform:uppercase; font-weight:600; color:var(--clay-deep); margin-bottom:.7rem; display:block}
+.entry h3{font-size:clamp(1.45rem,2.6vw,1.9rem); letter-spacing:-.012em; line-height:1.1; margin-bottom:.4rem; transition:color .25s ease}
+.entry:hover h3{color:var(--moss-deep)}
+.entry p{font-size:.96rem; color:var(--ink-2); margin:0; max-width:52ch}
+.go{font-size:.8rem; letter-spacing:.1em; text-transform:uppercase; font-weight:600; color:var(--moss-deep); display:inline-flex; align-items:center; gap:.55rem; white-space:nowrap}
+.go .arr{transition:transform .3s ease; display:inline-block}
+.entry:hover .go .arr,.fw:hover .go .arr{transform:translateX(5px)}
+
+/* lessons (categorized learnings) + bullet lists */
+.lesson-group{margin-top:var(--s6); max-width:50rem}
+.lesson-group h3{font-size:1.5rem; letter-spacing:-.01em; margin-bottom:var(--s2); padding-bottom:.5rem; border-bottom:1px solid var(--line-2)}
+.leaf-list{list-style:none; margin:0; padding:0}
+.leaf-list li{padding:.7rem 0 .7rem 1.7rem; border-top:1px solid var(--line); position:relative; color:var(--ink); line-height:1.5}
+.lesson-group .leaf-list li:first-child{border-top:0}
+.leaf-list li::before{content:""; position:absolute; left:0; top:1.04em; width:.72rem; height:.72rem; background:var(--clay); -webkit-mask:var(--leaf-mask) center/contain no-repeat; mask:var(--leaf-mask) center/contain no-repeat}
+
+/* quotes */
+.quote-list{list-style:none; margin:var(--s6) 0 0; padding:0; max-width:46rem}
+.quote-list li{padding:var(--s4) 0; border-top:1px solid var(--line)}
+.quote-list li:first-child{border-top:0}
+.quote-list .q{font-family:var(--display); font-size:clamp(1.02rem,1.87vw,1.32rem); line-height:1.32; color:var(--ink); margin:0 0 .55rem; letter-spacing:-.005em}
+.quote-list .by{font-size:.8rem; letter-spacing:.1em; text-transform:uppercase; font-weight:600; color:var(--clay-deep)}
+
+/* Systems */
+.tools-wrap{position:relative; margin-top:var(--s6)}
+#constellation{position:absolute; inset:-1.5rem; width:calc(100% + 3rem); height:calc(100% + 3rem); pointer-events:none; z-index:0}
+.tools{position:relative; z-index:1; display:flex; flex-wrap:wrap; gap:.7rem}
+.tool{font-size:.92rem; font-weight:500; color:var(--ink); background:var(--surface); border:1px solid var(--line-2); border-radius:999px; padding:.5rem 1rem; cursor:default; transition:transform .25s cubic-bezier(.16,1,.3,1), border-color .25s ease, color .25s ease, box-shadow .25s ease}
+.tool:hover{transform:translateY(-2px); border-color:var(--moss); color:var(--moss-deep); box-shadow:var(--shadow-soft)}
+.tools-label{font-size:.74rem; letter-spacing:.16em; text-transform:uppercase; font-weight:600; color:var(--ink-3); margin-bottom:var(--s3); display:block}
+.big-q{font-family:var(--display); font-size:clamp(1.5rem,3vw,2.1rem); line-height:1.24; letter-spacing:-.01em; color:var(--ink); margin:var(--s8) 0 var(--s4); padding:var(--s5) 0 0; border-top:1px solid var(--line-2); max-width:30ch}
+.frameworks{display:grid; grid-template-columns:1fr 1fr; gap:var(--s4); margin:var(--s5) 0}
+.fw{display:block; border:1px solid var(--line); border-radius:6px; padding:var(--s5); background:var(--surface); color:inherit; cursor:pointer; transition:transform .35s cubic-bezier(.16,1,.3,1), box-shadow .35s ease, border-color .35s ease}
+.fw:hover{transform:translateY(-3px); box-shadow:var(--shadow-lift); border-color:var(--line-2)}
+.fw h3{font-size:1.3rem; letter-spacing:-.01em; line-height:1.16; margin-bottom:.4rem}
+.fw h3 .acro{color:var(--moss-deep)}
+.fw .fw-uc{font-size:.82rem; font-weight:600; color:var(--clay-deep); margin:0 0 .6rem}
+.fw p{font-size:.95rem; margin:0 0 var(--s4); color:var(--ink-2)}
+.come-back{display:inline-flex; align-items:center; gap:.6rem; font-size:1.08rem; color:var(--ink); margin-top:var(--s6); font-family:var(--display)}
+.come-back .jit{font-family:var(--body)}
+
+/* reader / sub-pages */
+.reader-wrap{max-width:var(--reader-w)}
+.reader-back{font-size:.78rem; letter-spacing:.12em; text-transform:uppercase; font-weight:600; color:var(--ink-2); cursor:pointer; background:none; border:0; padding:.4rem 0; display:inline-flex; align-items:center; gap:.6rem; margin-bottom:var(--s6); transition:color .25s; font-family:var(--body)}
+.reader-back .arr{transition:transform .3s ease; display:inline-block}
+.reader-back:hover{color:var(--moss-deep)} .reader-back:hover .arr{transform:translateX(-4px)}
+.reader-title{font-size:clamp(2.3rem,4.6vw,3.4rem); line-height:1.05; letter-spacing:-.018em; margin-bottom:var(--s3)}
+.page[data-page^="article-"] .reader-title{font-size:clamp(1.85rem,3.7vw,2.72rem)}   /* article headlines ~20% smaller */
+.reader-title .acro{color:var(--moss-deep)}
+.uc-status{display:inline-flex; align-items:center; gap:.5rem; font-size:.9rem; font-weight:600; color:var(--clay-deep); margin:0 0 var(--s5); padding:.4rem .9rem; border:1px dashed var(--line-2); border-radius:999px; background:oklch(0.60 0.11 50 / .05)}
+.reader-body{font-size:1.13rem; line-height:1.75; max-width:var(--reader-w)}
+.reader-body p{margin:0 0 var(--s4); color:var(--ink-2)}
+.reader-body .drop::first-letter{font-family:var(--display); font-size:3.4em; line-height:.72; float:left; padding:.08em .12em 0 0; color:var(--moss-deep)}
+.reader-body .pull{font-family:var(--display); font-weight:400; font-size:clamp(1.12rem,2.08vw,1.56rem); line-height:1.3; letter-spacing:-.01em; color:var(--ink); margin:0 0 var(--s5); max-width:30ch}
+.reader-body .speech{font-style:italic; color:var(--ink); margin:var(--s4) 0; padding-left:var(--s4)}
+.reader-body .pt{color:var(--clay-deep); font-weight:600; font-style:normal}
+.reader-body .lead{font-weight:700; color:var(--ink)}
+.reader-body .dialogue{margin:var(--s4) 0; padding-left:var(--s4)}
+.reader-body .dialogue p{margin:0 0 .55rem; color:var(--ink)}
+.reader-body .dialogue p:last-child{margin-bottom:0}
+.reader-body .pquote{text-align:center; font-family:var(--display); font-weight:400; font-size:clamp(1.5rem,3vw,2rem); line-height:1.26; letter-spacing:-.012em; color:var(--ink); margin:var(--s5) auto; max-width:28ch}
+.reader-body .divider{display:flex; align-items:center; justify-content:center; gap:.85rem; margin:var(--s7) 0}
+.reader-body .divider::before,.reader-body .divider::after{content:""; width:2.4rem; height:1px; background:var(--line-2)}
+.reader-body .divider .lf{display:inline-block; width:.9rem; height:.9rem; background:var(--clay); -webkit-mask:var(--leaf-mask) center/contain no-repeat; mask:var(--leaf-mask) center/contain no-repeat}
+.reader-body .coda{font-size:1.24rem; line-height:1.66; color:var(--ink); margin-top:var(--s6)}
+.reader-body ul.rules{list-style:none; margin:var(--s4) 0 var(--s5); padding:0; max-width:60ch}
+.reader-body ul.rules li{position:relative; padding:.42rem 0 .42rem 1.7rem; color:var(--ink); line-height:1.5}
+.reader-body ul.rules li::before{content:""; position:absolute; left:0; top:.6em; width:.72rem; height:.72rem; background:var(--clay); -webkit-mask:var(--leaf-mask) center/contain no-repeat; mask:var(--leaf-mask) center/contain no-repeat}
+.reader-body .turn{font-family:var(--display); font-size:1.5rem; letter-spacing:-.01em; color:var(--ink); margin:var(--s6) 0 var(--s4)}
+.reader-body .riddle{font-family:var(--display); font-size:clamp(1.18rem,2.3vw,1.55rem); line-height:1.6; color:var(--ink); text-align:center; margin:0 0 var(--s5); letter-spacing:-.005em}
+.reader-body .riddle .rq{display:inline-block; margin-top:.7rem; color:var(--clay-deep); font-style:italic}
+.reader-body .fig{margin:var(--s6) 0; text-align:center}
+.reader-body .fig a{display:block; border-radius:8px}
+.reader-body .fig img{width:100%; height:auto; display:block; border-radius:8px; border:1px solid var(--line-2); box-shadow:0 5px 16px -10px oklch(0.25 0.02 150 / .35)}
+.reader-body .fig figcaption{margin-top:.75rem; font-size:.8rem; color:var(--ink-3); line-height:1.5; letter-spacing:.02em}
+.reader-body p:last-child{margin-bottom:0}
+.editable-note{margin-top:var(--s6); padding:var(--s4); border:1px dashed var(--line-2); border-radius:4px; font-size:.82rem; letter-spacing:.01em; color:var(--ink-3); line-height:1.7; background:oklch(0.52 0.072 150 / .03)}
+.editable-note b{color:var(--moss-deep); font-weight:600}
+
+/* mobile */
+.toc-toggle{display:none; position:fixed; top:var(--s3); right:var(--s3); z-index:var(--z-toggle); font-size:.78rem; letter-spacing:.1em; text-transform:uppercase; font-weight:600; color:var(--ground); background:var(--ink); border:0; cursor:pointer; padding:.8rem 1.1rem; min-height:44px; border-radius:4px; box-shadow:var(--shadow-soft); align-items:center; gap:.6rem}
+.toc-toggle .bars{display:inline-flex; flex-direction:column; gap:3.5px}
+.toc-toggle .bars i{display:block; width:15px; height:1.5px; background:var(--ground); transition:transform .3s, opacity .3s}
+body.menu-open .toc-toggle .bars i:nth-child(1){transform:translateY(5px) rotate(45deg)}
+body.menu-open .toc-toggle .bars i:nth-child(2){opacity:0}
+body.menu-open .toc-toggle .bars i:nth-child(3){transform:translateY(-5px) rotate(-45deg)}
+@media (max-width:920px){
+  .layout{grid-template-columns:1fr; gap:0; padding:0 var(--s5)}
+  .toc-toggle{display:inline-flex}
+  .toc{position:fixed; inset:0; z-index:var(--z-menu); background:var(--ground); background-image:radial-gradient(120% 80% at 82% 0%, oklch(0.975 0.01 140 / .9), transparent 60%); transform:translateY(-101%); transition:transform .45s cubic-bezier(.16,1,.3,1); overflow-y:auto}
+  body.menu-open .toc{transform:translateY(0)}
+  .toc-inner{position:static; padding:var(--s8) var(--s5) var(--s6); max-width:34rem; margin:0 auto}
+  .toc-marker{display:none}
+  .toc-link{font-size:1.3rem; padding:.8rem 0 .8rem 1.3rem; min-height:44px}
+  .toc-sublink{font-size:1.02rem; padding:.65rem 0 .65rem 2.6rem; min-height:44px}
+  .toc-sublink::before{top:1.0em}
+  .toc-sub{max-height:none; opacity:1; overflow:visible}
+  .content{padding-top:var(--s8)}
+  .caps,.frameworks{grid-template-columns:1fr}
+  .entry{grid-template-columns:1fr; gap:var(--s3)} .entry .go{align-self:start}
+}
+@media (max-width:560px){ body{font-size:16px} .layout{padding:0 var(--s4)} }
+
+/* ── Easter eggs ─────────────────────────────────────────── */
+/* 1. Reading-progress hairline (article pages only) */
+.read-bar{position:fixed; top:0; left:0; height:3px; width:0; background:linear-gradient(90deg,var(--moss),var(--moss-deep)); z-index:45; opacity:0; transition:opacity .35s ease; pointer-events:none; box-shadow:0 0 8px oklch(0.52 0.072 150 / .5)}
+body.reading .read-bar{opacity:1}
+
+/* 2. Cursor-aware sheen on the capability cards */
+.cap{position:relative; isolation:isolate}
+.cap::after{content:""; position:absolute; inset:0; border-radius:inherit; pointer-events:none; z-index:-1; opacity:0; transition:opacity .4s ease;
+  background:radial-gradient(240px circle at var(--mx,50%) var(--my,50%), oklch(0.60 0.085 150 / .18), transparent 60%)}
+.cap:hover::after{opacity:1}
+.cap[aria-pressed="true"]::after{background:radial-gradient(240px circle at var(--mx,50%) var(--my,50%), oklch(0.62 0.10 55 / .18), transparent 60%)}
+
+/* 3. North Star twinkle + mini constellation */
+.northstar{position:relative}
+.ns-canvas{position:absolute; inset:0; pointer-events:none; z-index:3}
+.northstar .jit{cursor:pointer}
+.northstar .jit.twinkle{animation:nsTwinkle .65s cubic-bezier(.16,1,.3,1)}
+@keyframes nsTwinkle{0%{transform:scale(1) rotate(0)} 30%{transform:scale(1.45) rotate(10deg)} 60%{transform:scale(1.12) rotate(-7deg)} 100%{transform:scale(1) rotate(0)}}
+
+/* 4. Hidden night / dark herbarium theme (press n) */
+body.night{
+  --ground:oklch(0.205 0.016 152); --ground-2:oklch(0.245 0.018 152); --surface:oklch(0.258 0.020 152);
+  --ink:oklch(0.940 0.012 140); --ink-2:oklch(0.835 0.012 145); --ink-3:oklch(0.705 0.012 145);
+  --moss:oklch(0.745 0.085 150); --moss-deep:oklch(0.805 0.080 150);
+  --clay:oklch(0.730 0.105 55); --clay-deep:oklch(0.790 0.095 52);
+  --line:oklch(0.940 0.012 140 / 0.15); --line-2:oklch(0.940 0.012 140 / 0.27);
+  --shadow-soft:0 1px 2px oklch(0 0 0 / .35), 0 10px 26px -12px oklch(0 0 0 / .55);
+  --shadow-lift:0 1px 1px oklch(0 0 0 / .35), 0 22px 44px -22px oklch(0 0 0 / .60);
+  background-image:radial-gradient(120% 80% at 82% -8%, oklch(0.300 0.030 152 / .8), transparent 60%),radial-gradient(90% 60% at 0% 4%, oklch(0.60 0.11 50 / .07), transparent 55%),radial-gradient(120% 90% at 50% 122%, oklch(0.50 0.072 150 / .16), transparent 60%);
+}
+body.night .grain{opacity:.06; mix-blend-mode:screen}
+::view-transition-old(root),::view-transition-new(root){animation-duration:.45s}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms!important; animation-iteration-count:1!important; transition-duration:.001ms!important}
+  .page.is-active .anim{animation:none}
+}
+</style>
+<noscript><style>
+  #intro,.toc-toggle{display:none!important}
+  .app{opacity:1!important}
+  .page{display:block!important; border-top:1px solid var(--line); padding-top:var(--s6); margin-top:var(--s6)}
+  .toc-marker,#constellation{display:none!important}
+  .toc-sub{max-height:none!important; opacity:1!important}
+</style></noscript>
+</head>
+<body>
+<div class="grain" aria-hidden="true"></div>
+<div class="read-bar" id="readBar" aria-hidden="true"></div>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<svg width="0" height="0" aria-hidden="true" style="position:absolute">
+  <symbol id="leaf" viewBox="0 0 24 24">
+    <path d="M12 2C6.5 6.5 4.5 13.5 11.4 22 11.7 16 12 9 12 2Z" fill="currentColor"/>
+    <path d="M12 2C17.5 6.5 19.5 13.5 12.6 22 12.3 16 12 9 12 2Z" fill="currentColor" opacity=".55"/>
+  </symbol>
+</svg>
+
+<div id="intro" role="presentation">
+  <canvas id="introCanvas" aria-hidden="true"></canvas>
+  <button class="intro-skip" id="introSkip" type="button">Enter the garden →</button>
+</div>
+
+<button class="toc-toggle" id="tocToggle" type="button" aria-expanded="false" aria-controls="toc">
+  <span class="bars" aria-hidden="true"><i></i><i></i><i></i></span><span class="toc-toggle-label">Menu</span>
+</button>
+
+<div class="app" id="app">
+  <div class="layout">
+    <aside class="toc" id="toc">
+      <div class="toc-inner">
+        <a class="toc-brand" id="brandHome" href="/" title="Replay the opening">
+          <svg class="sprig" aria-hidden="true"><use href="#leaf"/></svg>
+          <span class="gw">My digital garden —<br/><em>where I go to muse</em></span>
+        </a>
+        <nav class="toc-nav" aria-label="Sections">
+          <span class="toc-marker" id="tocMarker" aria-hidden="true"></span>
+          <ul class="toc-list">
+            <li class="toc-item"><a class="toc-link" href="/" data-route><span class="ix">01</span><span>About</span></a></li>
+            <li class="toc-item" data-parent="introspection">
+              <a class="toc-link" href="/introspection" data-route><span class="ix">02</span><span>Introspection</span></a>
+              <ul class="toc-sub">
+                <li><a class="toc-sublink" href="/introspection/learnings" data-route>27 Learnings</a></li>
+                <li><a class="toc-sublink" href="/introspection/quotes" data-route>My Favorite Quotes</a></li>
+                <li><a class="toc-sublink" href="/introspection/flaws" data-route>Flaws</a></li>
+                <li><a class="toc-sublink" href="/introspection/dreams" data-route>Dreams</a></li>
+              </ul>
+            </li>
+            <li class="toc-item" data-parent="systems">
+              <a class="toc-link" href="/systems" data-route><span class="ix">03</span><span>Systems</span></a>
+              <ul class="toc-sub">
+                <li><a class="toc-sublink" href="/systems/atom" data-route>ATOM — Agentic Task Ontology Model</a></li>
+                <li><a class="toc-sublink" href="/systems/horus" data-route>HORUS — an AI operating system</a></li>
+              </ul>
+            </li>
+            <li class="toc-item" data-parent="articles">
+              <a class="toc-link" href="/articles" data-route><span class="ix">04</span><span>Essays</span></a>
+              <ul class="toc-sub">
+                <li><a class="toc-sublink" href="/articles/public-health" data-route>Why I studied Public Health</a></li>
+                <li><a class="toc-sublink" href="/articles/unstuck" data-route>How to get unstuck</a></li>
+                <li><a class="toc-sublink" href="/articles/force-multiplier" data-route>Are you a force multiplier?</a></li>
+              </ul>
+            </li>
+            <li class="toc-item"><a class="toc-link" href="/contact" data-route><span class="ix">05</span><span>Contact</span></a></li>
+          </ul>
+        </nav>
+        <div class="toc-foot">
+          <a href="mailto:contact.ethantse@gmail.com">contact.ethantse@gmail.com</a>
+          <a href="https://www.linkedin.com/in/tse-ethan/" target="_blank" rel="noopener">LinkedIn ↗</a>
+          <button class="night-hint" id="nightHint" type="button">press <kbd>n</kbd> for <span id="nmWord">night</span> mode</button>
+        </div>
+      </div>
+    </aside>
+
+    <main class="content" id="main">
+
+      <!-- ABOUT -->
+      <section class="page" data-page="about" aria-labelledby="about-h" tabindex="-1">
+        <h1 class="h-display anim" id="about-h">Hi, I'm <span class="name-pop">Ethan&nbsp;Tse<span class="pop" aria-hidden="true"><img src="/assets/ethan.jpg" alt="Ethan Tse" onerror="var p=this.closest('.pop'); if(p) p.remove();"></span></span>.</h1>
+        <p class="lede anim d1">Los Angeles born and raised, now based in Philadelphia and New York (mostly wherever I'm needed).</p>
+        <div class="about-bio anim d1">
+          <p>I've always been drawn to people who build lasting things: companies, communities, movements, and ideas that outlive them.</p>
+          <p>Over the past few years, I've worked across healthcare, software, and technology, primarily in consulting, investing, and operational roles. Along the way, I've helped founders grow companies, investors evaluate opportunities, and organizations turn ambitious ideas into reality.</p>
+          <p>I studied Public Health and Entrepreneurship at Cal Poly and the University of Pennsylvania, but most of my education has come from working alongside founders, operators, investors, researchers, and students trying to solve difficult problems.</p>
+          <p class="lead-in">Today, what I'm really chasing is simple:</p>
+        </div>
+        <figure class="northstar anim d2">
+          <figcaption class="label"><span class="jit" role="img" aria-label="star">⭐</span>My North Star</figcaption>
+          <blockquote class="quote">Be a force multiplier for the people shaping real progress.</blockquote>
+        </figure>
+        <div class="caps anim d3" role="group" aria-label="Capabilities — select one to filter questions">
+          <button type="button" class="cap" data-cat="strategy" aria-pressed="false" aria-controls="qPanel"><span class="cl">Strategy</span><h3>Turning complexity into direction</h3><p>Using knowledge, trends, and incentives to identify the next step.</p></button>
+          <button type="button" class="cap" data-cat="operations" aria-pressed="false" aria-controls="qPanel"><span class="cl">Operations</span><h3>Turning chaos into function</h3><p>Maintaining systems and processes that consistently execute.</p></button>
+          <button type="button" class="cap" data-cat="business-development" aria-pressed="false" aria-controls="qPanel"><span class="cl">Business Development</span><h3>Turning leads into opportunities</h3><p>Developing partnerships, ecosystems, and channels that grow over time.</p></button>
+          <button type="button" class="cap" data-cat="product" aria-pressed="false" aria-controls="qPanel"><span class="cl">Product</span><h3>Turning signal into substance</h3><p>Building, designing, and launching experiences that the market needs.</p></button>
+        </div>
+        <div class="qcue anim d4" id="qCue">
+          <span class="qcue-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M6 11l6-6 6 6"/></svg></span>
+          <span class="qcue-eyebrow">Tap a card to see some questions I've enjoyed facing</span>
+        </div>
+        <section class="qpanel" id="qPanel" aria-labelledby="qTitle" hidden>
+          <div class="qpanel-head">
+            <div class="qpanel-headings">
+              <p class="qpanel-eyebrow" id="qCat"></p>
+              <h2 class="qpanel-title" id="qTitle">Questions I've enjoyed facing</h2>
+            </div>
+            <button type="button" class="qpanel-close" id="qClose" aria-label="Hide questions">Clear <span aria-hidden="true">✕</span></button>
+          </div>
+          <ul class="qlist" id="qList" aria-live="polite"></ul>
+        </section>
+      </section>
+
+      <!-- INTROSPECTION (hub) -->
+      <section class="page" data-page="introspection" aria-labelledby="intro-h" tabindex="-1">
+        <h2 class="h-section anim" id="intro-h">Introspection</h2>
+        <p class="prose anim">A look inward — what I've learned, what I return to, what I'm working on, and where I'm headed.</p>
+        <div class="index anim d1">
+          <a class="entry" href="/introspection/learnings" data-route><div><span class="entry-tag">Lessons</span><h3>27 Learnings</h3><p>On life, work, and decision-making.</p></div><span class="go">Open <span class="arr">→</span></span></a>
+          <a class="entry" href="/introspection/quotes" data-route><div><span class="entry-tag">Words</span><h3>My Favorite Quotes</h3><p>Lines I keep coming back to.</p></div><span class="go">Open <span class="arr">→</span></span></a>
+          <a class="entry" href="/introspection/flaws" data-route><div><span class="entry-tag">Honesty</span><h3>Flaws</h3><p>The edges I'm still sanding down.</p></div><span class="go">Open <span class="arr">→</span></span></a>
+          <a class="entry" href="/introspection/dreams" data-route><div><span class="entry-tag">Ahead</span><h3>Dreams</h3><p>Where I'm pointed.</p></div><span class="go">Open <span class="arr">→</span></span></a>
+        </div>
+      </section>
+
+      <!-- 27 LEARNINGS -->
+      <section class="page" data-page="learnings" aria-labelledby="learn-h" tabindex="-1">
+        <a class="reader-back" href="/introspection" data-route><span class="arr">←</span> Back to Introspection</a>
+        <h1 class="reader-title anim" id="learn-h">27 Learnings</h1>
+        <div class="lesson-group anim d1">
+          <h3>Life</h3>
+          <ul class="leaf-list">
+            <li>If everyone agrees you're a good person, you're probably avoiding necessary conflicts.</li>
+            <li>Envy doesn't need to be toxic.</li>
+            <li>The most courageous thing you can do is not letting the world corrupt your heart.</li>
+            <li>Don't go looking to join a tribe, build your own.</li>
+            <li>Real friends do not rejoice when you fail, nor see your success as a threat to their own.</li>
+            <li>Assume people like you (mostly).</li>
+            <li>You don't need a massive following to influence many people.</li>
+            <li>Think: what is the most selfish possible reason this person would want to affiliate with me?</li>
+            <li>Being a big fish in a small pond is for experimentation. A small fish in a big pond is for learning.</li>
+            <li>Anxiety is a result of inaction on something you could've controlled.</li>
+            <li>Being an asshole doesn't make you a tough guy.</li>
+            <li>Merit doesn't market itself.</li>
+            <li>You cannot control first impressions, only second and third ones.</li>
+          </ul>
+        </div>
+        <div class="lesson-group anim d2">
+          <h3>Work</h3>
+          <ul class="leaf-list">
+            <li>Be a professional, first and foremost.</li>
+            <li>Big dreams demand bigger discipline.</li>
+            <li>People less qualified than you are getting what you want because they chose to. You can choose too.</li>
+            <li>Be cautiously authentic.</li>
+            <li>Ambition isn't always good.</li>
+            <li>Your career is often limited more by courage than competence.</li>
+            <li>The fastest way to stand out is to become reliable.</li>
+            <li>Be interesting before you try to be connected.</li>
+          </ul>
+        </div>
+        <div class="lesson-group anim d3">
+          <h3>Decision-Making</h3>
+          <ul class="leaf-list">
+            <li>If you need certainty before acting, you'll spend your life watching.</li>
+            <li>Think in tiers: yes/no, more info, multiple perspectives.</li>
+            <li>Invest time laying a foundation and choosing the right direction.</li>
+            <li>Imagination is where our dreams get born and die, action is where they go to live.</li>
+            <li>Be wary of saying "one day, I'll do X."</li>
+            <li>Chronic lateness is rarely about time.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- QUOTES -->
+      <section class="page" data-page="quotes" aria-labelledby="quotes-h" tabindex="-1">
+        <a class="reader-back" href="/introspection" data-route><span class="arr">←</span> Back to Introspection</a>
+        <h1 class="reader-title anim" id="quotes-h">My Favorite Quotes</h1>
+        <ul class="quote-list anim d1">
+          <li><p class="q">"You're never going to learn something as profoundly as when it's purely out of curiosity."</p><span class="by">— Christopher Nolan</span></li>
+          <li><p class="q">"It takes a lifetime to build a good reputation, but you can lose it in a minute."</p><span class="by">— Will Rogers</span></li>
+          <li><p class="q">"We all have two lives. The second begins when we realize we only have one."</p><span class="by">— Confucius</span></li>
+          <li><p class="q">"Do not wait to strike till the iron is hot, but make it hot by striking."</p><span class="by">— William Butler Yeats</span></li>
+          <li><p class="q">"Give me a place to stand, and a lever long enough, and I will move the world."</p><span class="by">— Archimedes</span></li>
+        </ul>
+      </section>
+
+      <!-- FLAWS -->
+      <section class="page" data-page="flaws" aria-labelledby="flaws-h" tabindex="-1">
+        <a class="reader-back" href="/introspection" data-route><span class="arr">←</span> Back to Introspection</a>
+        <h1 class="reader-title anim" id="flaws-h">Flaws</h1>
+        <p class="prose anim d1">The edges I'm still sanding down.</p>
+        <ul class="leaf-list anim d1" style="max-width:46rem;margin-top:var(--s4)">
+          <li>I can treat disagreement as exploration rather than recognizing when it needs closure.</li>
+          <li>I can underestimate the cost it takes to change reticent people.</li>
+          <li>I can overcommunicate to manufacture certainty where none is needed.</li>
+          <li>I can reframe problems instead of directly solving them.</li>
+          <li>I occasionally have to remind myself that the best solution can be the simplest one.</li>
+        </ul>
+      </section>
+
+      <!-- DREAMS -->
+      <section class="page" data-page="dreams" aria-labelledby="dreams-h" tabindex="-1">
+        <a class="reader-back" href="/introspection" data-route><span class="arr">←</span> Back to Introspection</a>
+        <h1 class="reader-title anim" id="dreams-h">Dreams</h1>
+        <p class="prose anim d1">Where I'm pointed.</p>
+        <ul class="leaf-list anim d1" style="max-width:46rem;margin-top:var(--s4)">
+          <li>Build and design my own home.</li>
+          <li>Live to 100 and help others do the same.</li>
+          <li>Run a marathon under 3:00.</li>
+          <li>See earth from space.</li>
+          <li>Direct a short film.</li>
+        </ul>
+      </section>
+
+      <!-- SYSTEMS (hub) -->
+      <section class="page" data-page="systems" aria-labelledby="sys-h" tabindex="-1">
+        <h2 class="h-section anim" id="sys-h">Systems</h2>
+        <p class="prose anim">Some tools I use to think clearly and execute consistently.</p>
+
+        <div class="tools-wrap anim d1">
+          <span class="tools-label">SaaS I use for productivity</span>
+          <canvas id="constellation" aria-hidden="true"></canvas>
+          <div class="tools" id="tools">
+            <span class="tool">Claude</span><span class="tool">Gemini</span><span class="tool">Perplexity</span>
+            <span class="tool">ChatGPT</span><span class="tool">Grok</span><span class="tool">Notion</span>
+            <span class="tool">NotebookLM</span><span class="tool">WisprFlow</span><span class="tool">Dia</span>
+            <span class="tool">Focus To-Do</span><span class="tool">Calendly</span><span class="tool">Slack</span>
+            <span class="tool">Granola AI</span><span class="tool">Airtable</span><span class="tool">Poke</span>
+            <span class="tool">Spotify</span><span class="tool">LastPass</span>
+          </div>
+        </div>
+
+        <blockquote class="big-q anim d2">How do we use AI in our workflows, but in a way that catalyzes human intelligence, not replaces it?</blockquote>
+        <p class="anim d2" style="max-width:60ch">I'm spending some free time developing two things:</p>
+
+        <div class="frameworks anim d3">
+          <a class="fw" href="/systems/atom" data-route>
+            <h3><span class="acro">ATOM</span> — Agentic Task Ontology Model</h3>
+            <p class="fw-uc">🚧 under construction</p>
+            <p>ATOM is an evolving framework for categorizing and defining tasks that AI can assist with or should stay out of.</p>
+            <span class="go">Open ATOM <span class="arr">→</span></span>
+          </a>
+          <a class="fw" href="/systems/horus" data-route>
+            <h3><span class="acro">HORUS</span> — Habits, Objectives, Routines, Utilization, Synthesis</h3>
+            <p class="fw-uc">🚧 under construction</p>
+            <p>A personalized AI operating system built around my goals, workflow, and decision-making.</p>
+            <span class="go">Open HORUS <span class="arr">→</span></span>
+          </a>
+        </div>
+
+        <p class="come-back anim d4"><span class="jit" role="img" aria-label="brain">🧠</span>Feel free to inquire how it's coming along or if you want to trade ideas. Come back soon!</p>
+      </section>
+
+      <!-- ATOM -->
+      <section class="page" data-page="atom" aria-labelledby="atom-h" tabindex="-1">
+        <a class="reader-back" href="/systems" data-route><span class="arr">←</span> Back to Systems</a>
+        <div class="reader-wrap">
+          <h1 class="reader-title anim" id="atom-h"><span class="acro">ATOM</span> — Agentic Task Ontology Model</h1>
+          <p class="uc-status anim d1">🚧 currently under construction — come back soon!</p>
+          <div class="reader-body anim d2">
+            <p>Currently more interested in what "should" be improved over if it "can" be. Use cases and rationale to be updated.</p>
+            <div class="editable-note">The full model is growing here — diagrams, task types, and the vocabulary will land as it matures.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- HORUS -->
+      <section class="page" data-page="horus" aria-labelledby="horus-h" tabindex="-1">
+        <a class="reader-back" href="/systems" data-route><span class="arr">←</span> Back to Systems</a>
+        <div class="reader-wrap">
+          <h1 class="reader-title anim" id="horus-h"><span class="acro">HORUS</span> — Habits, Objectives, Routines, Utilization, Synthesis</h1>
+          <p class="uc-status anim d1">🚧 currently under construction — come back soon!</p>
+          <div class="reader-body anim d2">
+            <p>A personalized AI operating system built around my goals, workflow, and decision-making. HORUS is my primary interface across a stack centered on Claude, Notion, Obsidian, and Hermes Agent.</p>
+            <div class="editable-note">The architecture and routines will be documented here as the system settles.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ARTICLES index -->
+      <section class="page" data-page="articles" aria-labelledby="art-h" tabindex="-1">
+        <h2 class="h-section anim" id="art-h">Essays</h2>
+        <div class="index anim d1">
+          <a class="entry" href="/articles/public-health" data-route><div><span class="entry-tag">Origins</span><h3>Why I studied Public Health</h3></div><span class="go">Read <span class="arr">→</span></span></a>
+          <a class="entry" href="/articles/unstuck" data-route><div><span class="entry-tag">Life</span><h3>How to get unstuck</h3></div><span class="go">Read <span class="arr">→</span></span></a>
+          <a class="entry" href="/articles/force-multiplier" data-route><div><span class="entry-tag">Work</span><h3>Are you a force multiplier?</h3></div><span class="go">Read <span class="arr">→</span></span></a>
+        </div>
+      </section>
+
+      <!-- ARTICLE readers (editable) -->
+      <section class="page" data-page="article-unstuck" tabindex="-1">
+        <a class="reader-back" href="/articles" data-route><span class="arr">←</span> Back to Essays</a>
+        <div class="reader-wrap"><p class="kicker">Essay — Life · 4 min read</p><h1 class="reader-title">How to get unstuck</h1>
+        <div class="reader-body" style="margin-top:var(--s5)">
+          <blockquote class="pull">Most people think they need more confidence. What they really need is more evidence.</blockquote>
+          <p class="drop">There's an idea in decision theory called <b>optimal stopping</b>: the problem of knowing when to quit gathering options or information and just commit — because while waiting can have upside, it also has a cost, and after some amount of time, the cost definitively outweighs the upside.</p>
+          <p>Here's how I learned when to stop gathering, and when to start acting.</p>
+          <p>San Luis Obispo — a small city on California's Central Coast — was the kind of place you could bike end to end in under thirty minutes. My chronic coffee shop frequently had made me a familiar face to half the businesses in town.</p>
+          <p>But with only half my college experience left, most of it stolen by COVID, no amount of caffeine could relieve the crushing urgency in my chest: that I hadn't done enough, learned enough, or become enough.</p>
+          <p>Then an inconspicuous newsletter landed in my inbox. <em>Pitch your startup for a chance to win $15,000.</em></p>
+          <p>I was confident I needed this. I just didn't know what, or how. I'd just turned twenty, and my only experience was nearly two years as a research associate in my major's health behavior change unit (shoutout Dr. Thomas) — summarizing nearly two hundred scholarly sources, iterating on our methods until they were airtight. I'd been trained to gather and analyze before I dared to conclude anything.</p>
+          <p>My roommate and I settled on an idea inspired by his time in Gilroy — "the garlic capital of the world." An urban farming business that grew and sold microgreens.</p>
+          <p>Sitting at the library, we sought mentorship from a friend a year older than us, who'd done this competition before.</p>
+          <div class="dialogue">
+            <p>"Guys, just watch this." With his usual swagger, he calmly strode over to a group of girls sitting near us. My roommate and I followed meekly, fifteen feet from the booth we'd just left.</p>
+            <p>"Hi." His usual charismatic smile. "Sorry to interrupt — can I ask you guys a question?"</p>
+            <p>"Go for it."</p>
+            <p>"Do you know what microgreens are?"</p>
+            <p>"Yeah, um — those sprout things? On avocado toast, right?"</p>
+          </div>
+          <p>After two minutes of small talk, the three of us walked back. He sat down and said it plainly: "It's that easy, fellas."</p>
+          <p>That was the first time I watched customer discovery and market validation happen in front of me — casual, spontaneous, over in under two minutes. No hours pulling data from reputable sources. No ten-slide pitch deck. No certification, no peer-reviewed citations, no standardized questions list, and no waiting to get approved by someone who says they know better.</p>
+          <p class="pquote">Just a question, asked of a real person.</p>
+          <p>And that's when it hit me: he didn't have more confidence than me. He had less to go on, and he went anyway. The two minutes of asking gave him more real evidence than my nearly two years of training had, because he came from doing, and mine came from reading about it. I wasn't stuck for lack of belief. I was stuck because I kept trying to think my way to belief instead of act my way there.</p>
+          <h2 class="turn">The two minds were never at odds</h2>
+          <p>For a long time I'd held entrepreneurial thinking and scholarly thinking as opposite schools of thought, and I'd quietly decided my scholarly side was the problem. The thing slowing me down. The reason I couldn't move like my friend could.</p>
+          <p>That was a <b>false dichotomy</b>, and most people fall for it. A false dichotomy is when you treat two things as mutually exclusive, an either/or, when nothing actually forces you to choose. I'd told myself I could be rigorous or fast, careful or bold, the scholar or the builder, and that to get unstuck I'd have to abandon the first for the second. The wall separating the schools of thought was never real, but, in fact, complementary if I chose to view it as such. You can choose to as well! Regardless if you've never formally practiced to be a scholar or entrepreneur. Just do it.</p>
+          <p>So we just did it. With the businesses I already knew: all those coffee-shop visits had made me a familiar face, so asking real customer questions was easy — the relationships were there, and people tell a familiar face the truth. Validation was quick, easy, and most importantly, it was <em>enough</em>.</p>
+          <p>Then I went to a professor: "Hey, we're not the students you typically teach — we're business and public health majors — but can we use this lab space to learn and build alongside your students?" So we did. We iterated until we found the technical process that actually worked for our product — which rarely matched the instructions we'd dutifully read going in.</p>
+          <p>Three months later, we had a working prototype, several customers, and a small but mighty team. The product was growing faster and consistently; the business, even more so. I became known as "that plants guy" amongst my social circle. On the back of extraordinary feedback, we were ready to pitch.</p>
+          <p>We didn't win. (Congrats to the winner — he ended up on The Ellen Show — something about a "custom skateboard attached to his wheelchair.")</p>
+          <p>But losing and making mistakes (more than I can count) didn't change the lesson. It confirmed it. It made me think about several things more intuitively:</p>
+          <ul class="rules">
+            <li>To your best ability, try to set the stopping rule before you start.</li>
+            <li>Some decisions are like a 1-way door. Most are actually 2-way doors.</li>
+            <li>Time itself is a cost you typically forget to count.</li>
+            <li>Ask whether more evidence would even change your action.</li>
+            <li>Confidence is manufactured by wins, so learn to appreciate almost any win: big or small.</li>
+            <li>You CAN do it all, just not all at once.</li>
+          </ul>
+          <p class="coda"><b class="lead">That's how you get unstuck.</b> Stop looking for the <em>right</em> amount of confidence. Just go get the evidence, by doing.</p>
+        </div></div>
+      </section>
+      <section class="page" data-page="article-public-health" tabindex="-1">
+        <a class="reader-back" href="/articles" data-route><span class="arr">←</span> Back to Essays</a>
+        <div class="reader-wrap"><p class="kicker">Essay — Origins · 3 min read</p><h1 class="reader-title">Why I studied Public Health</h1>
+        <div class="reader-body" style="margin-top:var(--s5)">
+          <blockquote class="pull">"Isn't a Public Health degree kind of useless?"</blockquote>
+          <p class="drop">This, said to me, the host of a party, by a guest, during a playful round of hot takes. I was in my final semester of a degree (bachelors and a subsequent masters) that had taken me five and a half years.</p>
+          <p>Here's what I should have said:</p>
+          <blockquote class="speech">"After seven years of sometimes-debilitating musculoskeletal pain that people gaslit me about. After one near-death experience my own primary care provider couldn't diagnose. After a humanity-wide leap in lifespan built on evidence and advocacy. And after this little-known event called COVID that, in case anyone noticed, shut down most of the world — no. I don't think the degree is useless."</blockquote>
+          <p>What I actually said, a little buzzed and very tired, was: "Yeah, sometimes it's useless."</p>
+          <p>Looking back, I think I caved because explaining the real answer is hard. It would have meant unpacking the transferable skills that interdisciplinary learning builds. It would have meant admitting my own mixed feelings about who actually holds the power in public health, in a society this politically divided and this capitalistic. And it would have meant conceding the job market wasn't great – though to be fair, it wasn't great for many fields.</p>
+          <p>That pessimism comes and goes, even today. But here's the thing: no degree promises success in its own field. Not sciences, not humanities, not anything in between. The real question isn't "is this degree useful?" It's "what did it actually teach me to do?"</p>
+          <p>For me, five things.</p>
+          <p><span class="pt">One:</span> <b class="lead">How to coexist with people who see the world differently and aren't afraid to say so.</b> Public health is identities, values, and humanity sitting in the same room. You don't get to wish the disagreement away. You learn to work across it. That skill has paid off in every room I've been in since, almost none of them were just about health.</p>
+          <p><span class="pt">Two:</span> <b class="lead">Incentives and motivation.</b> Health is more than biology and genetics. The real value add is knowing how to identify, assess, evaluate, and intervene, which takes a deeper understanding of incentives, motivations, populations, and their behaviors. The human and environmental layer is where the real difficulty lives. As Isaac Newton once said, "I can calculate the motion of heavenly bodies, but not the madness of people."</p>
+          <p><span class="pt">Three:</span> <b class="lead">Statistical thinking.</b> Epidemiology and biostatistics train a specific kind of suspicion: bias, confounding, interaction, and the way a study's design quietly shapes what its numbers are even allowed to say. You learn that data tells stories, and that the story is rarely raw maths.</p>
+          <p><span class="pt">Four:</span> <b class="lead">A kind of thinking AI can't replace.</b> Interdisciplinary learning makes for unusual thoughts: the non-linear, cross-wired kind. AI is extraordinary at automating linear thinking; it is far weaker at the leap between two or more fields that don't obviously belong together — to see the world as interwoven yet distinct populations and systems that are frequently shaped by the same underlying forces while behaving according to entirely different rules.</p>
+          <p><span class="pt">Five:</span> <b class="lead">Timing, taste, and storytelling.</b> This skill matters more than the field admits, because of how the work is actually received. Most people aren't that party guest. Strangers have told me "thank you," and "we need more people like you." People assume you're someone who cares about the advancement of society, and doors open when they assume you're not the average self-centered person. Mind, public health has those people too, but plenty of other fields attract them more openly.</p>
+          <p class="turn">So would I do it again?</p>
+          <p>I'm happy with my outcome: the people I met, the classes I took, the perspectives I learned, the critical thinking I honed, and the hard fought lessons I got made it worth it. That said, I don't think about that question much. The decisions we make as humans were right in the moment, given what we knew and what was available to us at the time. Asking your past self to have today's information is a category error. Besides, what we've learned simply lays a foundation for the rest of our lives, but it doesn't necessarily dictate it. Numbers vary: 1 study even said <a href="https://www.prweb.com/releases/Employment_BOOST_Survey_Reveals_64_of_US_Workers_Don_t_Work_In_Jobs_Related_To_Their_Undergraduate_Education/prweb18192054.htm" target="_blank" rel="noopener">64% of US workers don't work in a job related to their undergraduate education</a>, and <a href="https://www.boston25news.com/news/the-average-american-has-72-jobs-by-28-study-says/211823146/" target="_blank" rel="noopener">the average American has 7.2 jobs by 28</a>.</p>
+          <p>What I'll say instead is this: parts of the degree need modernizing and a few hard reality-checks. And whether it's worth it — for any degree — lives almost entirely in two caveats: your personal ambitions, and whether your environment makes the experience worth having.</p>
+          <p>So if you enjoy public health, do it. But think hard about the <b>exact mechanics</b> you'll be learning — the knowledge, the applied skills, the <b>thing you actually want to be known for</b>. Then assess what channels exist that'll let you shine at that thing, so your contribution to the field is actually realized.</p>
+          <p>If those channels don't exist, or if you can't yet describe your own mechanics, here's my rule of thumb: it's a you-problem. Not as an insult, but as good news. It means the fix is practicing higher agency, and that's something you can start practicing <em>today</em>.</p>
+          <p>If you're considering a Public Health degree, <a href="https://www.linkedin.com/in/tse-ethan/" target="_blank" rel="noopener">message me on LinkedIn</a>.</p>
+        </div></div>
+      </section>
+      <section class="page" data-page="article-force-multiplier" tabindex="-1">
+        <a class="reader-back" href="/articles" data-route><span class="arr">←</span> Back to Essays</a>
+        <div class="reader-wrap"><p class="kicker">Essay — Work · 6 min read</p><h1 class="reader-title">Are you a force multiplier?</h1>
+        <div class="reader-body" style="margin-top:var(--s5)">
+          <div class="riddle">I am the ramp, the wheel, the wedge,<br>the clever angle, the strategic edge.<br>Whatever you have, I help it do more,<br>the same effort in, but greater the score.<br><span class="rq">What am I?</span></div>
+          <p class="drop">You've probably guessed it: the answer is the title. And credit where it's due, an AI generated twenty of those riddles for me to pick from in about seven seconds. That itself is one small example of a force multiplier.</p>
+          <p>This essay covers three things: (1) how to become a force multiplier, (2) the invisible barrier that stops most people from becoming one, and (3) the tool that <em>might</em> change the whole game…</p>
+          <h2 class="turn">How to become a force multiplier</h2>
+          <p>A force multiplier is any factor, tool, or tactic that sharply increases what a person can accomplish: the same effort in, far greater output out. The term comes from military science, but the pattern shows up everywhere:</p>
+          <ul class="rules">
+            <li>In business, it's the person who raises the output of an entire team, not just their own.</li>
+            <li>In research, it's a breakthrough technique that accelerates an entire field.</li>
+            <li>In product, it's a system that lets a small team serve millions of users.</li>
+          </ul>
+          <p>Most everyone wants to be this person. But "be more effective" is useless advice. The question is: effective at what?</p>
+          <p>Start with an audit. Split your role into two columns: <b>hard mechanics</b> and <b>soft mechanics</b>. Hard mechanics are the concrete, teachable skills: the modeling, the coding, the writing, the craft. Soft mechanics are the harder-to-name ones: judgment, taste, knowing who to talk to, sensing where a project is really stuck. List everything your work requires under one or the other.</p>
+          <p>Now stack them. Take that list and build a pyramid, your own version of Maslow's Hierarchy of Needs — the model we'll be borrowing from.</p>
+          <figure class="fig"><a href="/assets/maslow.jpg" target="_blank" rel="noopener"><img src="/assets/maslow.jpg" alt="Maslow's Hierarchy of Needs pyramid" loading="lazy" onerror="this.closest('.fig').style.display='none'"></a><figcaption>Maslow's Hierarchy of Needs — the model for stacking your mechanics.</figcaption></figure>
+          <p>Your hard mechanics are the base: the reliable, repeatable craft everything rests on. Your soft mechanics climb toward the top: the rare judgment that's hard to copy. And the peak is the one thing you most want to be known for.</p>
+          <p>Take a self-employed artist. The base isn't "make masterpieces." It's the foundational stuff: consistent output, a recognizable style, the discipline to finish. Above that, distribution: getting the work seen. Above that, a body of work and a reputation. Only at the very top sits what everyone fixates on: prolific, world-class art. An artist with genius and no consistency is a hobbyist; an artist with consistency and distribution becomes the force.</p>
+          <figure class="fig"><a href="/assets/artist-pyramid.jpg" target="_blank" rel="noopener"><img src="/assets/artist-pyramid.jpg" alt="An artist's force-multiplier pyramid: hard mechanics at the base, soft mechanics toward the peak" loading="lazy" onerror="this.closest('.fig').style.display='none'"></a><figcaption>An artist's force-multiplier pyramid — build your base first.</figcaption></figure>
+          <p>The mistake almost everyone makes is chasing the summit while the foundation is still unsettled. Invest in your base, because that's what lets you fully reach the next level. This is just the 80/20 rule with a floor plan: the pyramid shows you which 20% of your inputs produce 80% of your value. Your hard mechanics make it work; your soft mechanics make it yours. Find that, and you've found your multiplier.</p>
+          <h2 class="turn">The invisible barrier</h2>
+          <p>So you've done the audit. You're pouring effort into the highest-leverage work. But here's where the real problem begins.</p>
+          <p>Because leverage isn't absolute. It's relative. Whether your work counts as "high-leverage" depends entirely on the frame of reference of whoever's measuring it.</p>
+          <p>Stephen Hawking used a version of this in <em>A Brief History of Time</em>. Imagine two people playing ping-pong on a train moving at constant speed. To the players, the ball bounces straight up and down. But to someone on the platform watching the train rush past, that same ball traces a long horizontal arc. Same ball, same bounce, two completely different paths. Neither observer is wrong.</p>
+          <p>There's no "true" point of view. The physics is identical for both; their measurements differ only because they're moving relative to each other.</p>
+          <figure class="fig"><a href="/assets/frame-of-reference.jpg" target="_blank" rel="noopener"><img src="/assets/frame-of-reference.jpg" alt="Hawking's train and ping-pong thought experiment: the same bounce looks vertical inside the train and a long arc from the platform" loading="lazy" onerror="this.closest('.fig').style.display='none'"></a><figcaption>Same ball, same bounce — perspective changes what you see.</figcaption></figure>
+          <p>Now apply that to your work. You can put in tremendous effort: pages of analysis, a working prototype, full customer feedback, all delivered two weeks early. From your frame, the work landed exactly where it should: clean, obvious, valuable. But if your manager's frame shifts (a new directive comes down, priorities change overnight), that same work is suddenly scored from the platform, not the train. Thirteen meters off. All that effort landed as nothing. You weren't lazy; you measured from inside the train while they stood on the platform.</p>
+          <p>Yes, that's partly an unfair quirk of organizations, where directives can change without warning. But pretending it isn't real doesn't help you. The lesson: multiplying your output isn't enough. You have to stay locked onto the right frame while you do it.</p>
+          <h2 class="turn">An AI operating system for everyone (but only when necessary)</h2>
+          <p>That same question (which frame am I working in?) is about to matter even more, because of the tool quietly rewriting what a force multiplier can be: the AI operating system.</p>
+          <p>It isn't a single app. It's a stack: a connected set of tools that handles your goals, workflows, and decisions as one system. AI helps because it collapses the cost of the 80% (the gathering, drafting, formatting, first-pass thinking), so your time and judgment go to the 20% only you can do. It strengthens the base of your pyramid so you can live at the top.</p>
+          <p>What's genuinely new is that building one no longer requires being an engineer, and the proof is who's building these tools now. PewDiePie, a YouTuber, released Odysseus, a private AI workspace that bundles chat, research, and memory into one system. Milla Jovovich, the actress from Resident Evil, co-built MemPalace, an AI memory system that holds onto past conversations so your AI stops losing the reasoning behind your decisions.</p>
+          <figure class="fig"><a href="/assets/ai-os.jpg" target="_blank" rel="noopener"><img src="/assets/ai-os.jpg" alt="Creators building personal AI systems — MemPalace memory and the Odysseus private AI workspace" loading="lazy" onerror="this.closest('.fig').style.display='none'"></a><figcaption>Personal AI operating systems, built by creators rather than just engineers.</figcaption></figure>
+          <p>You assemble the stack for your goals. Building one is the next step in becoming a force multiplier. But here's where the essay folds back on itself: knowing when to deploy that leverage is itself a frame-of-reference judgment.</p>
+          <p>So, I'd actually caution most people against over-indexing on it right now. At most organizations, leadership doesn't yet know what AI can do, or whether burning maximum AI usage ("token-maxxing") even pays off financially. Maxing out your AI in a room that can't see its value, or doesn't even need it, is the same error as the employee who did brilliant work for a manager whose frame had already shifted.</p>
+          <h2 class="turn">So, are you a force multiplier?</h2>
+          <p>This is where the most interesting idea of the moment shows up. We're hearing a lot about "one-person companies": solo operators running businesses that used to need a full staff.</p>
+          <p>I'm skeptical, with a caveat. Picture the choice plainly: would you rather have one human with twenty years of hard-won judgment, or a young prodigy who learns anything quickly and yet, in a real sense, knows nothing: no scars, no taste, no read on the room? You don't always need the prodigy. That's the point.</p>
+          <p>So a billion-dollar "one-person company" probably won't truly be one person. It'll be the perception of one. And perception, as we've seen, is just a frame of reference. From the platform, it looks like a single person performing a miracle. Step onto the train, and you see the real arrangement: one human holding the high-value 20% (the judgment, the taste, the call about which direction to even look) while an AI operating system runs the other 80% tirelessly underneath.</p>
+          <p class="coda"><b class="lead">That's the force multiplier of the next decade:</b> not the person who does the most, but the one who knows their 20%, builds a system (AI or not) to handle the rest, and never loses sight of which way the train is moving.</p>
+        </div></div>
+      </section>
+      <!-- CONTACT -->
+      <section class="page" data-page="contact" aria-labelledby="con-h" tabindex="-1">
+        <h2 class="h-section anim" id="con-h">Let's talk.</h2>
+        <p class="prose anim">If you're shaping real progress and want a force multiplier in your corner, reach out.</p>
+        <ul class="index anim d1" style="list-style:none;padding:0;max-width:42rem;border-top:1px solid var(--line-2)">
+          <li><a class="entry" href="mailto:contact.ethantse@gmail.com"><div><span class="entry-tag">Email</span><h3 style="font-size:1.5rem">contact.ethantse@gmail.com</h3></div><span class="go">Write <span class="arr">→</span></span></a></li>
+          <li><a class="entry" href="https://www.linkedin.com/in/tse-ethan/" target="_blank" rel="noopener"><div><span class="entry-tag">LinkedIn</span><h3 style="font-size:1.5rem">linkedin.com/in/tse-ethan</h3></div><span class="go">Open ↗</span></a></li>
+        </ul>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<script>
+(() => {
+  'use strict';
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const $ = (s,r=document)=>r.querySelector(s);
+  const $$ = (s,r=document)=>Array.from(r.querySelectorAll(s));
+
+  const ROUTES = {
+    '/':                            {page:'about', key:'about'},
+    '/introspection':               {page:'introspection', key:'introspection'},
+    '/introspection/learnings':     {page:'learnings', key:'learnings', parent:'introspection'},
+    '/introspection/quotes':        {page:'quotes', key:'quotes', parent:'introspection'},
+    '/introspection/flaws':         {page:'flaws', key:'flaws', parent:'introspection'},
+    '/introspection/dreams':        {page:'dreams', key:'dreams', parent:'introspection'},
+    '/systems':                     {page:'systems', key:'systems'},
+    '/systems/atom':                {page:'atom', key:'atom', parent:'systems'},
+    '/systems/horus':               {page:'horus', key:'horus', parent:'systems'},
+    '/articles':                    {page:'articles', key:'articles'},
+    '/articles/unstuck':         {page:'article-unstuck', key:'unstuck', parent:'articles'},
+    '/articles/public-health':      {page:'article-public-health', key:'public-health', parent:'articles'},
+    '/articles/force-multiplier':   {page:'article-force-multiplier', key:'force-multiplier', parent:'articles'},
+    '/contact':                     {page:'contact', key:'contact'}
+  };
+  const PATH_FOR = {}; for (const p in ROUTES) PATH_FOR[ROUTES[p].key] = p;
+
+  const app = $('#app'), marker = $('#tocMarker'), toggle = $('#tocToggle');
+
+  function setActive(key, parent){
+    const top = parent || key;
+    $$('.toc-link').forEach(l => { const on = new URL(l.href).pathname === PATH_FOR[top];
+      l.classList.toggle('active', on); on ? l.setAttribute('aria-current','page') : l.removeAttribute('aria-current'); });
+    $$('.toc-sublink').forEach(l => l.classList.toggle('active', new URL(l.href).pathname === location.pathname));
+    $$('.toc-item[data-parent]').forEach(item => item.classList.toggle('open', item.dataset.parent === top));
+    moveMarker(top);
+    const lbl = $('.toc-toggle-label'); if (lbl){ const a = $('.toc-link.active'); lbl.textContent = a ? a.querySelector('span:last-child').textContent : 'Menu'; }
+  }
+  function moveMarker(top){
+    const link = $$('.toc-link').find(l => new URL(l.href).pathname === PATH_FOR[top]); if (!link || !marker) return;
+    const nav = link.closest('.toc-nav'); const lr = link.getBoundingClientRect(), nr = nav.getBoundingClientRect();
+    marker.style.transform = `translateY(${(lr.top-nr.top)+lr.height/2 - marker.offsetHeight/2}px)`; marker.style.opacity = '1';
+  }
+
+  function render(path, push){
+    const route = ROUTES[path] || ROUTES['/'];
+    if (push){ try { history.pushState({}, '', path); } catch(e){} }
+    const pageEl = $(`.page[data-page="${route.page}"]`);
+    $$('.page').forEach(p => p.classList.toggle('is-active', p===pageEl));
+    setActive(route.key, route.parent);
+    window.scrollTo(0,0);
+    if (pageEl) pageEl.focus({preventScroll:true});
+    closeMenu(); startVisuals(route.page);
+    document.body.classList.toggle('reading', String(route.page).indexOf('article-') === 0);
+    if (readBar) readBar.style.width = '0%';
+  }
+  document.addEventListener('click', e => {
+    const a = e.target.closest('a[data-route]'); if (!a) return;
+    const url = new URL(a.href); if (url.origin !== location.origin) return;
+    e.preventDefault();
+    if (url.pathname !== location.pathname) render(url.pathname, true); else closeMenu();
+  });
+  window.addEventListener('popstate', () => render(location.pathname, false));
+
+  function closeMenu(){ document.body.classList.remove('menu-open'); toggle.setAttribute('aria-expanded','false'); }
+  function openMenu(){ document.body.classList.add('menu-open'); toggle.setAttribute('aria-expanded','true'); }
+  toggle.addEventListener('click', () => document.body.classList.contains('menu-open') ? closeMenu() : openMenu());
+  document.addEventListener('keydown', e => { if (e.key==='Escape') closeMenu(); });
+  window.addEventListener('resize', () => { const a = $('.toc-link.active'); if (a) moveMarker(ROUTES[new URL(a.href).pathname]?.key); sizeConstellation(); });
+
+  /* Systems constellation */
+  const cv = $('#constellation'); const cg = cv.getContext('2d');
+  let nodes = [], cRAF = 0, cDPR = Math.min(window.devicePixelRatio||1, 2);
+  function sizeConstellation(){
+    const wrap = $('.tools-wrap'); if (!wrap || !wrap.offsetWidth) return;
+    const w = wrap.offsetWidth + 48, h = wrap.offsetHeight + 48;
+    cv.width = w*cDPR; cv.height = h*cDPR; cv.style.width=w+'px'; cv.style.height=h+'px'; cg.setTransform(cDPR,0,0,cDPR,0,0);
+    const wr = wrap.getBoundingClientRect();
+    nodes = $$('.tool').map(t => { const r=t.getBoundingClientRect(); return {x:(r.left+r.width/2)-wr.left+24, y:(r.top+r.height/2)-wr.top+24, ph:Math.random()*6.28, hov:false}; });
+    nodes.forEach(n => n.links = nodes.filter(m=>m!==n).map(m=>({m,d:Math.hypot(m.x-n.x,m.y-n.y)})).sort((a,b)=>a.d-b.d).slice(0,2).map(o=>o.m));
+    $$('.tool').forEach((t,i)=>{ t.onmouseenter=()=>{ if(nodes[i]) nodes[i].hov=true; }; t.onmouseleave=()=>{ if(nodes[i]) nodes[i].hov=false; }; });
+  }
+  function drawConst(t){
+    if (!nodes.length) return;
+    const W=cv.width/cDPR, H=cv.height/cDPR; cg.clearRect(0,0,W,H);
+    const pos = nodes.map(n=>({x:n.x+Math.sin(t/1800+n.ph)*3, y:n.y+Math.cos(t/2100+n.ph)*3, n}));
+    nodes.forEach((n,i)=>{ const a=pos[i]; n.links.forEach(m=>{ const b=pos[nodes.indexOf(m)]; if(!b) return; const hot=n.hov||m.hov;
+      cg.strokeStyle = hot?'rgba(74,117,83,0.6)':'rgba(46,84,55,0.22)'; cg.lineWidth=hot?1.5:1; cg.beginPath(); cg.moveTo(a.x,a.y); cg.lineTo(b.x,b.y); cg.stroke(); }); });
+    pos.forEach(p=>{ cg.beginPath(); cg.arc(p.x,p.y,p.n.hov?3.6:2.4,0,6.2832); cg.fillStyle=p.n.hov?'rgba(180,107,64,0.95)':'rgba(74,117,83,0.6)'; cg.fill(); });
+  }
+  function constLoop(t){ drawConst(t); cRAF=requestAnimationFrame(constLoop); }
+  function startVisuals(page){
+    cancelAnimationFrame(cRAF); cRAF=0;
+    if (page==='systems') requestAnimationFrame(()=>{ sizeConstellation(); reduce ? drawConst(0) : (cRAF=requestAnimationFrame(constLoop)); });
+  }
+
+  /* ABOUT — "Questions I've enjoyed facing" filter
+     Edit the questions here: one array per category key. */
+  const QUESTIONS = {
+    'strategy': [
+      "How do you earn enough trust with a client that they'll be transparent with their problems and needs?",
+      "How do we read where the market is heading before the consensus forms?",
+      "What evidence do payers, providers, and policymakers need to back a novel care pilot?",
+      "With one week to diligence a $2M acquisition target, what factors decide if we go deeper?",
+      "For a product entering the market, what proof point opens the most doors: outcomes, economics, or workflow fit?",
+      "How do you tell a client what they need to hear, not just what they asked for?",
+      "What factors tell you it's not a market risk, but a product risk?",
+      "How do you prove microgreens demand is real before pouring resources into supply?",
+      "When you're tracking portfolio companies, how do you spot the one quietly heading for trouble?"
+    ],
+    'operations': [
+      "How do you build lean but scalable systems that track the KPIs of every portfolio company?",
+      "How do you standardize reporting across 30+ companies that all operate differently?",
+      "How do you keep delivery plans synced when a client's product, IT, and compliance teams each move at their own pace?",
+      "When you run a 100-person conference, what has to be locked 3 months out, 3 weeks out, and 3 days out?",
+      "How do you maintain a deal-flow funnel that surfaces 5–8 quality investment targets a week without drowning in noise?",
+      "How do you build growth ops from scratch when there's no playbook to inherit?",
+      "How do you design a personal operating system that lets AI agents catalyze research and tasks?"
+    ],
+    'business-development': [
+      "Which vendors and partners can help a portco scale?",
+      "Where should you source the highest-potential deals for the investment team?",
+      "How do you juggle stakeholder relationships when nobody's sure what their calendar looks like 2 months out?",
+      "Which channels most attract a talent network that spans 15+ universities?",
+      "How do you convene the right mix of veterans, founders, and young talent to catalyze real career connections?",
+      "How do you land your first restaurant accounts when you're an unknown selling to busy chefs?",
+      "How do you find the real decision-maker when you've been routed to the wrong person?"
+    ],
+    'product': [
+      "How do you find product-market fit for a device the market has never seen before?",
+      "Which outcomes prove a product's adoption is sticky, not a fad?",
+      "How do you ship a product from first idea to something live?",
+      "What does a credible go-to-market look like for a novel product entering established workflows?",
+      "How do you prototype use cases that prove an AI tool is genuinely useful, not just clever?",
+      "How do you know when a product is ready to launch versus when it needs another iteration?",
+      "When the buyer and the user aren't the same person, whose needs win?"
+    ]
+  };
+  const QCAT_LABEL = { 'strategy':'Strategy', 'operations':'Operations', 'business-development':'Business Development', 'product':'Product' };
+
+  const qCaps = $$('.cap[data-cat]'), qCapsWrap = $('.caps');
+  const qPanel = $('#qPanel'), qList = $('#qList'), qCat = $('#qCat'), qCue = $('#qCue'), qClose = $('#qClose');
+  let qActive = null, qSwitching = false;
+
+  function qBuild(cat){
+    qList.innerHTML = '';
+    (QUESTIONS[cat] || []).forEach((text, i) => {
+      const li = document.createElement('li');
+      li.textContent = text;
+      if (!reduce){ li.classList.add('q-anim'); li.style.animationDelay = (120 + i*50) + 'ms'; }
+      qList.appendChild(li);
+    });
+  }
+  function qOpen(cat){
+    qActive = cat;
+    qCaps.forEach(c => c.setAttribute('aria-pressed', String(c.dataset.cat === cat)));
+    qCapsWrap.classList.add('has-active');
+    qCat.textContent = QCAT_LABEL[cat];
+    qBuild(cat);
+    qPanel.hidden = false;
+    qPanel.classList.remove('is-out', 'is-in');
+    if (!reduce){ void qPanel.offsetWidth; qPanel.classList.add('is-in'); }   /* restart header reveal */
+    qCue.classList.remove('anim','d4'); qCue.classList.add('is-dismissed');   /* tuck the cue away while a category is open */
+  }
+  function qCloseFn(){
+    qActive = null;
+    qCaps.forEach(c => c.setAttribute('aria-pressed', 'false'));
+    qCapsWrap.classList.remove('has-active');
+    qPanel.classList.remove('is-in', 'is-out');
+    qPanel.hidden = true;
+    qCue.classList.remove('is-dismissed');   /* bring the cue back on Clear / toggle-off */
+  }
+  function qSelect(cat){
+    if (qActive === cat){ qCloseFn(); return; }      /* same card → hide */
+    if (qActive && !reduce){                          /* switch → animate out, then in */
+      if (qSwitching) return;
+      qSwitching = true;
+      qPanel.classList.remove('is-in'); qPanel.classList.add('is-out');
+      setTimeout(() => { qPanel.classList.remove('is-out'); qOpen(cat); qSwitching = false; }, 200);
+    } else {
+      qOpen(cat);
+    }
+  }
+  qCaps.forEach(c => c.addEventListener('click', () => qSelect(c.dataset.cat)));
+  if (qClose) qClose.addEventListener('click', qCloseFn);
+
+  /* ════════ Easter eggs ════════ */
+
+  /* 1. Reading-progress hairline — fills as you scroll an article */
+  const readBar = $('#readBar');
+  function updateRead(){
+    if (!document.body.classList.contains('reading') || !readBar) return;
+    const d = document.documentElement, max = d.scrollHeight - d.clientHeight;
+    readBar.style.width = (max > 0 ? Math.min(100, (d.scrollTop / max) * 100) : 0) + '%';
+  }
+  window.addEventListener('scroll', updateRead, { passive: true });
+  window.addEventListener('resize', updateRead);
+
+  /* 2. Cursor-aware sheen on the capability cards */
+  if (!reduce) qCaps.forEach(card => {
+    card.addEventListener('pointermove', e => {
+      const r = card.getBoundingClientRect();
+      card.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+      card.style.setProperty('--my', (e.clientY - r.top) + 'px');
+    });
+  });
+
+  /* 3. North Star — click to twinkle + draw a tiny constellation */
+  const nsStar = $('.northstar .jit'), nsFig = $('.northstar');
+  if (nsStar && nsFig){
+    let nsCanvas, nsCtx, nsGroups = [], nsRAF = 0;
+    const nsDPR = Math.min(window.devicePixelRatio || 1, 2);
+    function nsSize(){
+      const r = nsFig.getBoundingClientRect();
+      nsCanvas.width = r.width * nsDPR; nsCanvas.height = r.height * nsDPR;
+      nsCanvas.style.width = r.width + 'px'; nsCanvas.style.height = r.height + 'px';
+      nsCtx.setTransform(nsDPR, 0, 0, nsDPR, 0, 0);
+      return r;
+    }
+    function nsSpark(){
+      if (!nsCanvas){ nsCanvas = document.createElement('canvas'); nsCanvas.className = 'ns-canvas'; nsCanvas.setAttribute('aria-hidden','true'); nsFig.appendChild(nsCanvas); nsCtx = nsCanvas.getContext('2d'); }
+      const r = nsSize(), sr = nsStar.getBoundingClientRect();
+      const cx = sr.left + sr.width/2 - r.left, cy = sr.top + sr.height/2 - r.top;
+      const pts = [], n = 5 + (Math.random()*3|0);
+      for (let i=0;i<n;i++){ const a = Math.random()*6.2832, dist = 26 + Math.random()*96; pts.push({ x: cx+Math.cos(a)*dist, y: cy+Math.sin(a)*dist, born: performance.now(), life: 950 + Math.random()*550, ph: Math.random()*6.28 }); }
+      nsGroups.push({ pts, cx, cy });
+      if (!nsRAF) nsRAF = requestAnimationFrame(nsLoop);
+      nsStar.classList.remove('twinkle'); void nsStar.offsetWidth; nsStar.classList.add('twinkle');
+    }
+    function nsLoop(t){
+      const W = nsCanvas.width/nsDPR, H = nsCanvas.height/nsDPR; nsCtx.clearRect(0,0,W,H);
+      let alive = false;
+      nsGroups.forEach(g => g.pts.forEach(p => {
+        const age = t - p.born; if (age > p.life) return; alive = true;
+        const fade = Math.sin(Math.min(1, age/p.life) * Math.PI), tw = 0.6 + 0.4*Math.sin(t/120 + p.ph);
+        nsCtx.strokeStyle = `rgba(74,117,83,${0.22*fade})`; nsCtx.lineWidth = 1;
+        nsCtx.beginPath(); nsCtx.moveTo(g.cx, g.cy); nsCtx.lineTo(p.x, p.y); nsCtx.stroke();
+        nsCtx.beginPath(); nsCtx.arc(p.x, p.y, 1.6*tw + 0.7, 0, 6.2832); nsCtx.fillStyle = `rgba(180,107,64,${0.9*fade})`; nsCtx.fill();
+      }));
+      nsGroups = nsGroups.filter(g => g.pts.some(p => (t - p.born) < p.life));
+      if (alive){ nsRAF = requestAnimationFrame(nsLoop); } else { nsRAF = 0; nsCtx.clearRect(0,0,nsCanvas.width,nsCanvas.height); }
+    }
+    nsStar.addEventListener('click', () => {
+      if (reduce){ nsStar.classList.remove('twinkle'); void nsStar.offsetWidth; nsStar.classList.add('twinkle'); return; }
+      nsSpark();
+    });
+    nsStar.addEventListener('animationend', () => nsStar.classList.remove('twinkle'));
+  }
+
+  /* 4. Press "n" — hidden night / dark herbarium theme */
+  const nmWord = $('#nmWord'), nightHint = $('#nightHint');
+  function applyNight(on){ document.body.classList.toggle('night', on); if (nmWord) nmWord.textContent = on ? 'day' : 'night'; try { localStorage.setItem('gardenNight', on ? '1' : '0'); } catch(e){} }
+  function toggleNight(){
+    const next = !document.body.classList.contains('night');
+    if (document.startViewTransition && !reduce){ document.startViewTransition(() => applyNight(next)); }
+    else applyNight(next);
+  }
+  try { if (localStorage.getItem('gardenNight') === '1') applyNight(true); } catch(e){}
+  if (nightHint) nightHint.addEventListener('click', toggleNight);
+  document.addEventListener('keydown', e => {
+    if (e.key !== 'n' && e.key !== 'N') return;
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    const el = e.target, tag = (el.tagName || '').toLowerCase();
+    if (tag === 'input' || tag === 'textarea' || el.isContentEditable) return;
+    toggleNight();
+  });
+
+  /* INTRO — words + many leaves in calm wind (4s) */
+  const intro = $('#intro'), introSkip = $('#introSkip');
+  let introDone = false, introBooted = false, introGen = 0;
+  const skipIntro = new URLSearchParams(location.search).has('nointro') || location.pathname !== '/' || sessionStorage.getItem('introSeen')==='1';
+
+  function revealApp(){ app.classList.add('revealed'); if (!introBooted){ introBooted=true; render(location.pathname, false); } }
+  function finishIntro(){ if (introDone) return; introDone=true; sessionStorage.setItem('introSeen','1'); intro.classList.add('done'); revealApp(); }
+  function reducedIntro(){ const old=intro.querySelector('.intro-fallback'); if (old) old.remove(); const w=document.createElement('div'); w.className='intro-fallback'; w.innerHTML='My digital garden —<br/><span>where I go to muse</span>'; intro.insertBefore(w, introSkip); setTimeout(finishIntro,1600); }
+
+  const LEAF = new Path2D('M12 2C6.5 6.5 4.5 13.5 11.4 22 11.7 16 12 9 12 2Z M12 2C17.5 6.5 19.5 13.5 12.6 22 12.3 16 12 9 12 2Z');
+  const LCOL = ['74,117,83','46,84,55','120,120,70','180,107,64','92,115,88'];
+
+  async function runIntro(){
+    const gen = ++introGen; introDone=false; intro.classList.remove('done');
+    if (reduce){ reducedIntro(); return; }
+    const canvas=$('#introCanvas'), g=canvas.getContext('2d'); let W,H; const dpr=Math.min(window.devicePixelRatio||1,2);
+    function size(){ W=innerWidth; H=innerHeight; canvas.width=W*dpr; canvas.height=H*dpr; canvas.style.width=W+'px'; canvas.style.height=H+'px'; g.setTransform(dpr,0,0,dpr,0,0); }
+    size();
+    const fs=()=>Math.min(W*0.058,H*0.105,72);
+    const leaves=[]; let seeded=false, nextSpawn=0;
+    function spawn(now, scatter){
+      const s=8+Math.random()*30;
+      leaves.push({ x0: scatter? Math.random()*W : (-60-Math.random()*140), y0: scatter? Math.random()*H : Math.random()*H,
+        t0:now/1000, vx:50+Math.random()*120, sway:12+Math.random()*32, swayF:.7+Math.random()*1.3,
+        rot:Math.random()*6.28, vr:(Math.random()-.5)*1.7, s, a:.22+Math.random()*0.5, c:LCOL[(Math.random()*LCOL.length)|0] });
+    }
+    function drawLeaf(L, now){
+      const age=now/1000-L.t0; const x=L.x0+L.vx*age; if (x>W+80) return false;
+      const y=L.y0+Math.sin(age*L.swayF+L.x0*0.01)*L.sway; const rot=L.rot+L.vr*age; const fin=Math.min(1,age/0.4);
+      g.save(); g.translate(x,y); g.rotate(rot); const sc=L.s/24; g.scale(sc,sc); g.translate(-12,-12);
+      g.fillStyle=`rgba(${L.c},${L.a*fin})`; g.fill(LEAF); g.restore(); return true;
+    }
+    const lines=[ {text:'My digital garden —', color:'33,40,32', off:0, rel:1900}, {text:'where I go to muse', color:'58,86,62', off:1, rel:2060} ];
+    const start=performance.now(); let last=start;
+    function frame(now){
+      if (introDone || gen!==introGen) return; const t=now-start; last=now; g.clearRect(0,0,W,H);
+      if (!seeded && t>300){ for (let i=0;i<150;i++) spawn(now,true); seeded=true; nextSpawn=now; }   /* gust fills the page */
+      if (t>300 && t<3300 && leaves.length<320 && now>=nextSpawn){ spawn(now,false); nextSpawn=now+16+Math.random()*22; }  /* ~4x density, replenished from the left */
+      for (let i=leaves.length-1;i>=0;i--){ if (!drawLeaf(leaves[i],now)) leaves.splice(i,1); }
+      const fsz=fs(), gap=fsz*1.22; g.textAlign='center'; g.textBaseline='middle'; g.font=`${fsz}px "Young Serif", Georgia, serif`;
+      lines.forEach(L=>{ const ap=Math.min(1,t/1000); let alpha=1-Math.pow(1-ap,3), dx=0, dy=0, rot=0;
+        if (t>L.rel){ const p=(t-L.rel)/1500, e=p*p; dx=e*(W*0.8); dy=-e*70-Math.sin(p*3)*8; rot=e*0.22; alpha=Math.max(0,1-p*1.1); }
+        if (alpha<=0) return; g.save(); g.translate(W/2+dx, H/2+(L.off?gap*0.55:-gap*0.55)+dy); g.rotate(rot); g.fillStyle=`rgba(${L.color},${alpha})`; g.fillText(L.text,0,0); g.restore(); });
+      if (t<4000) requestAnimationFrame(frame); else finishIntro();
+    }
+    try { await Promise.race([document.fonts.ready, new Promise(r=>setTimeout(r,1000))]); } catch(e){}
+    if (gen !== introGen) return;
+    size(); addEventListener('resize', ()=>{ if (!introDone) size(); }); requestAnimationFrame(frame);
+  }
+  function replayIntro(){ render('/', true); runIntro(); }
+  introSkip.addEventListener('click', finishIntro);
+  intro.addEventListener('click', e => { if (e.target===intro || e.target.id==='introCanvas') finishIntro(); });
+  const brandHome = $('#brandHome'); if (brandHome) brandHome.addEventListener('click', e => { e.preventDefault(); replayIntro(); });
+  if (skipIntro){ intro.classList.add('done'); revealApp(); }
+  else { (document.readyState==='loading') ? document.addEventListener('DOMContentLoaded', runIntro) : runIntro(); }
+})();
+</script>
+</body>
+</html>

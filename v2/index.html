@@ -131,6 +131,7 @@ p{margin:0 0 var(--s3); color:var(--ink-2); text-wrap:pretty}
 
 /* name hover photo */
 .name-pop{position:relative; white-space:nowrap; z-index:20}   /* raise so the hover photo sits in front of the words below */
+#about-h{position:relative; z-index:30}   /* the h1's pageIn animation makes it a stacking context; lift it above the lede/bio so the name-hover photo isn't trapped behind them */
 .name-pop .pop{position:absolute; left:50%; top:112%; width:140px; aspect-ratio:1/1; border-radius:12px; overflow:hidden; opacity:0; pointer-events:none; box-shadow:var(--shadow-lift); border:3px solid var(--surface); transform:translate(-50%,-10px) rotate(-3deg) scale(.9); transition:opacity .35s ease, transform .45s cubic-bezier(.16,1,.3,1); z-index:5}
 .name-pop .pop img{width:100%; height:100%; object-fit:cover; display:block}
 .name-pop:hover .pop{opacity:1; transform:translate(-50%,0) rotate(-2deg) scale(1)}

@@ -220,7 +220,7 @@ p{margin:0 0 var(--s3); color:var(--ink-2); text-wrap:pretty}
 .tool:hover{transform:translateY(-2px); border-color:var(--moss); color:var(--moss-deep); box-shadow:var(--shadow-soft)}
 .tools-label{font-size:.74rem; letter-spacing:.16em; text-transform:uppercase; font-weight:600; color:var(--ink-3); margin-bottom:var(--s3); display:block}
 .big-q{font-family:var(--display); font-size:clamp(1.5rem,3vw,2.1rem); line-height:1.24; letter-spacing:-.01em; color:var(--ink); margin:var(--s8) 0 var(--s4); padding:var(--s5) 0 0; border-top:1px solid var(--line-2); max-width:30ch}
-.frameworks{display:grid; grid-template-columns:1fr 1fr; gap:var(--s4); margin:var(--s5) 0}
+.frameworks{display:grid; grid-template-columns:1fr; gap:var(--s4); margin:var(--s5) 0; max-width:46rem}
 .fw{display:block; border:1px solid var(--line); border-radius:6px; padding:var(--s5); background:var(--surface); color:inherit; cursor:pointer; transition:transform .35s cubic-bezier(.16,1,.3,1), box-shadow .35s ease, border-color .35s ease}
 .fw:hover{transform:translateY(-3px); box-shadow:var(--shadow-lift); border-color:var(--line-2)}
 .fw h3{font-size:1.3rem; letter-spacing:-.01em; line-height:1.16; margin-bottom:.4rem}
@@ -383,7 +383,6 @@ body.night .grain{opacity:.06; mix-blend-mode:screen}
             <li class="toc-item" data-parent="systems">
               <a class="toc-link" href="/systems" data-route><span class="ix">03</span><span>Systems</span></a>
               <ul class="toc-sub">
-                <li><a class="toc-sublink" href="/systems/atom" data-route>ATOM — Agentic Task Ontology Model</a></li>
                 <li><a class="toc-sublink" href="/systems/horus" data-route>HORUS — an AI operating system</a></li>
               </ul>
             </li>
@@ -564,37 +563,18 @@ body.night .grain{opacity:.06; mix-blend-mode:screen}
         </div>
 
         <blockquote class="big-q anim d2">How do we use AI in our workflows, but in a way that catalyzes human intelligence, not replaces it?</blockquote>
-        <p class="anim d2" style="max-width:60ch">I'm spending some free time developing two things:</p>
+        <p class="anim d2" style="max-width:60ch">I'm spending some free time building toward an answer:</p>
 
         <div class="frameworks anim d3">
-          <a class="fw" href="/systems/atom" data-route>
-            <h3><span class="acro">ATOM</span> — Agentic Task Ontology Model</h3>
-            <p class="fw-uc">🚧 under construction</p>
-            <p>ATOM is an evolving framework for categorizing and defining tasks that AI can assist with or should stay out of.</p>
-            <span class="go">Open ATOM <span class="arr">→</span></span>
-          </a>
           <a class="fw" href="/systems/horus" data-route>
             <h3><span class="acro">HORUS</span> — Habits, Objectives, Routines, Utilization, Synthesis</h3>
             <p class="fw-uc">🚧 under construction</p>
-            <p>A personalized AI operating system built around my goals, workflow, and decision-making.</p>
+            <p>A personalized AI operating system built around my goals, workflow, and decision-making — opinionated about which tasks AI should take on, and which stay human.</p>
             <span class="go">Open HORUS <span class="arr">→</span></span>
           </a>
         </div>
 
         <p class="come-back anim d4"><span class="jit" role="img" aria-label="brain">🧠</span>Feel free to inquire how it's coming along or if you want to trade ideas. Come back soon!</p>
-      </section>
-
-      <!-- ATOM -->
-      <section class="page" data-page="atom" aria-labelledby="atom-h" tabindex="-1">
-        <a class="reader-back" href="/systems" data-route><span class="arr">←</span> Back to Systems</a>
-        <div class="reader-wrap">
-          <h1 class="reader-title anim" id="atom-h"><span class="acro">ATOM</span> — Agentic Task Ontology Model</h1>
-          <p class="uc-status anim d1">🚧 currently under construction — come back soon!</p>
-          <div class="reader-body anim d2">
-            <p>Currently more interested in what "should" be improved over if it "can" be. Use cases and rationale to be updated.</p>
-            <div class="editable-note">The full model is growing here — diagrams, task types, and the vocabulary will land as it matures.</div>
-          </div>
-        </div>
       </section>
 
       <!-- HORUS -->
@@ -765,7 +745,6 @@ body.night .grain{opacity:.06; mix-blend-mode:screen}
     '/introspection/flaws':         {page:'flaws', key:'flaws', parent:'introspection'},
     '/introspection/dreams':        {page:'dreams', key:'dreams', parent:'introspection'},
     '/systems':                     {page:'systems', key:'systems'},
-    '/systems/atom':                {page:'atom', key:'atom', parent:'systems'},
     '/systems/horus':               {page:'horus', key:'horus', parent:'systems'},
     '/articles':                    {page:'articles', key:'articles'},
     '/articles/unstuck':         {page:'article-unstuck', key:'unstuck', parent:'articles'},

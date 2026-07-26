@@ -325,15 +325,29 @@ body.night, body.horus-scene{
 body.night .grain, body.horus-scene .grain{opacity:.055; mix-blend-mode:screen}
 ::view-transition-old(root),::view-transition-new(root){animation-duration:.45s}
 
-/* 5. HORUS — cinematic revolving constellation field.
-   Full-viewport canvas painted with the night ground + glows, sitting
-   behind the app content (z:0) but above the body bg; grain (z:1) and
-   app text (z:2) layer on top. Only visible while body.horus-scene. */
-#horusField{position:fixed; inset:0; z-index:0; pointer-events:none; display:none; opacity:0; transition:opacity .9s ease}
+/* 5. HORUS — cinematic two-layer scene (attractor + constellation field).
+   Full-viewport canvas painted with the night ground + glows, behind the
+   app content (z:0); grain (z:1) and text (z:2) layer on top. Only live
+   while body.horus-scene. */
+#horusField{position:fixed; inset:0; z-index:0; pointer-events:none; display:none; opacity:0; transition:opacity 1.1s ease}
 body.horus-scene #horusField{display:block; opacity:1}
 body.horus-scene .page[data-page="horus"] .reader-title,
 body.horus-scene .page[data-page="horus"] .reader-body,
-body.horus-scene .page[data-page="horus"] .uc-status{text-shadow:0 1px 22px oklch(0.205 0.016 152 / .92), 0 0 3px oklch(0.205 0.016 152 / .8)}
+body.horus-scene .page[data-page="horus"] .uc-status{text-shadow:0 1px 22px oklch(0.205 0.016 152 / .95), 0 0 3px oklch(0.205 0.016 152 / .85)}
+/* logo lockup — Eye of Horus mark + wordmark */
+.horus-lockup{display:inline-flex; align-items:center; gap:.7rem; margin:0 0 var(--s5)}
+.horus-lockup .horus-eye{width:2.1rem; height:2.1rem; color:var(--moss); flex:none; transition:filter .6s ease}
+body.horus-scene .horus-lockup .horus-eye{filter:drop-shadow(0 0 13px oklch(0.745 0.085 150 / .55))}
+.horus-lockup .horus-word{font-family:var(--display); font-size:1.1rem; letter-spacing:.34em; text-indent:.34em; text-transform:uppercase; color:var(--ink)}
+/* the manifesto — hero caption over the attractor */
+.horus-manifesto{margin:var(--s7) 0 0; max-width:35rem; font-family:var(--display); font-weight:400;
+  font-size:clamp(1.32rem,2.5vw,1.86rem); line-height:1.44; letter-spacing:-.004em; color:var(--ink); border:0; padding:0}
+.horus-manifesto .m-lead{color:var(--moss-deep)}
+.horus-manifesto .m-clay{color:var(--clay-deep)}
+body.horus-scene .horus-manifesto{text-shadow:0 1px 26px oklch(0.205 0.016 152 / .97), 0 0 4px oklch(0.205 0.016 152 / .92)}
+.horus-scroll-room{height:82vh; pointer-events:none}
+@media (max-width:920px){ .horus-lockup .horus-eye{width:1.8rem;height:1.8rem} .horus-scroll-room{height:36vh} }
+@media (prefers-reduced-motion:reduce){ .horus-scroll-room{height:0} }
 
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.001ms!important; animation-iteration-count:1!important; transition-duration:.001ms!important}
@@ -592,12 +606,26 @@ body.horus-scene .page[data-page="horus"] .uc-status{text-shadow:0 1px 22px oklc
       <section class="page" data-page="horus" aria-labelledby="horus-h" tabindex="-1">
         <a class="reader-back" href="/systems" data-route><span class="arr">←</span> Back to Systems</a>
         <div class="reader-wrap">
+          <div class="horus-lockup anim" aria-label="HORUS">
+            <svg class="horus-eye" viewBox="0 0 64 40" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M4 22 C14 8, 34 8, 46 20 C40 30, 20 34, 4 22 Z"/>
+              <circle cx="27" cy="20" r="5" fill="currentColor" stroke="none"/>
+              <path d="M46 20 C52 19, 57 20, 61 24"/>
+              <path d="M27 25 C25 32, 24 37, 22 39"/>
+              <path d="M35 26 C38 31, 42 33, 47 33"/>
+            </svg>
+            <span class="horus-word">Horus</span>
+          </div>
           <h1 class="reader-title anim" id="horus-h"><span class="acro">HORUS</span> — Habits, Objectives, Routines, Utilization, Synthesis</h1>
           <p class="uc-status anim d1">🚧 currently under construction — come back soon!</p>
           <div class="reader-body anim d2">
             <p>A personalized AI operating system built around my goals, workflow, and decision-making. HORUS is my primary interface across a stack centered on Claude and Notion.</p>
             <div class="editable-note">The architecture and routines will be documented here as the system settles.</div>
           </div>
+          <blockquote class="horus-manifesto anim d3" id="horusManifesto">
+            <span class="m-lead">Our identities have momentum.</span> <span class="m-clay">Work</span> gives it force — we repeat it most. <span class="m-clay">Life</span> gives it its long arc. And <span class="m-clay">Today</span> gives it motion, because the present is the only moment we ever actually live, even as the mind stretches across past, present, and future. That weight is why we get stuck. HORUS is the AI OS that carries it: sensing, nudging, and co-piloting your identity momentum — so the system does the holding, and you do the living.
+          </blockquote>
+          <div class="horus-scroll-room" aria-hidden="true"></div>
         </div>
       </section>
 
@@ -835,288 +863,427 @@ body.horus-scene .page[data-page="horus"] .uc-status{text-shadow:0 1px 22px oklc
     page==='horus' ? enterHorus() : exitHorus();
   }
 
-  /* ───────────────────────────────────────────────────────────
-     HORUS — cinematic pseudo-3D revolving constellation field.
-     A hand-projected point cloud (x,y,z): the volume slowly orbits a
-     vertical axis, nodes are advected through a flow field, shimmer like
-     probability clouds, wire into a depth-sorted mesh, and fire like
-     neurons. Five brighter "anchor" nodes = H·O·R·U·S. Pure 2D canvas.
-     Tune everything from the HF knobs below. FAITHFUL_MODE → plain
-     monochrome white-on-black plexus like the original reference.
-     ─────────────────────────────────────────────────────────── */
-  const HF = {
-    nodeCount: 74, anchors: 5,
-    linkDist: 134,                         // projected-px link threshold
-    cursorRadius: 172, cursorPull: 0.16,   // soft gravity well
-    driftSpeed: 26, flowScale: 0.0016,     // fluid current advection
-    orbitSpeed: 0.05, orbitAmp: 1,         // slow camera orbit (rad/s)
-    parallax: 0.16,                        // pointer / scroll camera nudge
-    fov: 680, camDist: 470, depth: 540,    // perspective + depth range
-    shimmer: 0.5, collapseFreq: 0.4,       // quantum jitter / collapses per s
-    fireFreq: 0.9, fireDepth: 3, pulseSpeed: 1.9, maxPulses: 22,
-    dimMin: 0.34, dimFeather: 66,          // node/link fade behind text
-    col: { ground:[24,32,28], node:[132,180,146], anchor:[196,224,205], clay:[214,150,108], bright:[236,244,239] },
-    FAITHFUL_MODE: false
+  /* ═══════════════════════════════════════════════════════════════════
+     HORUS — cinematic two-layer scene. ONE projection/orbit, ONE rAF.
+       Layer 1  the constellation / quantum-neural FIELD (background)
+       Layer 2  "THE ATTRACTOR" — a churning vortex knot fed by three
+                streams WORK · LIFE · TODAY = identity momentum (the hero)
+     Cinematic passes: lighting+fog · bloom · vignette · grain ·
+     depth-graded palette · choreographed cascades · scroll dolly.
+     All hand-projected pseudo-3D on a 2D canvas. No libraries.
+     Tune from HZ. FAITHFUL_MODE → the plain white-on-black plexus.
+     ═══════════════════════════════════════════════════════════════════ */
+  const H_TOUCH = matchMedia('(pointer:coarse)').matches || window.innerWidth < 820;
+  const H_QUALITY = H_TOUCH ? 'low' : 'high';          // high | med | low
+  const pick = o => o[H_QUALITY];
+  const HZ = {
+    // ── field (Layer 1)
+    fieldNodes: pick({high:70,med:54,low:38}), linkDist:128, cursorRadius:176, cursorPull:0.15,
+    flowSpeed:24, flowScale:0.0016,
+    // ── attractor (Layer 2)
+    attrPoints: pick({high:280,med:190,low:120}), coreR:16, breathAmp:0.06, breathRate:0.5,
+    springStiffness:0.09, springDamping:0.82,
+    // three feeding streams  [angle, radius, y, turns, speed, width, mass, warm]
+    streams:[
+      {id:'WORK',  ang:3.55, R:150, y: 26, turns:1.5, speed:0.100, width:15, mass:0.46, warm:1.0},
+      {id:'LIFE',  ang:5.60, R:214, y: 74, turns:2.3, speed:0.052, width:28, mass:0.24, warm:0.0},
+      {id:'TODAY', ang:1.45, R: 92, y:-14, turns:0.9, speed:0.176, width: 9, mass:0.30, warm:0.35}
+    ],
+    // ── camera / shared projection
+    orbitSpeed:0.05, orbitAmp:1, parallax: H_TOUCH?0:0.16, fov:700, camDist:470, depth:560,
+    dollyRange: H_TOUCH?120:300, scrollSens:1, attrCX:0.38, attrCY:0.55,
+    // ── life
+    shimmer:0.5, collapseFreq:0.4, fireFreq:0.8, fireDepth:3, pulseSpeed:1.9, maxPulses:26,
+    streamFireFreq:0.55, cascadeFreq:0.045, cascadeSpeed:2.4, beatCooldown:2.6,
+    // ── cinematic passes (all restrained by default)
+    key:{x:-0.55,y:0.66,z:-0.5}, keyWarm:[255,226,188], rim:{x:0.6,y:-0.25,z:0.78}, rimCool:[150,196,255],
+    ambient:0.34, fog:0.92, bloom: pick({high:0.5,med:0.4,low:0}), bloomThresh:0.74, bloomBlur:8,
+    grain: pick({high:0.06,med:0.045,low:0}), vignette:0.6, aberration: pick({high:0.0,med:0,low:0}),
+    clayRarity:0.13, textDimMin:0.32, textDimFeather:70,
+    // palette (rgb resolved at init from the site's oklch tokens)
+    ground:[24,32,28], near:[168,214,176], far:[70,120,104], clay:[214,150,108], bright:[236,244,239],
+    logoMode:'fixed', FAITHFUL_MODE:false
   };
 
-  // OKLCH → sRGB (so the palette stays true to the site's oklch tokens)
   function oklchToRgb(L,C,h){
-    const hr=h*Math.PI/180, a=C*Math.cos(hr), b=C*Math.sin(hr);
-    const l_=L+0.3963377774*a+0.2158037573*b, m_=L-0.1055613458*a-0.0638541728*b, s_=L-0.0894841775*a-1.2914855480*b;
-    const l=l_*l_*l_, m=m_*m_*m_, s=s_*s_*s_;
-    const r= 4.0767416621*l-3.3077115913*m+0.2309699292*s;
-    const g=-1.2684380046*l+2.6097574011*m-0.3413193965*s;
-    const bl=-0.0041960863*l-0.7034186147*m+1.7076147010*s;
-    const f=x=>{ x=x<=0.0031308?12.92*x:1.055*Math.pow(x,1/2.4)-0.055; return Math.max(0,Math.min(255,Math.round(x*255))); };
+    const hr=h*Math.PI/180,a=C*Math.cos(hr),b=C*Math.sin(hr);
+    const l_=L+0.3963377774*a+0.2158037573*b,m_=L-0.1055613458*a-0.0638541728*b,s_=L-0.0894841775*a-1.2914855480*b;
+    const l=l_*l_*l_,m=m_*m_*m_,s=s_*s_*s_;
+    const r=4.0767416621*l-3.3077115913*m+0.2309699292*s, g=-1.2684380046*l+2.6097574011*m-0.3413193965*s, bl=-0.0041960863*l-0.7034186147*m+1.7076147010*s;
+    const f=x=>{x=x<=0.0031308?12.92*x:1.055*Math.pow(x,1/2.4)-0.055;return Math.max(0,Math.min(255,Math.round(x*255)));};
     return [f(r),f(g),f(bl)];
   }
-  HF.col.ground = oklchToRgb(0.205,0.016,152);
-  HF.col.node   = oklchToRgb(0.745,0.085,150);
-  HF.col.clay   = oklchToRgb(0.730,0.105,55);
-  HF.col.anchor = HF.col.node.map((v,i)=>Math.round((v+HF.col.bright[i])/2));
+  HZ.ground=oklchToRgb(0.205,0.016,152);
+  HZ.near  =oklchToRgb(0.815,0.095,142);   // warm bright moss — near core
+  HZ.far   =oklchToRgb(0.430,0.052,190);   // cool dark teal-green — far filaments
+  HZ.clay  =oklchToRgb(0.730,0.110,55);
 
-  const fcv=$('#horusField'), fctx=fcv?fcv.getContext('2d'):null;
-  const isTouch = matchMedia('(pointer:coarse)').matches;
-  const allowCursor=!isTouch, allowParallax=!isTouch, orbitScale=isTouch?0.4:1;
-  const rgb=a=>`rgb(${a[0]},${a[1]},${a[2]})`;
-  const rgba=(a,al)=>`rgba(${a[0]},${a[1]},${a[2]},${al})`;
+  const hcv=$('#horusField'), hx=hcv?hcv.getContext('2d'):null;
+  const rgb=a=>`rgb(${a[0]|0},${a[1]|0},${a[2]|0})`;
+  const rgba=(a,al)=>`rgba(${a[0]|0},${a[1]|0},${a[2]|0},${al})`;
+  const clamp=(v,a,b)=>v<a?a:v>b?b:v;
+  const lerp=(a,b,t)=>a+(b-a)*t;
+  const mix=(A,B,t)=>[lerp(A[0],B[0],t),lerp(A[1],B[1],t),lerp(A[2],B[2],t)];
 
-  let fnodes=[], pulses=[], fieldActive=false, fSeeded=false, fRAF=0;
-  let W=0,H=0,VW=0,VH=0,FDPR=1,tt=0,lastT=0,scrollNorm=0,textRect=null;
-  const pointer={x:-9999,y:-9999,seed:0};
-  let spNode,spClay,spAnchor,spWhite;
+  // soft radial "probability cloud" sprites (pre-rendered once)
+  let spNear,spFar,spClay,spWhite,bloomCv,bloomX,grainPat;
+  function glowSprite(col,hard){
+    const s=96,c=document.createElement('canvas');c.width=c.height=s;const g=c.getContext('2d');
+    const gr=g.createRadialGradient(s/2,s/2,0,s/2,s/2,s/2);
+    gr.addColorStop(0,rgba(col,1));gr.addColorStop(0.32,rgba(col,hard?0.66:0.5));gr.addColorStop(0.7,rgba(col,0.12));gr.addColorStop(1,rgba(col,0));
+    g.fillStyle=gr;g.fillRect(0,0,s,s);return c;
+  }
+  function buildGrain(){
+    const s=140,c=document.createElement('canvas');c.width=c.height=s;const g=c.getContext('2d');
+    const img=g.createImageData(s,s),d=img.data;
+    for(let i=0;i<d.length;i+=4){const v=(Math.random()*255)|0; d[i]=d[i+1]=d[i+2]=v; d[i+3]=26;}
+    g.putImageData(img,0,0); grainPat=hx.createPattern(c,'repeat');
+  }
+  function buildAssets(){
+    spNear=glowSprite(HZ.near,true); spFar=glowSprite(HZ.far); spClay=glowSprite(HZ.clay,true); spWhite=glowSprite(HZ.bright,true);
+    bloomCv=document.createElement('canvas'); bloomX=bloomCv.getContext('2d'); buildGrain();
+  }
 
-  function glowSprite(col,coreBoost){
-    const s=96,c=document.createElement('canvas'); c.width=c.height=s;
-    const g=c.getContext('2d'), gr=g.createRadialGradient(s/2,s/2,0,s/2,s/2,s/2);
-    gr.addColorStop(0,rgba(col,1)); gr.addColorStop(0.34,rgba(col,coreBoost?0.62:0.52));
-    gr.addColorStop(0.72,rgba(col,0.12)); gr.addColorStop(1,rgba(col,0));
-    g.fillStyle=gr; g.fillRect(0,0,s,s); return c;
-  }
-  function buildSprites(){
-    spNode=glowSprite(HF.col.node); spClay=glowSprite(HF.col.clay);
-    spAnchor=glowSprite(HF.col.anchor,true); spWhite=glowSprite(HF.col.bright,true);
-  }
-
-  function mkNode(x,y,z,anchor,letter){
-    return {x,y,z, ph:Math.random()*6.283, anchor, letter,
-      r0:anchor?3.5:1.5+Math.random()*1.0, tone:(!anchor&&Math.random()<0.16),
-      hot:0, lit:0, collapse:0, sx:0, sy:0, sz:0, scale:1, dn:0.5, nbr:[]};
-  }
-  function seedField(){
-    fnodes=[]; pulses=[];
-    const letters=['H','O','R','U','S'];
-    for(let i=0;i<HF.anchors;i++){
-      const a=(i/HF.anchors)*Math.PI*2;
-      fnodes.push(mkNode(Math.cos(a)*VW*0.5, (Math.random()*2-1)*VH*0.42,
-        (i/(HF.anchors-1)*2-1)*HF.depth*0.82, true, letters[i]));
-    }
-    const total=isTouch?Math.round(HF.nodeCount*0.55):HF.nodeCount;
-    for(let i=fnodes.length;i<total;i++)
-      fnodes.push(mkNode((Math.random()*2-1)*VW,(Math.random()*2-1)*VH,(Math.random()*2-1)*HF.depth,false,null));
-    // static nearest-neighbour graph (firing routes along this; anchors weighted)
-    fnodes.forEach((f,fi)=>{
-      f.nbr=fnodes.map((g,gi)=>({gi,d:g===f?1e9:Math.hypot(g.x-f.x,g.y-f.y,g.z-f.z)-(g.anchor?90:0)}))
-        .sort((a,b)=>a.d-b.d).slice(0,4).map(o=>o.gi);
-    });
-  }
+  // ── state
+  let hActive=false, hRAF=0, hSeeded=false, fieldN=[], attrP=[], fieldPulses=[], streamPulses=[];
+  let W=0,H=0,VW=0,VH=0,HDPR=1,tt=0,lastT=0,textRect=null;
+  let sp=0,spTarget=0,spVel=0,drift=0,coreResolve=0,beatTimer=0,lastScrollY=0,manifestoFired=false;
+  const ptr={x:-9999,y:-9999,active:false,seed:0}; const TMP={};
 
   function sizeField(){
-    if(!fcv||!fctx) return;
-    FDPR=Math.min(window.devicePixelRatio||1, 2.2);
+    if(!hcv||!hx) return;
+    HDPR=Math.min(window.devicePixelRatio||1, H_TOUCH?2:2.1);
     W=window.innerWidth; H=window.innerHeight;
-    fcv.width=Math.round(W*FDPR); fcv.height=Math.round(H*FDPR);
-    fcv.style.width=W+'px'; fcv.style.height=H+'px';
-    fctx.setTransform(FDPR,0,0,FDPR,0,0);
+    hcv.width=Math.round(W*HDPR); hcv.height=Math.round(H*HDPR);
+    hcv.style.width=W+'px'; hcv.style.height=H+'px'; hx.setTransform(HDPR,0,0,HDPR,0,0);
     VW=W*0.62; VH=H*0.60;
+    const bw=Math.max(1,Math.round(W/4)), bh=Math.max(1,Math.round(H/4));
+    if(bloomCv){ bloomCv.width=bw; bloomCv.height=bh; }
     captureTextRect();
   }
   function captureTextRect(){
     const el=document.querySelector('.page[data-page="horus"] .reader-wrap');
-    if(el && el.offsetWidth){ const r=el.getBoundingClientRect(); textRect={l:r.left,t:r.top,r:r.right,b:r.bottom}; }
+    if(el&&el.offsetWidth){const r=el.getBoundingClientRect(); textRect={l:r.left,t:Math.max(0,r.top),r:r.right,b:Math.min(H,r.bottom)};}
     else textRect=null;
   }
-  // fade nodes/links that fall over the reading column so copy stays crisp
-  function dimAt(x,y){
+  function dimAt(x,y){ // protect the reading column's luminance band
     if(!textRect) return 1;
     const dx=Math.max(textRect.l-x,0,x-textRect.r), dy=Math.max(textRect.t-y,0,y-textRect.b);
-    const o=Math.hypot(dx,dy); if(o>=HF.dimFeather) return 1;
-    return HF.dimMin+(1-HF.dimMin)*(o/HF.dimFeather);
+    const o=Math.hypot(dx,dy); if(o>=HZ.textDimFeather) return 1;
+    return HZ.textDimMin+(1-HZ.textDimMin)*(o/HZ.textDimFeather);
   }
 
-  function seedPulse(from){
-    if(pulses.length>=HF.maxPulses) return;
-    let fi = from!=null ? from
-      : (Math.random()<0.6 ? (Math.random()*HF.anchors)|0 : (Math.random()*fnodes.length)|0);
-    const f=fnodes[fi]; if(!f||!f.nbr.length) return;
-    const to=f.nbr[(Math.random()*f.nbr.length)|0];
-    if(to==null||to===fi) return;
-    pulses.push({from:fi,to,p:0,hops:0,back:-1});
-  }
-  function updatePulses(dt){
-    for(let i=pulses.length-1;i>=0;i--){
-      const pu=pulses[i]; pu.p+=HF.pulseSpeed*dt;
-      if(pu.p>=1){
-        const b=fnodes[pu.to]; if(b) b.lit=Math.min(1,b.lit+0.9);
-        if(!HF.FAITHFUL_MODE && pu.hops<HF.fireDepth && Math.random()<0.78 && pulses.length<HF.maxPulses){
-          const cand=(b?b.nbr:[]).filter(x=>x!==pu.from);
-          if(cand.length) pulses.push({from:pu.to,to:cand[(Math.random()*cand.length)|0],p:0,hops:pu.hops+1,back:pu.from});
-        }
-        pulses.splice(i,1);
-      }
+  // ── seed both layers
+  function seedScene(){
+    fieldN=[]; attrP=[]; fieldPulses=[]; streamPulses=[];
+    // Layer 1 — field nodes (five brighter H·O·R·U·S anchors optional-secondary)
+    const letters=['H','O','R','U','S'];
+    for(let i=0;i<5;i++){const a=(i/5)*6.283;
+      fieldN.push(mkNode(Math.cos(a)*VW*0.5,(Math.random()*2-1)*VH*0.42,(i/4*2-1)*HZ.depth*0.8,true,letters[i]));}
+    for(let i=fieldN.length;i<HZ.fieldNodes;i++)
+      fieldN.push(mkNode((Math.random()*2-1)*VW,(Math.random()*2-1)*VH,(Math.random()*2-1)*HZ.depth,false,null));
+    fieldN.forEach(f=>{ f.nbr=fieldN.map((g,gi)=>({gi,d:g===f?1e9:Math.hypot(g.x-f.x,g.y-f.y,g.z-f.z)-(g.anchor?90:0)}))
+      .sort((a,b)=>a.d-b.d).slice(0,4).map(o=>o.gi); });
+    // Layer 2 — attractor points assigned to the three streams by mass
+    const S=HZ.streams; let acc=[]; S.forEach((s,i)=>acc.push((acc[i-1]||0)+s.mass));
+    for(let i=0;i<HZ.attrPoints;i++){
+      const r=Math.random(); let si=acc.findIndex(a=>r<=a); if(si<0) si=S.length-1;
+      attrP.push(mkAttr(si));
     }
   }
+  function mkNode(x,y,z,anchor,letter){
+    return {x,y,z,ph:Math.random()*6.283,anchor,letter,r0:anchor?3.3:1.5+Math.random(),
+      tone:(!anchor&&Math.random()<HZ.clayRarity),hot:0,lit:0,collapse:0,sx:0,sy:0,sz:0,scale:1,dn:.5,shp:{k:0,r:0}};
+  }
+  function mkAttr(si){
+    const s=HZ.streams[si];
+    return {si, s:Math.random(), core:false,coreT:0,
+      ja:(Math.random()*2-1), jr:(Math.random()*2-1), jy:(Math.random()*2-1), ph:Math.random()*6.283,
+      clay: Math.random() < HZ.clayRarity*(0.4+s.warm), sx:0,sy:0,sz:0,scale:1,dn:.5,tx:0,ty:0,bri:0.5,col:HZ.near.slice(),bloom:0};
+  }
 
-  function stepField(now){
+  // ── shared projection (camera space). Returns nothing; writes sx,sy,sz,scale,dn onto obj.
+  let cT=1,sT=0,cP=1,sP=0,camDistEff=480;
+  function project(x,y,z,cx,cy,o){
+    const rx=x*cT+z*sT, rz=-x*sT+z*cT, ry=y*cP-rz*sP, rz2=y*sP+rz*cP;
+    const scale=HZ.fov/Math.max(80, rz2+HZ.depth+camDistEff);
+    o.sx=cx+rx*scale; o.sy=cy+ry*scale; o.sz=rz2; o.scale=scale; o.dn=clamp((rz2+HZ.depth)/(2*HZ.depth),0,1);
+    return rz2;
+  }
+  // lighting: dot of camera-space direction vs fixed key/rim lights
+  function shade(dx,dy,dz){
+    const m=Math.hypot(dx,dy,dz)||1, nx=dx/m,ny=dy/m,nz=dz/m;
+    const k=Math.max(0,nx*HZ.key.x+ny*HZ.key.y+nz*HZ.key.z);
+    const r=Math.max(0,nx*HZ.rim.x+ny*HZ.rim.y+nz*HZ.rim.z);
+    return {k,r};
+  }
+
+  // ── attractor point world position on its stream's inward spiral (+ jitter, weave, breath)
+  function streamPos(p,t,breath){
+    const s=HZ.streams[p.si];
+    const theta=s.ang + (1-t)*s.turns*6.283 + p.ja*0.18;
+    const rad=(HZ.coreR + (s.R-HZ.coreR)*Math.pow(t,0.9) + p.jr*s.width*t)*breath;
+    const yy = s.y*t + p.jy*s.width*0.5*t + Math.sin(theta*2+p.ph)*s.width*0.6;
+    return [Math.cos(theta)*rad, yy, Math.sin(theta)*rad];
+  }
+  function respawnAttr(p){ p.core=false; p.s=1; p.ja=Math.random()*2-1; p.jr=Math.random()*2-1; p.jy=Math.random()*2-1; }
+  function attrPos(p,now){ // used only for the reduced-motion composed frame
+    const breath=1+Math.sin(now*HZ.breathRate+p.ph)*HZ.breathAmp;
+    if(p.core){ const ca=p.ph+now*1.1, cr=HZ.coreR*0.72*breath; return [Math.cos(ca)*cr, p.jy*5, Math.sin(ca)*cr]; }
+    return streamPos(p,p.s,breath);
+  }
+
+  // ── firing
+  function seedFieldPulse(from){
+    if(fieldPulses.length>=HZ.maxPulses) return;
+    let fi=from!=null?from:(Math.random()<0.6?(Math.random()*5)|0:(Math.random()*fieldN.length)|0);
+    const f=fieldN[fi]; if(!f||!f.nbr.length) return;
+    const to=f.nbr[(Math.random()*f.nbr.length)|0]; if(to==null||to===fi) return;
+    fieldPulses.push({from:fi,to,p:0,hops:0});
+  }
+  function seedStreamPulse(si,dir){ // dir -1 = inward(emitter→core), +1 = outward(cascade bloom)
+    streamPulses.push({si, s: dir<0?1:0, dir, clay: HZ.streams[si].warm>0.6});
+  }
+  function triggerCascade(){
+    if(beatTimer>0) return; beatTimer=HZ.beatCooldown;
+    seedStreamPulse(2,-1);                          // TODAY ignites into the core
+    coreResolve=Math.min(1,coreResolve+0.9);        // the knot RESOLVES — tighter, brighter
+    setTimeout(()=>{ seedStreamPulse(0,1); seedStreamPulse(1,1); }, 220); // then blooms out WORK + LIFE
+  }
+
+  let emaDt=16, degraded=false;
+  function step(now){
     const dt=Math.min(0.05,(now-lastT)/1000)||0.016; lastT=now; tt+=dt;
-    const still=reduce; // reduced-motion → composed but frozen
-    const px=(pointer.x/W-0.5), py=(pointer.y/H-0.5);
-    const orbit=HF.FAITHFUL_MODE?0:tt*HF.orbitSpeed*HF.orbitAmp*orbitScale;
-    const theta=orbit + (allowParallax&&!still?px*HF.parallax*2:0) + scrollNorm*0.4;
-    const phi=(allowParallax&&!still?-py*HF.parallax:0.05);
-    const cT=Math.cos(theta),sT=Math.sin(theta),cP=Math.cos(phi),sP=Math.sin(phi);
+    // adaptive: if we blow the frame budget, shed the most expensive passes once
+    emaDt += (dt*1000-emaDt)*0.05;
+    if(emaDt>30 && !degraded){ degraded=true; HZ.bloom=0; HZ.grain=Math.min(HZ.grain,0.03); }
+    const still=reduce;
+    // smoothed scroll → dolly + drift energy (never raw)
+    const sy=window.scrollY||0, rawV=Math.abs(sy-lastScrollY); lastScrollY=sy;
+    const maxScroll=Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+    spTarget=clamp(sy/maxScroll,0,1);
+    spVel += ((spTarget>sp?1:-1)*Math.min(1,rawV/40) - spVel)*0.1;
+    if(!still){ sp += (spTarget-sp)*0.08; }
+    const anticip = still?0 : -0.05*Math.max(0,spVel)*Math.sign(spTarget-sp||1); // tiny pull-back before push-in
+    drift += ((0.5 + Math.min(1,rawV/30)*0.9) - drift)*0.06;   // scroll-velocity → drift energy
+    coreResolve=Math.max(0,coreResolve-dt*0.5);
+    beatTimer=Math.max(0,beatTimer-dt);
 
-    for(const f of fnodes){
-      if(!still && !HF.FAITHFUL_MODE){
-        const s=HF.flowScale;
-        const fx=Math.sin(f.y*s+tt*0.30)+Math.sin(f.z*s*1.3-tt*0.22);
-        const fy=Math.sin(f.z*s*1.1+tt*0.26)+Math.sin(f.x*s*0.9+tt*0.16);
-        const fz=Math.sin(f.x*s*1.2-tt*0.20)+Math.sin(f.y*s*0.8+tt*0.24);
-        f.x+=fx*HF.driftSpeed*dt; f.y+=fy*HF.driftSpeed*dt; f.z+=fz*HF.driftSpeed*dt*0.6;
-        if(f.x>VW)f.x=-VW; else if(f.x<-VW)f.x=VW;
-        if(f.y>VH)f.y=-VH; else if(f.y<-VH)f.y=VH;
-        if(f.z>HF.depth)f.z=-HF.depth; else if(f.z<-HF.depth)f.z=HF.depth;
+    // camera angles (eased orbit: slow at profile, quicker through the turn)
+    const baseOrbit = HZ.FAITHFUL_MODE?0: tt*HZ.orbitSpeed*HZ.orbitAmp*(H_TOUCH?0.4:1);
+    const eased = baseOrbit + Math.sin(baseOrbit)*0.12;
+    const px=(ptr.x/W-0.5), py=(ptr.y/H-0.5);
+    const theta = eased + (HZ.parallax? px*HZ.parallax*2:0) + sp*0.5;
+    const phi   = (HZ.parallax? -py*HZ.parallax:0) + 0.06 + sp*0.12;
+    cT=Math.cos(theta);sT=Math.sin(theta);cP=Math.cos(phi);sP=Math.sin(phi);
+    camDistEff = HZ.camDist - HZ.dollyRange*clamp(sp+anticip,0,1);
+
+    // manifesto arrival cascade (dolly lands on a crescendo)
+    if(!still && !manifestoFired && sp>0.6){ manifestoFired=true; triggerCascade(); }
+    if(sp<0.4) manifestoFired=false;
+
+    // ── advance + project FIELD
+    for(const f of fieldN){
+      if(!still){
+        const s=HZ.flowScale, e=HZ.flowSpeed*(0.5+drift*0.9);
+        f.x+=(Math.sin(f.y*s+tt*0.3)+Math.sin(f.z*s*1.3-tt*0.22))*e*dt;
+        f.y+=(Math.sin(f.z*s*1.1+tt*0.26)+Math.sin(f.x*s*0.9+tt*0.16))*e*dt;
+        f.z+=(Math.sin(f.x*s*1.2-tt*0.2)+Math.sin(f.y*s*0.8+tt*0.24))*e*dt*0.6;
+        if(f.x>VW)f.x=-VW;else if(f.x<-VW)f.x=VW; if(f.y>VH)f.y=-VH;else if(f.y<-VH)f.y=VH;
+        if(f.z>HZ.depth)f.z=-HZ.depth;else if(f.z<-HZ.depth)f.z=HZ.depth;
       }
-      const rx= f.x*cT + f.z*sT;
-      const rz=-f.x*sT + f.z*cT;
-      const ry= f.y*cP - rz*sP;
-      const rz2=f.y*sP + rz*cP;
-      const scale=HF.fov/Math.max(80,(rz2+HF.depth+HF.camDist));
-      f.sx=W/2+rx*scale; f.sy=H/2+ry*scale; f.sz=rz2; f.scale=scale;
-      f.dn=(rz2+HF.depth)/(2*HF.depth);
+      project(f.x,f.y,f.z,W/2,H/2,f); f.shp=shade(f.sx-W/2,f.sy-H/2,f.sz);
       f.lit=Math.max(0,f.lit-dt*1.6); f.collapse=Math.max(0,f.collapse-dt*1.3);
-      if(allowCursor && !HF.FAITHFUL_MODE && !still){
-        const dx=pointer.x-f.sx, dy=pointer.y-f.sy, d=Math.hypot(dx,dy);
-        const inf=d<HF.cursorRadius?1-d/HF.cursorRadius:0;
-        f.hot+=(inf-f.hot)*0.2;
-        if(inf){ f.sx+=dx*HF.cursorPull*inf; f.sy+=dy*HF.cursorPull*inf; }
+      if(!still&&ptr.active){
+        const dx=ptr.x-f.sx,dy=ptr.y-f.sy,d=Math.hypot(dx,dy),inf=d<HZ.cursorRadius?1-d/HZ.cursorRadius:0;
+        f.hot+=(inf-f.hot)*0.2; if(inf){f.sx+=dx*HZ.cursorPull*inf;f.sy+=dy*HZ.cursorPull*inf;}
       } else f.hot+=(0-f.hot)*0.2;
     }
-    if(!still && !HF.FAITHFUL_MODE && Math.random()<HF.collapseFreq*dt) fnodes[(Math.random()*fnodes.length)|0].collapse=1;
-    if(!still && Math.random()<HF.fireFreq*dt) seedPulse();
-    if(!still && allowCursor && pointer.x>0 && pointer.seed>0){
-      let bi=-1,bd=HF.cursorRadius; for(let i=0;i<fnodes.length;i++){const d=Math.hypot(pointer.x-fnodes[i].sx,pointer.y-fnodes[i].sy); if(d<bd){bd=d;bi=i;}}
-      if(bi>=0) seedPulse(bi); pointer.seed=0;
+    // ── advance + project ATTRACTOR (each point = a streak riding its streamline)
+    const acx=W*HZ.attrCX, acy=H*HZ.attrCY;
+    if(!HZ.FAITHFUL_MODE) for(const p of attrP){
+      const s=HZ.streams[p.si];
+      if(!still){
+        if(p.core){ p.coreT-=dt; if(p.coreT<=0) respawnAttr(p); }
+        else { p.s -= s.speed*dt*(0.6+drift*0.8);
+          if(p.s<=0){ if(Math.random()<0.34){ p.core=true; p.coreT=0.8+Math.random()*1.4; } else respawnAttr(p); } }
+      }
+      const breath=1+Math.sin(tt*HZ.breathRate+p.ph)*HZ.breathAmp, ds=0.02+s.speed*0.4;
+      let hx3,hy3,hz3,txx,tyy,tzz;
+      if(p.core){
+        const ca=p.ph+tt*1.1*(1+coreResolve), cr=(HZ.coreR*0.72)*(1-0.25*coreResolve)*breath, ca2=ca-0.28;
+        hx3=Math.cos(ca)*cr; hz3=Math.sin(ca)*cr; hy3=p.jy*5*(1-0.3*coreResolve);
+        txx=Math.cos(ca2)*cr; tzz=Math.sin(ca2)*cr; tyy=hy3;
+      } else {
+        const h=streamPos(p,p.s,breath), t=streamPos(p,Math.min(1,p.s+ds),breath);
+        hx3=h[0];hy3=h[1];hz3=h[2]; txx=t[0];tyy=t[1];tzz=t[2];
+      }
+      project(hx3,hy3,hz3,acx,acy,p);
+      project(txx,tyy,tzz,acx,acy,TMP); p.tx=TMP.sx; p.ty=TMP.sy;
+      const shp=shade(hx3,hy3,hz3);
+      const nearCore=1-clamp(p.core?0.05:p.s,0,1);          // 1 at core, 0 at emitter
+      p.bri = 0.44 + nearCore*0.4 + (p.core?0.14:0) + coreResolve*0.2*nearCore;
+      let c=mix(HZ.far,HZ.near, nearCore*0.6 + (1-p.dn)*0.4);
+      c=mix(c,HZ.keyWarm, shp.k*0.3); c=mix(c,HZ.rimCool, shp.r*0.18);
+      if(p.clay && (nearCore>0.5||coreResolve>0.3)) c=mix(c,HZ.clay,0.62);
+      if(p.core&&coreResolve>0.4) c=mix(c,HZ.bright,0.35*coreResolve);
+      p.col=c; p.bloom = p.bri*(0.6+coreResolve*0.5) + (p.core?0.18:0);
     }
-    updatePulses(dt);
+    // ── spawn life
+    if(!still&&!HZ.FAITHFUL_MODE){
+      if(Math.random()<HZ.collapseFreq*dt) fieldN[(Math.random()*fieldN.length)|0].collapse=1;
+      if(Math.random()<HZ.fireFreq*dt) seedFieldPulse();
+      if(Math.random()<HZ.streamFireFreq*dt) seedStreamPulse((Math.random()*3)|0,-1);
+      if(Math.random()<HZ.cascadeFreq*dt) triggerCascade();
+      if(ptr.active&&ptr.seed){ let bi=-1,bd=HZ.cursorRadius; for(let i=0;i<fieldN.length;i++){const d=Math.hypot(ptr.x-fieldN[i].sx,ptr.y-fieldN[i].sy);if(d<bd){bd=d;bi=i;}} if(bi>=0)seedFieldPulse(bi); ptr.seed=0; }
+    }
+    // advance pulses
+    for(let i=fieldPulses.length-1;i>=0;i--){const pu=fieldPulses[i]; pu.p+=HZ.pulseSpeed*dt;
+      if(pu.p>=1){const b=fieldN[pu.to]; if(b)b.lit=1;
+        if(!HZ.FAITHFUL_MODE&&pu.hops<HZ.fireDepth&&Math.random()<0.75&&fieldPulses.length<HZ.maxPulses){
+          const c=(b?b.nbr:[]).filter(x=>x!==pu.from); if(c.length)fieldPulses.push({from:pu.to,to:c[(Math.random()*c.length)|0],p:0,hops:pu.hops+1});}
+        fieldPulses.splice(i,1);}}
+    for(let i=streamPulses.length-1;i>=0;i--){const pu=streamPulses[i]; pu.s += (pu.dir<0?-1:1)*HZ.cascadeSpeed*dt*0.5;
+      if(pu.s<=0){ coreResolve=Math.min(1,coreResolve+0.35); streamPulses.splice(i,1); }
+      else if(pu.s>=1){ streamPulses.splice(i,1); } }
   }
 
-  function drawField(){
-    const g=fctx; const ground=HF.FAITHFUL_MODE?[7,8,9]:HF.col.ground;
+  function drawScene(){
+    const g=hx, ground=HZ.FAITHFUL_MODE?[7,8,9]:HZ.ground;
+    g.setTransform(HDPR,0,0,HDPR,0,0); g.globalCompositeOperation='source-over'; g.globalAlpha=1;
     g.fillStyle=rgb(ground); g.fillRect(0,0,W,H);
-    if(!HF.FAITHFUL_MODE) paintGlows(g);
-    const order=fnodes.map((f,i)=>i).sort((a,b)=>fnodes[b].sz-fnodes[a].sz); // far → near
+    if(!HZ.FAITHFUL_MODE) paintGlows(g);
+    if(bloomX){ bloomX.setTransform(1,0,0,1,0,0); bloomX.clearRect(0,0,bloomCv.width,bloomCv.height); }
+    const bs = bloomX ? bloomCv.width/W : 0;
+    const acx=W*HZ.attrCX, acy=H*HZ.attrCY;
 
-    // mesh links
-    for(let ii=0;ii<order.length;ii++){ const f=fnodes[order[ii]];
-      for(let jj=ii+1;jj<order.length;jj++){ const v=fnodes[order[jj]];
-        const dx=f.sx-v.sx, dy=f.sy-v.sy, d=Math.hypot(dx,dy);
-        if(d>HF.linkDist) continue;
-        const depthW=1-0.5*((f.dn+v.dn)/2);
-        let a=(1-d/HF.linkDist)*depthW*((f.anchor||v.anchor)?0.85:0.55);
-        const hot=Math.max(f.hot,v.hot); if(hot>0) a=Math.min(1,a+hot*0.5);
-        a*=dimAt((f.sx+v.sx)/2,(f.sy+v.sy)/2);
-        if(a<=0.012) continue;
-        const col=HF.FAITHFUL_MODE?HF.col.bright:((f.tone||v.tone)?HF.col.clay:HF.col.node);
-        g.strokeStyle=rgba(col,a*0.5);
-        g.lineWidth=((f.anchor||v.anchor)?1.2:0.8)*Math.max(0.55,1-((f.dn+v.dn)/2)*0.5);
-        g.beginPath(); g.moveTo(f.sx,f.sy); g.lineTo(v.sx,v.sy); g.stroke();
+    // field mesh links
+    for(let i=0;i<fieldN.length;i++){const f=fieldN[i];
+      for(let j=i+1;j<fieldN.length;j++){const v=fieldN[j];
+        const dx=f.sx-v.sx,dy=f.sy-v.sy,d=Math.hypot(dx,dy); if(d>HZ.linkDist)continue;
+        let a=(1-d/HZ.linkDist)*(1-0.5*((f.dn+v.dn)/2))*((f.anchor||v.anchor)?0.8:0.5);
+        const hot=Math.max(f.hot,v.hot); if(hot>0)a=Math.min(1,a+hot*0.5);
+        a*=dimAt((f.sx+v.sx)/2,(f.sy+v.sy)/2); if(a<=0.012)continue;
+        const col=HZ.FAITHFUL_MODE?HZ.bright:((f.tone||v.tone)?HZ.clay:mix(HZ.far,HZ.near,1-(f.dn+v.dn)/2));
+        g.strokeStyle=rgba(col,a*0.5); g.lineWidth=((f.anchor||v.anchor)?1.1:0.75)*Math.max(0.5,1-((f.dn+v.dn)/2)*0.5);
+        g.beginPath();g.moveTo(f.sx,f.sy);g.lineTo(v.sx,v.sy);g.stroke();}}
+
+    // depth-sort ALL points (field + attractor), far → near
+    const pts=[];
+    for(const f of fieldN) pts.push(f);
+    if(!HZ.FAITHFUL_MODE) for(const p of attrP) pts.push(p);
+    pts.sort((a,b)=>b.sz-a.sz);
+    const fogK=HZ.fog;
+    for(const o of pts){
+      const dim=dimAt(o.sx,o.sy); if(dim<=0.02) continue;
+      const fog = 1-fogK*o.dn*0.7;                       // depth fog dims/desats far
+      if(o.si!==undefined){ // attractor point — luminous streak riding its streamline
+        let a=clamp(o.bri*fog,0,1)*dim; if(a<=0.02) continue;
+        g.strokeStyle=rgba(o.col,a*0.55); g.lineWidth=Math.max(0.6,(0.7+o.bri*1.5)*o.scale); g.lineCap='round';
+        g.beginPath(); g.moveTo(o.tx,o.ty); g.lineTo(o.sx,o.sy); g.stroke();
+        const R=(1.1+o.bri*1.5)*o.scale*(o.core?1.2:1);
+        const spr=(o.clay&&o.bri>0.66)?spClay:(o.dn<0.5?spNear:spFar);
+        const gr=R*2.6; g.globalAlpha=a*0.9; g.drawImage(spr,o.sx-gr,o.sy-gr,gr*2,gr*2);
+        if(o.bri>0.9){ g.globalAlpha=a*0.5; const cr=R*0.95; g.drawImage(spWhite,o.sx-cr,o.sy-cr,cr*2,cr*2); }
+        g.globalAlpha=1;
+        if(bs&&o.bloom>HZ.bloomThresh){ bloomX.globalAlpha=clamp((o.bloom-HZ.bloomThresh)*1.5,0,1); bloomX.drawImage(spr,(o.sx-gr)*bs,(o.sy-gr)*bs,gr*2*bs,gr*2*bs); bloomX.globalAlpha=1; }
+      } else { // field node
+        const near=1-o.dn, shim=1+((still_or_faith())?0:Math.sin(tt*1.6+o.ph)*HZ.shimmer*0.25);
+        const lit=0.32+o.shp.k*0.3+o.shp.r*0.12;
+        let a=Math.min(1,((o.anchor?0.85:0.56)*(0.55+near*0.65)*lit*2)+o.hot*0.6+o.lit*0.6+o.collapse*0.7)*dim*fog; if(a<=0.02)continue;
+        let R=o.r0*o.scale*shim*(1+o.hot*0.5); if(o.collapse>0)R*=1-0.35*o.collapse;
+        const spr=HZ.FAITHFUL_MODE?spWhite:(o.tone?spClay:(o.dn<0.5?spNear:spFar));
+        const gr=R*(o.anchor?4.2:3.3); g.globalAlpha=a; g.drawImage(spr,o.sx-gr,o.sy-gr,gr*2,gr*2);
+        const core=Math.max(o.lit,o.collapse,o.hot,(o.anchor&&!HZ.FAITHFUL_MODE)?0.2:0);
+        if(core>0){g.globalAlpha=Math.min(1,core)*dim;const cr=R*1.6;g.drawImage(spWhite,o.sx-cr,o.sy-cr,cr*2,cr*2);}
+        g.globalAlpha=1;
       }
     }
-    // firing pulses along edges
-    for(const pu of pulses){ const a=fnodes[pu.from], b=fnodes[pu.to]; if(!a||!b) continue;
+
+    // pulses — field (along mesh) + stream (along spirals)
+    for(const pu of fieldPulses){const a=fieldN[pu.from],b=fieldN[pu.to];if(!a||!b)continue;
       const md=dimAt((a.sx+b.sx)/2,(a.sy+b.sy)/2);
-      g.strokeStyle=rgba(HF.col.bright,0.26*md); g.lineWidth=1.4;
-      g.beginPath(); g.moveTo(a.sx,a.sy); g.lineTo(b.sx,b.sy); g.stroke();
-      const x=a.sx+(b.sx-a.sx)*pu.p, y=a.sy+(b.sy-a.sy)*pu.p, r=3.2*Math.max(0.55,b.scale);
-      g.globalAlpha=0.92*dimAt(x,y); g.drawImage(spWhite,x-r*3,y-r*3,r*6,r*6); g.globalAlpha=1;
-    }
-    // nodes, far → near
-    for(let ii=0;ii<order.length;ii++) drawNode(g,fnodes[order[ii]]);
+      g.strokeStyle=rgba(HZ.bright,0.26*md);g.lineWidth=1.3;g.beginPath();g.moveTo(a.sx,a.sy);g.lineTo(b.sx,b.sy);g.stroke();
+      const x=a.sx+(b.sx-a.sx)*pu.p,y=a.sy+(b.sy-a.sy)*pu.p,r=3*Math.max(0.5,b.scale);
+      g.globalAlpha=0.9*dimAt(x,y);g.drawImage(spWhite,x-r*3,y-r*3,r*6,r*6);g.globalAlpha=1;
+      if(bs){bloomX.globalAlpha=0.8;bloomX.drawImage(spWhite,(x-r*3)*bs,(y-r*3)*bs,r*6*bs,r*6*bs);bloomX.globalAlpha=1;}}
+    if(!HZ.FAITHFUL_MODE) for(const pu of streamPulses){
+      const tmp={}; const wp=attrPosPulse(pu); project(wp[0],wp[1],wp[2],acx,acy,tmp);
+      const r=3.4*Math.max(0.5,tmp.scale), dm=dimAt(tmp.sx,tmp.sy);
+      const spr=pu.clay?spClay:spWhite; g.globalAlpha=0.95*dm; g.drawImage(spr,tmp.sx-r*3,tmp.sy-r*3,r*6,r*6); g.globalAlpha=1;
+      if(bs){bloomX.globalAlpha=0.9;bloomX.drawImage(spr,(tmp.sx-r*3)*bs,(tmp.sy-r*3)*bs,r*6*bs,r*6*bs);bloomX.globalAlpha=1;}}
+
+    // BLOOM composite (blurred low-res buffer, added back)
+    if(bs&&HZ.bloom>0){ g.save(); g.globalCompositeOperation='lighter'; g.globalAlpha=HZ.bloom; g.filter=`blur(${HZ.bloomBlur}px)`;
+      g.drawImage(bloomCv,0,0,W,H); g.filter='none'; g.restore(); }
 
     paintVignette(g,ground);
-    if(!isTouch && !HF.FAITHFUL_MODE) drawLabels(g);
+    if(HZ.grain>0&&grainPat){ g.save(); g.globalAlpha=HZ.grain; g.globalCompositeOperation='overlay';
+      const ox=(Math.random()*140)|0, oy=(Math.random()*140)|0; g.translate(-ox,-oy); g.fillStyle=grainPat; g.fillRect(ox,oy,W,H); g.restore(); }
+    if(!isSmall()&&!HZ.FAITHFUL_MODE) drawStreamLabels(g,acx,acy);
   }
-
-  function drawNode(g,f){
-    const dim=dimAt(f.sx,f.sy), near=1-f.dn;
-    const shim=1+((reduce||HF.FAITHFUL_MODE)?0:Math.sin(tt*1.6+f.ph)*HF.shimmer*0.25);
-    const base=(f.anchor?0.82:0.48)*(0.5+near*0.7);
-    let a=Math.min(1,base+f.hot*0.6+f.lit*0.6+f.collapse*0.7)*dim*shim;
-    if(a<=0.012) return;
-    let R=f.r0*f.scale*shim*(1+f.hot*0.5);
-    if(f.collapse>0) R*=1-0.35*f.collapse; // "collapse" sharpens the smear
-    const spr=HF.FAITHFUL_MODE?spWhite:(f.tone?spClay:(f.anchor?spAnchor:spNode));
-    const gr=R*(f.anchor?4.4:3.4);
-    g.globalAlpha=a; g.drawImage(spr,f.sx-gr,f.sy-gr,gr*2,gr*2);
-    const core=Math.max(f.lit,f.collapse,f.hot,(f.anchor&&!HF.FAITHFUL_MODE)?0.22:0);
-    if(core>0){ g.globalAlpha=Math.min(1,core)*dim; const cr=R*1.7; g.drawImage(spWhite,f.sx-cr,f.sy-cr,cr*2,cr*2); }
-    g.globalAlpha=1;
+  function still_or_faith(){ return reduce||HZ.FAITHFUL_MODE; }
+  function isSmall(){ return H_TOUCH; }
+  function attrPosPulse(pu){ // sample a stream's spiral at param pu.s
+    const s=HZ.streams[pu.si], t=clamp(pu.s,0,1);
+    const theta=s.ang+(1-t)*s.turns*6.283, rad=HZ.coreR+(s.R-HZ.coreR)*Math.pow(t,1.25);
+    return [Math.cos(theta)*rad, s.y*t, Math.sin(theta)*rad];
   }
-
-  function drawLabels(g){
+  function drawStreamLabels(g,acx,acy){
     g.textAlign='center'; g.textBaseline='middle';
-    for(const f of fnodes){ if(!f.anchor) continue;
-      const d=Math.hypot(pointer.x-f.sx,pointer.y-f.sy);
-      const near=allowCursor?Math.max(0,1-d/230):0;
-      const a=(0.09+near*0.6)*dimAt(f.sx,f.sy); if(a<=0.02) continue;
-      const size=(13+(1-f.dn)*15);
-      g.font=`600 ${size}px 'Hanken Grotesk', system-ui, sans-serif`;
-      g.fillStyle=rgba(HF.col.bright,a);
-      g.fillText(f.letter,f.sx,f.sy-(15+(1-f.dn)*10));
+    for(const s of HZ.streams){ const tmp={}; const th=s.ang, rad=s.R*1.02;
+      project(Math.cos(th)*rad, s.y, Math.sin(th)*rad, acx, acy, tmp);
+      const a=(0.14+ (ptr.active?Math.max(0,1-Math.hypot(ptr.x-tmp.sx,ptr.y-tmp.sy)/240)*0.5:0))*dimAt(tmp.sx,tmp.sy)*(1-tmp.dn*0.5);
+      if(a<=0.03) continue;
+      g.font=`600 ${(11+(1-tmp.dn)*4)}px 'Hanken Grotesk', system-ui, sans-serif`;
+      g.fillStyle=rgba(s.warm>0.6?HZ.clay:HZ.bright, a); g.fillText(s.id, tmp.sx, tmp.sy);
     }
   }
-
   function paintGlows(g){
     let gr=g.createRadialGradient(W*0.82,-H*0.08,0,W*0.82,-H*0.08,Math.max(W,H)*0.95);
-    gr.addColorStop(0,rgba([60,74,66],0.5)); gr.addColorStop(0.6,rgba([60,74,66],0)); g.fillStyle=gr; g.fillRect(0,0,W,H);
+    gr.addColorStop(0,rgba([60,74,66],0.5));gr.addColorStop(0.6,rgba([60,74,66],0));g.fillStyle=gr;g.fillRect(0,0,W,H);
     gr=g.createRadialGradient(0,H*0.05,0,0,H*0.05,Math.max(W,H)*0.7);
-    gr.addColorStop(0,rgba(HF.col.clay,0.05)); gr.addColorStop(0.55,rgba(HF.col.clay,0)); g.fillStyle=gr; g.fillRect(0,0,W,H);
+    gr.addColorStop(0,rgba(HZ.clay,0.05));gr.addColorStop(0.55,rgba(HZ.clay,0));g.fillStyle=gr;g.fillRect(0,0,W,H);
     gr=g.createRadialGradient(W*0.5,H*1.2,0,W*0.5,H*1.2,Math.max(W,H)*0.95);
-    gr.addColorStop(0,rgba(HF.col.node,0.09)); gr.addColorStop(0.6,rgba(HF.col.node,0)); g.fillStyle=gr; g.fillRect(0,0,W,H);
+    gr.addColorStop(0,rgba(HZ.near,0.08));gr.addColorStop(0.6,rgba(HZ.near,0));g.fillStyle=gr;g.fillRect(0,0,W,H);
   }
   function paintVignette(g,ground){
-    const gr=g.createRadialGradient(W/2,H*0.46,Math.min(W,H)*0.34,W/2,H*0.46,Math.max(W,H)*0.72);
-    gr.addColorStop(0,rgba(ground,0)); gr.addColorStop(1,rgba(ground,0.62)); g.fillStyle=gr; g.fillRect(0,0,W,H);
+    const gr=g.createRadialGradient(W*HZ.attrCX,H*0.46,Math.min(W,H)*0.32,W*HZ.attrCX,H*0.5,Math.max(W,H)*0.75);
+    gr.addColorStop(0,rgba(ground,0));gr.addColorStop(1,rgba(ground,HZ.vignette));g.fillStyle=gr;g.fillRect(0,0,W,H);
   }
 
-  function fieldLoop(now){ if(!fieldActive) return; stepField(now); drawField(); fRAF=requestAnimationFrame(fieldLoop); }
+  function loop(now){ if(!hActive) return; step(now); drawScene(); hRAF=requestAnimationFrame(loop); }
   function enterHorus(){
     document.body.classList.add('horus-scene');
-    if(!fctx) return;
-    if(!spNode) buildSprites();
+    if(!hx) return;
+    if(!spNear) buildAssets();
     sizeField();
-    if(!fSeeded){ seedField(); fSeeded=true; }
-    fieldActive=true;
-    // re-measure the text column after the pageIn animation settles
-    setTimeout(captureTextRect,120); setTimeout(captureTextRect,650);
-    cancelAnimationFrame(fRAF);
-    if(reduce){ lastT=performance.now(); tt=6.8; stepField(performance.now()); drawField(); }
-    else { lastT=performance.now(); fRAF=requestAnimationFrame(fieldLoop); }
+    if(!hSeeded){ seedScene(); hSeeded=true; }
+    hActive=true; setTimeout(captureTextRect,120); setTimeout(captureTextRect,700);
+    sp=0; spTarget=0; spVel=0; drift=0.5; manifestoFired=false; lastScrollY=window.scrollY||0;
+    cancelAnimationFrame(hRAF);
+    if(reduce){ tt=6.5; sp=0.55; coreResolve=0.55; drift=0.5; lastT=performance.now();
+      cT=Math.cos(6.5+0.12);sT=Math.sin(6.5+0.12);cP=Math.cos(0.14);sP=Math.sin(0.14); camDistEff=HZ.camDist-HZ.dollyRange*0.5;
+      // one composed, fully-lit static frame (head + tail projected, no motion)
+      for(const f of fieldN){project(f.x,f.y,f.z,W/2,H/2,f);f.shp=shade(f.sx-W/2,f.sy-H/2,f.sz);}
+      const acx=W*HZ.attrCX,acy=H*HZ.attrCY;
+      for(const p of attrP){ const breath=1+Math.sin(6.5*HZ.breathRate+p.ph)*HZ.breathAmp;
+        const h=attrPos(p,6.5), tl=p.core?h:streamPos(p,Math.min(1,p.s+0.02+HZ.streams[p.si].speed*0.4),breath);
+        project(h[0],h[1],h[2],acx,acy,p); project(tl[0],tl[1],tl[2],acx,acy,TMP); p.tx=TMP.sx; p.ty=TMP.sy;
+        const shp=shade(h[0],h[1],h[2]); const nc=1-clamp(p.core?0.05:p.s,0,1);
+        p.bri=0.44+nc*0.4+coreResolve*0.2*nc; let c=mix(HZ.far,HZ.near,nc*0.6+(1-p.dn)*0.4);
+        c=mix(c,HZ.keyWarm,shp.k*0.3); c=mix(c,HZ.rimCool,shp.r*0.18);
+        if(p.clay&&nc>0.5)c=mix(c,HZ.clay,0.62); p.col=c; p.bloom=p.bri; }
+      drawScene();
+    } else { lastT=performance.now(); hRAF=requestAnimationFrame(loop); }
   }
-  function exitHorus(){
-    document.body.classList.remove('horus-scene');
-    fieldActive=false; cancelAnimationFrame(fRAF); fRAF=0;
-  }
-  if(fcv){
-    window.addEventListener('resize',()=>{ if(fieldActive) sizeField(); });
-    window.addEventListener('scroll',()=>{ if(!fieldActive) return; scrollNorm=Math.max(-1,Math.min(1,window.scrollY/700)); captureTextRect(); },{passive:true});
-    window.addEventListener('pointermove',e=>{ pointer.x=e.clientX; pointer.y=e.clientY; if(Math.random()<0.05) pointer.seed=1; },{passive:true});
-    window.addEventListener('pointerout',e=>{ if(!e.relatedTarget){ pointer.x=-9999; pointer.y=-9999; } });
-    document.addEventListener('visibilitychange',()=>{
-      if(document.hidden){ cancelAnimationFrame(fRAF); fRAF=0; }
-      else if(fieldActive && !reduce){ lastT=performance.now(); cancelAnimationFrame(fRAF); fRAF=requestAnimationFrame(fieldLoop); }
-    });
+  function exitHorus(){ document.body.classList.remove('horus-scene'); hActive=false; cancelAnimationFrame(hRAF); hRAF=0; }
+  if(hcv){
+    window.addEventListener('resize',()=>{ if(hActive) sizeField(); });
+    window.addEventListener('scroll',()=>{ if(hActive) captureTextRect(); },{passive:true});
+    window.addEventListener('pointermove',e=>{ ptr.x=e.clientX; ptr.y=e.clientY; ptr.active=true; if(Math.random()<0.05)ptr.seed=1; },{passive:true});
+    window.addEventListener('pointerout',e=>{ if(!e.relatedTarget){ ptr.active=false; ptr.x=-9999; ptr.y=-9999; } });
+    document.addEventListener('visibilitychange',()=>{ if(document.hidden){cancelAnimationFrame(hRAF);hRAF=0;} else if(hActive&&!reduce){lastT=performance.now();cancelAnimationFrame(hRAF);hRAF=requestAnimationFrame(loop);} });
   }
 
   /* ABOUT — "Questions I've enjoyed facing" filter

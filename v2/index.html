@@ -114,6 +114,7 @@ a{color:var(--moss-deep); text-decoration:none}
 .page.is-active .anim{animation:pageIn .7s cubic-bezier(.16,1,.3,1) both}
 .page.is-active .anim.d1{animation-delay:.06s} .page.is-active .anim.d2{animation-delay:.13s}
 .page.is-active .anim.d3{animation-delay:.2s} .page.is-active .anim.d4{animation-delay:.27s}
+.page.is-active .anim.d5{animation-delay:.34s}
 @keyframes pageIn{from{opacity:0; transform:translateY(16px)} to{opacity:1; transform:none}}
 
 h1,h2,h3,h4{font-family:var(--display); font-weight:400; color:var(--ink); margin:0; text-wrap:balance; font-variant-numeric:lining-nums; font-feature-settings:"lnum" 1}
@@ -225,12 +226,38 @@ p{margin:0 0 var(--s3); color:var(--ink-2); text-wrap:pretty}
 .frameworks{display:grid; grid-template-columns:1fr; gap:var(--s4); margin:var(--s5) 0; max-width:46rem}
 .fw{display:block; border:1px solid var(--line); border-radius:6px; padding:var(--s5); background:var(--surface); color:inherit; cursor:pointer; transition:transform .35s cubic-bezier(.16,1,.3,1), box-shadow .35s ease, border-color .35s ease}
 .fw:hover{transform:translateY(-3px); box-shadow:var(--shadow-lift); border-color:var(--line-2)}
-.fw h3{font-size:1.3rem; letter-spacing:-.01em; line-height:1.16; margin-bottom:.4rem}
-.fw h3 .acro{color:var(--moss-deep)}
+.fw h3,.fw h4{font-size:1.3rem; letter-spacing:-.01em; line-height:1.16; margin-bottom:.4rem}
+.fw h3 .acro,.fw h4 .acro{color:var(--moss-deep)}
 .fw .fw-uc{font-size:.82rem; font-weight:600; color:var(--clay-deep); margin:0 0 .6rem}
 .fw p{font-size:.95rem; margin:0 0 var(--s4); color:var(--ink-2)}
 .come-back{display:inline-flex; align-items:center; gap:.6rem; font-size:1.08rem; color:var(--ink); margin-top:var(--s6); font-family:var(--display)}
 .come-back .jit{font-family:var(--body)}
+
+/* The Human Layer — the non-software half of Systems */
+/* Systems split into two halves: Technology and Human */
+.sys-half{margin-top:var(--s7); padding-top:var(--s5); border-top:2px solid var(--line-2)}
+.sys-half-head{display:flex; align-items:baseline; gap:var(--s3); margin-bottom:.5rem}
+.sys-half-num{font-size:.74rem; letter-spacing:.16em; font-weight:600; color:var(--clay-deep)}
+.sys-half-title{font-family:var(--display); font-size:clamp(1.7rem,3.4vw,2.5rem); line-height:1.1; letter-spacing:-.015em; margin:0}
+.sys-half-lede{max-width:58ch; color:var(--ink-2); margin:0 0 var(--s5)}
+.sys-half .big-q{border-top:0; padding-top:0; margin-top:var(--s7)}
+.human-layer{max-width:46rem}
+.hl-lede{max-width:58ch; color:var(--ink-2); margin:0 0 var(--s5)}
+.hl-group{margin-bottom:var(--s5)}
+.hl-group h5{font-size:.74rem; letter-spacing:.16em; text-transform:uppercase; font-weight:600; color:var(--clay-deep); margin:0 0 .35rem; padding-bottom:.55rem; border-bottom:1px solid var(--line-2)}
+.hlq{border-top:1px solid var(--line)}
+.hl-group .hlq:first-of-type{border-top:0}
+.hlq summary{list-style:none; cursor:pointer; position:relative; padding:.72rem 1.7rem .72rem 1.5rem; font-size:.95rem; line-height:1.45; color:var(--ink-2); transition:color .25s ease}
+.hlq summary::-webkit-details-marker{display:none}
+.hlq summary::before{content:""; position:absolute; left:0; top:1em; width:.62rem; height:.62rem; background:var(--moss); -webkit-mask:var(--leaf-mask) center/contain no-repeat; mask:var(--leaf-mask) center/contain no-repeat}
+.hlq summary::after{content:""; position:absolute; right:.35rem; top:1.1em; width:.4rem; height:.4rem; border-right:1.5px solid var(--ink-3); border-bottom:1.5px solid var(--ink-3); transform:rotate(45deg); transition:transform .3s cubic-bezier(.16,1,.3,1), border-color .25s ease}
+.hlq summary:hover{color:var(--moss-deep)}
+.hlq summary:hover::after{border-color:var(--moss-deep)}
+.hlq[open] summary{color:var(--ink); font-weight:500}
+.hlq[open] summary::after{transform:rotate(-135deg); border-color:var(--moss-deep)}
+.hlq-a{padding:.1rem 1.7rem 1rem 1.5rem; max-width:62ch; font-size:.93rem; line-height:1.65; color:var(--ink-2); animation:pageIn .45s cubic-bezier(.16,1,.3,1) both}
+.hlq-a.todo{color:var(--ink-3); font-style:italic}
+.hl-close{margin-top:var(--s6); font-family:var(--display); font-size:clamp(1.05rem,1.8vw,1.28rem); line-height:1.4; letter-spacing:-.005em; color:var(--ink); max-width:52ch}
 
 /* reader / sub-pages */
 .reader-wrap{max-width:var(--reader-w)}
@@ -406,7 +433,7 @@ body.horus-scene:not(.night) .horus-manifesto{text-shadow:0 0 16px var(--ground)
             <li class="toc-item" data-parent="introspection">
               <a class="toc-link" href="/introspection" data-route><span class="ix">02</span><span>Introspection</span></a>
               <ul class="toc-sub">
-                <li><a class="toc-sublink" href="/introspection/learnings" data-route>27 Learnings</a></li>
+                <li><a class="toc-sublink" href="/introspection/learnings" data-route>28 Learnings</a></li>
                 <li><a class="toc-sublink" href="/introspection/quotes" data-route>My Favorite Quotes</a></li>
                 <li><a class="toc-sublink" href="/introspection/flaws" data-route>Flaws</a></li>
                 <li><a class="toc-sublink" href="/introspection/dreams" data-route>Dreams</a></li>
@@ -479,7 +506,7 @@ body.horus-scene:not(.night) .horus-manifesto{text-shadow:0 0 16px var(--ground)
         <h2 class="h-section anim" id="intro-h">Introspection</h2>
         <p class="prose anim">A look inward — what I've learned, what I return to, what I'm working on, and where I'm headed.</p>
         <div class="index anim d1">
-          <a class="entry" href="/introspection/learnings" data-route><div><span class="entry-tag">Lessons</span><h3>27 Learnings</h3><p>On life, work, and decision-making.</p></div><span class="go">Open <span class="arr">→</span></span></a>
+          <a class="entry" href="/introspection/learnings" data-route><div><span class="entry-tag">Lessons</span><h3>28 Learnings</h3><p>On life, work, and decision-making.</p></div><span class="go">Open <span class="arr">→</span></span></a>
           <a class="entry" href="/introspection/quotes" data-route><div><span class="entry-tag">Words</span><h3>My Favorite Quotes</h3><p>Lines I keep coming back to.</p></div><span class="go">Open <span class="arr">→</span></span></a>
           <a class="entry" href="/introspection/flaws" data-route><div><span class="entry-tag">Honesty</span><h3>Flaws</h3><p>The edges I'm still sanding down.</p></div><span class="go">Open <span class="arr">→</span></span></a>
           <a class="entry" href="/introspection/dreams" data-route><div><span class="entry-tag">Ahead</span><h3>Dreams</h3><p>Where I'm pointed.</p></div><span class="go">Open <span class="arr">→</span></span></a>
@@ -489,7 +516,7 @@ body.horus-scene:not(.night) .horus-manifesto{text-shadow:0 0 16px var(--ground)
       <!-- 28 LEARNINGS -->
       <section class="page" data-page="learnings" aria-labelledby="learn-h" tabindex="-1">
         <a class="reader-back" href="/introspection" data-route><span class="arr">←</span> Back to Introspection</a>
-        <h1 class="reader-title anim" id="learn-h">27 Learnings</h1>
+        <h1 class="reader-title anim" id="learn-h">28 Learnings</h1>
         <div class="lesson-group anim d1">
           <h3>Life</h3>
           <ul class="leaf-list">
@@ -504,6 +531,7 @@ body.horus-scene:not(.night) .horus-manifesto{text-shadow:0 0 16px var(--ground)
             <li>Anxiety is a result of inaction on something you could've controlled.</li>
             <li>Scrolling is killing your dreams.</li>
             <li>Oversharing too early manufactures shaky, artificially-built trust.</li>
+            <li>The amount of beautiful things in your life depends on your ability to notice them.</li>
           </ul>
         </div>
         <div class="lesson-group anim d2">
@@ -578,7 +606,11 @@ body.horus-scene:not(.night) .horus-manifesto{text-shadow:0 0 16px var(--ground)
       <!-- SYSTEMS (hub) -->
       <section class="page" data-page="systems" aria-labelledby="sys-h" tabindex="-1">
         <h2 class="h-section anim" id="sys-h">Systems</h2>
-        <p class="prose anim">Some tools I use to think clearly and execute consistently.</p>
+        <p class="prose anim">Two halves: the software I run on, and the habits no software can run for me.</p>
+
+        <div class="sys-half">
+          <div class="sys-half-head anim d1"><span class="sys-half-num">01</span><h3 class="sys-half-title">Technology</h3></div>
+          <p class="sys-half-lede anim d1">The stack, and the AI operating system I'm building on top of it.</p>
 
         <div class="tools-wrap anim d1">
           <span class="tools-label">SaaS I use for productivity</span>
@@ -598,14 +630,56 @@ body.horus-scene:not(.night) .horus-manifesto{text-shadow:0 0 16px var(--ground)
 
         <div class="frameworks anim d3">
           <a class="fw" href="/systems/horus" data-route>
-            <h3><span class="acro">HORUS</span> — Habits, Objectives, Routines, Utilization, Synthesis</h3>
+            <h4><span class="acro">HORUS</span> — Habits, Objectives, Routines, Utilization, Synthesis</h4>
             <p class="fw-uc">🚧 under construction</p>
             <p>A personalized AI operating system built around my goals, workflow, and decision-making — opinionated about which tasks AI should take on, and which stay human.</p>
             <span class="go">Open HORUS <span class="arr">→</span></span>
           </a>
         </div>
 
-        <p class="come-back anim d4"><span class="jit" role="img" aria-label="brain">🧠</span>Feel free to inquire how it's coming along or if you want to trade ideas. Come back soon!</p>
+        </div>
+
+        <div class="sys-half">
+          <div class="sys-half-head anim d4"><span class="sys-half-num">02</span><h3 class="sys-half-title">Human</h3></div>
+          <p class="sys-half-lede anim d4">The half no stack installs for you. HORUS can only amplify what is already running here. Open a question to see where I actually land.</p>
+
+        <div class="human-layer anim d4">
+
+          <!-- The Human Layer Q&A. To add one: copy a <details class="hlq"> block. -->
+          <div class="hl-groups">
+            <div class="hl-group">
+              <h5>Time</h5>
+              <details class="hlq"><summary>Do you practice time blocking?</summary><div class="hlq-a">I used to do this, it almost never worked... I never really felt satisfied or happy enough. I treat my calendar as more of a "visual signal" (unless I have real appointments with people) than something I actually need to follow... I get into a flow state, live in my notes, and just execute.</div></details>
+              <details class="hlq"><summary>Do you schedule rest, or do you just collapse into it?</summary><div class="hlq-a">This is why being physically and mentally healthy is important. Typically, I'm confident enough that I can just wait for my body to give me signals that I need rest... But more so, it's important that I'm mindful if I'm feeling tired or in pain: I attempt to diagnose the cause and THEN instill a schedule or a routine...</div></details>
+            </div>
+            <div class="hl-group">
+              <h5>Body</h5>
+              <details class="hlq"><summary>What are your thoughts on exercise?</summary><div class="hlq-a">I've always been a huge cardio guy &mdash; usually 3x to 4x a week of either running or basketball. I can run a mile in under 5 minutes. I think hand-eye coordination exercises (just play sports!) are especially underrated because I think it's key to "survival" in dangerous or unexpected situations. I lift enough to be lean, not big.</div></details>
+              <details class="hlq"><summary>How do you balance your diet between health and happiness?</summary><div class="hlq-a">I tend to avoid snacking altogether. I often skip breakfast. I don't really drink unless it's a special occasion. I never drink soda. However, I'm honestly a sucker for AYCE menus and will try to fill up on their most expensive item &#128517;. A boba at 30% sugar is the highest I'll go.</div></details>
+            </div>
+            <div class="hl-group">
+              <h5>Mind</h5>
+              <details class="hlq"><summary>How do you come up with something original?</summary><div class="hlq-a">I take inspiration from Sean Evans, the interviewer from the YouTube series "Hot Ones". He rigorously researches from multiple angles, collaborates with others, and ALWAYS reserves time for personal, deep contemplation until it "just comes to him". In any work, if downtime or relaxation doesn't exist, it's unreasonable to expect fresh, real perspectives.</div></details>
+              <details class="hlq"><summary>How do you practice self-control?</summary><div class="hlq-a">I generally don't trust that my default environment works in my best interest. Most choice architecture is at the mercy of big profit-driven organizations trying to pump us full of wasteful desires across attention, diet, happiness, etc. I put more time into modifying my environment than I do trusting my base instincts to choose the right thing.</div></details>
+              <details class="hlq"><summary>What are your thoughts on social media?</summary><div class="hlq-a">It's like fire: both helpful and destructive. I go through cycles of deleting and downloading it. I use it mostly for inspiration or to stay in touch with friends &mdash; I've unfollowed most "meme," "humor," or clickbait pages &mdash; NOT because I'm a robot and don't enjoy it, but because I know they'll make their way into my feed regardless.</div></details>
+            </div>
+            <div class="hl-group">
+              <h5>People</h5>
+              <details class="hlq"><summary>How do you maintain friendships?</summary><div class="hlq-a">The quality of time you've spent with someone is more important than the quantity: I trust my friends to think the same way &mdash; and if not, I'm comfortable being made a fool if it means I can maintain my values... Checking in on the well-being of their personal goals, family, and occupations is important to me.</div></details>
+              <details class="hlq"><summary>What types of people do you avoid?</summary><div class="hlq-a">I used to have trouble accepting too many kinds of people... My default mode is to create harmony, but as I get older, I realize there's a distinction between "people-pleasing" and "true understanding". My rule of thumb is avoid people who "keep score" of favors.</div></details>
+            </div>
+            <div class="hl-group">
+              <h5>Self</h5>
+              <details class="hlq"><summary>What are your thoughts on personal aesthetics?</summary><div class="hlq-a">Usually, I try to "blend in" with the crowd. I prefer subtle colors. Though, I think it's important to have a few "statement pieces", but don't overdo it on the quantity or price. Health, not price, is the greatest indicator of status.</div></details>
+              <details class="hlq"><summary>What does fulfillment mean to you?</summary><div class="hlq-a">I think humans assume "fulfillment" means "full" (it's almost in the name, after all). Nobody ever says "glass is full"... they say "glass half full" or "glass half empty"... Practice gratitude always.</div></details>
+            </div>
+          </div>
+
+          <p class="hl-close">None of these need an app. That's the point: HORUS can carry the 80%, but it can't answer a single question on this list for me.</p>
+        </div>
+        </div>
+
+        <p class="come-back anim d5"><span class="jit" role="img" aria-label="brain">🧠</span>Feel free to inquire how it's coming along or if you want to trade ideas. Come back soon!</p>
       </section>
 
       <!-- HORUS -->

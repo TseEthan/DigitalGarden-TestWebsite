@@ -311,8 +311,8 @@ body.reading .read-bar{opacity:1}
 .northstar .jit.twinkle{animation:nsTwinkle .65s cubic-bezier(.16,1,.3,1)}
 @keyframes nsTwinkle{0%{transform:scale(1) rotate(0)} 30%{transform:scale(1.45) rotate(10deg)} 60%{transform:scale(1.12) rotate(-7deg)} 100%{transform:scale(1) rotate(0)}}
 
-/* 4. Hidden night / dark herbarium theme (press n) — also drives the HORUS scene */
-body.night, body.horus-scene{
+/* 4. Hidden night / dark herbarium theme (press n) */
+body.night{
   --ground:oklch(0.205 0.016 152); --ground-2:oklch(0.245 0.018 152); --surface:oklch(0.258 0.020 152);
   --ink:oklch(0.940 0.012 140); --ink-2:oklch(0.835 0.012 145); --ink-3:oklch(0.705 0.012 145);
   --moss:oklch(0.745 0.085 150); --moss-deep:oklch(0.805 0.080 150);
@@ -322,29 +322,33 @@ body.night, body.horus-scene{
   --shadow-lift:0 1px 1px oklch(0 0 0 / .35), 0 22px 44px -22px oklch(0 0 0 / .60);
   background-image:radial-gradient(120% 80% at 82% -8%, oklch(0.300 0.030 152 / .8), transparent 60%),radial-gradient(90% 60% at 0% 4%, oklch(0.60 0.11 50 / .07), transparent 55%),radial-gradient(120% 90% at 50% 122%, oklch(0.50 0.072 150 / .16), transparent 60%);
 }
-body.night .grain, body.horus-scene .grain{opacity:.055; mix-blend-mode:screen}
+body.night .grain{opacity:.055; mix-blend-mode:screen}
 ::view-transition-old(root),::view-transition-new(root){animation-duration:.45s}
 
-/* 5. HORUS — cinematic two-layer scene (attractor + constellation field).
-   Full-viewport canvas painted with the night ground + glows, behind the
-   app content (z:0); grain (z:1) and text (z:2) layer on top. Only live
-   while body.horus-scene. */
+/* 5. HORUS — "memory sea" scene. Full-viewport canvas behind the app content
+   (z:0); grain (z:1) and text (z:2) on top. Follows the site theme: transparent
+   over warm paper by day, the luminous dark sea under night (press n). It does
+   NOT force the page into night mode. */
 #horusField{position:fixed; inset:0; z-index:0; pointer-events:none; display:none; opacity:0; transition:opacity 1.1s ease}
 body.horus-scene #horusField{display:block; opacity:1}
-body.horus-scene .page[data-page="horus"] .reader-title,
-body.horus-scene .page[data-page="horus"] .reader-body,
-body.horus-scene .page[data-page="horus"] .uc-status{text-shadow:0 1px 22px oklch(0.205 0.016 152 / .95), 0 0 3px oklch(0.205 0.016 152 / .85)}
+body.horus-scene.night .page[data-page="horus"] .reader-title,
+body.horus-scene.night .page[data-page="horus"] .reader-body,
+body.horus-scene.night .page[data-page="horus"] .uc-status{text-shadow:0 1px 22px oklch(0.205 0.016 152 / .95), 0 0 3px oklch(0.205 0.016 152 / .85)}
+body.horus-scene:not(.night) .page[data-page="horus"] .reader-title,
+body.horus-scene:not(.night) .page[data-page="horus"] .reader-body,
+body.horus-scene:not(.night) .page[data-page="horus"] .uc-status{text-shadow:0 0 14px var(--ground), 0 0 5px var(--ground)}
 /* logo lockup — Eye of Horus mark + wordmark */
 .horus-lockup{display:inline-flex; align-items:center; gap:.7rem; margin:0 0 var(--s5)}
 .horus-lockup .horus-eye{width:2.1rem; height:2.1rem; color:var(--moss); flex:none; transition:filter .6s ease}
 body.horus-scene .horus-lockup .horus-eye{filter:drop-shadow(0 0 13px oklch(0.745 0.085 150 / .55))}
 .horus-lockup .horus-word{font-family:var(--display); font-size:1.1rem; letter-spacing:.34em; text-indent:.34em; text-transform:uppercase; color:var(--ink)}
-/* the manifesto — hero caption over the attractor */
+/* the manifesto — hero caption over the sea */
 .horus-manifesto{margin:var(--s7) 0 0; max-width:35rem; font-family:var(--display); font-weight:400;
-  font-size:clamp(1.32rem,2.5vw,1.86rem); line-height:1.44; letter-spacing:-.004em; color:var(--ink); border:0; padding:0}
+  font-size:clamp(0.92rem,1.75vw,1.3rem); line-height:1.5; letter-spacing:-.002em; color:var(--ink); border:0; padding:0}
 .horus-manifesto .m-lead{color:var(--moss-deep)}
 .horus-manifesto .m-clay{color:var(--clay-deep)}
-body.horus-scene .horus-manifesto{text-shadow:0 1px 26px oklch(0.205 0.016 152 / .97), 0 0 4px oklch(0.205 0.016 152 / .92)}
+body.horus-scene.night .horus-manifesto{text-shadow:0 1px 26px oklch(0.205 0.016 152 / .97), 0 0 4px oklch(0.205 0.016 152 / .92)}
+body.horus-scene:not(.night) .horus-manifesto{text-shadow:0 0 16px var(--ground), 0 0 5px var(--ground)}
 .horus-scroll-room{height:82vh; pointer-events:none}
 @media (max-width:920px){ .horus-lockup .horus-eye{width:1.8rem;height:1.8rem} .horus-scroll-room{height:36vh} }
 @media (prefers-reduced-motion:reduce){ .horus-scroll-room{height:0} }
@@ -623,7 +627,7 @@ body.horus-scene .horus-manifesto{text-shadow:0 1px 26px oklch(0.205 0.016 152 /
             <div class="editable-note">The architecture and routines will be documented here as the system settles.</div>
           </div>
           <blockquote class="horus-manifesto anim d3" id="horusManifesto">
-            <span class="m-lead">Our identities have momentum.</span> <span class="m-clay">Work</span> gives it force — we repeat it most. <span class="m-clay">Life</span> gives it its long arc. And <span class="m-clay">Today</span> gives it motion, because the present is the only moment we ever actually live, even as the mind stretches across past, present, and future. That weight is why we get stuck. HORUS is the AI OS that carries it: sensing, nudging, and co-piloting your identity momentum — so the system does the holding, and you do the living.
+            <span class="m-lead">Our identities have momentum.</span> <span class="m-clay">Work</span> gives it velocity — we repeat it most. <span class="m-clay">Life</span> gives it mass. And <span class="m-clay">Today</span> gives it momentum, because the present is the only moment we ever actually live, even as the mind stretches across past, present, and future. That weight is why we get stuck. HORUS is the AI OS that carries it: sensing, nudging, and co-piloting your identity momentum — so the system does the holding, and you do the living.
           </blockquote>
           <div class="horus-scroll-room" aria-hidden="true"></div>
         </div>
@@ -864,45 +868,32 @@ body.horus-scene .horus-manifesto{text-shadow:0 1px 26px oklch(0.205 0.016 152 /
   }
 
   /* ═══════════════════════════════════════════════════════════════════
-     HORUS — cinematic two-layer scene. ONE projection/orbit, ONE rAF.
-       Layer 1  the constellation / quantum-neural FIELD (background)
-       Layer 2  "THE ATTRACTOR" — a churning vortex knot fed by three
-                streams WORK · LIFE · TODAY = identity momentum (the hero)
-     Cinematic passes: lighting+fog · bloom · vignette · grain ·
-     depth-graded palette · choreographed cascades · scroll dolly.
-     All hand-projected pseudo-3D on a 2D canvas. No libraries.
-     Tune from HZ. FAITHFUL_MODE → the plain white-on-black plexus.
+     HORUS — "the memory sea". A horizon-oriented field of light: an
+     undulating wave-field dissolving into a drifting particle sea, raked
+     by one cold key light and wrapped in volumetric haze. Hand-projected
+     pseudo-3D on a 2D canvas — no libraries, ONE rAF loop. Follows the
+     site theme: a misty moss horizon on warm paper by day, the luminous
+     herbarium sea under night (press n). It never forces night on.
+     Tune from HZ. FAITHFUL_MODE → a plain Animus-blue wave-sea.
      ═══════════════════════════════════════════════════════════════════ */
   const H_TOUCH = matchMedia('(pointer:coarse)').matches || window.innerWidth < 820;
-  const H_QUALITY = H_TOUCH ? 'low' : 'high';          // high | med | low
+  const H_QUALITY = H_TOUCH ? 'low' : 'high';           // high | med | low
   const pick = o => o[H_QUALITY];
   const HZ = {
-    // ── field (Layer 1)
-    fieldNodes: pick({high:70,med:54,low:38}), linkDist:128, cursorRadius:176, cursorPull:0.15,
-    flowSpeed:24, flowScale:0.0016,
-    // ── attractor (Layer 2)
-    attrPoints: pick({high:280,med:190,low:120}), coreR:16, breathAmp:0.06, breathRate:0.5,
-    springStiffness:0.09, springDamping:0.82,
-    // three feeding streams  [angle, radius, y, turns, speed, width, mass, warm]
-    streams:[
-      {id:'WORK',  ang:3.55, R:150, y: 26, turns:1.5, speed:0.100, width:15, mass:0.46, warm:1.0},
-      {id:'LIFE',  ang:5.60, R:214, y: 74, turns:2.3, speed:0.052, width:28, mass:0.24, warm:0.0},
-      {id:'TODAY', ang:1.45, R: 92, y:-14, turns:0.9, speed:0.176, width: 9, mass:0.30, warm:0.35}
-    ],
-    // ── camera / shared projection
-    orbitSpeed:0.05, orbitAmp:1, parallax: H_TOUCH?0:0.16, fov:700, camDist:470, depth:560,
-    dollyRange: H_TOUCH?120:300, scrollSens:1, attrCX:0.38, attrCY:0.55,
-    // ── life
-    shimmer:0.5, collapseFreq:0.4, fireFreq:0.8, fireDepth:3, pulseSpeed:1.9, maxPulses:26,
-    streamFireFreq:0.55, cascadeFreq:0.045, cascadeSpeed:2.4, beatCooldown:2.6,
-    // ── cinematic passes (all restrained by default)
-    key:{x:-0.55,y:0.66,z:-0.5}, keyWarm:[255,226,188], rim:{x:0.6,y:-0.25,z:0.78}, rimCool:[150,196,255],
-    ambient:0.34, fog:0.92, bloom: pick({high:0.5,med:0.4,low:0}), bloomThresh:0.74, bloomBlur:8,
-    grain: pick({high:0.06,med:0.045,low:0}), vignette:0.6, aberration: pick({high:0.0,med:0,low:0}),
-    clayRarity:0.13, textDimMin:0.32, textDimFeather:70,
-    // palette (rgb resolved at init from the site's oklch tokens)
-    ground:[24,32,28], near:[168,214,176], far:[70,120,104], clay:[214,150,108], bright:[236,244,239],
-    logoMode:'fixed', FAITHFUL_MODE:false
+    QUALITY:H_QUALITY,
+    motes: pick({high:1150, med:720, low:360}),          // particle-sea cost centre
+    horizon:0.34, persp:2.4, fovNear:1.5, fovFar:0.2, waveScreen:1,
+    waveAmp:26, wfreq1:8, wfreq2:17, waveSpeed:0.4,      // layered traveling swells
+    currentSpeed:0.05, forwardBase:0.01, scrollForward:0.6, scrollHorizonRise:0.05, scrollBright:0.5,
+    keyX:0.58, keyIntensity:1, bandWidth:112, hazeDensity:1,   // one cold key light + haze
+    bloom: pick({high:0.6,med:0.42,low:0}), bloomThresh:0.62, bloomBlur:9,
+    grain: pick({high:0.06,med:0.05,low:0}), vignette:0.5, godRay: pick({high:0.5,med:0.35,low:0}),
+    cursorRadius:160, cursorPush: H_TOUCH?0:0.3, parallax: H_TOUCH?0:0.035, spring:0.12,
+    shimmerPulseSpeed:1.3, swellFreq:0.05, swellSpeed:0.45, manifestoSwellOn:true, beatCooldown:6,
+    clusters:true, figure:'absent', figureDark:0.86, logoMode:'fixed',
+    strandOpacity: pick({high:0.4,med:0.3,low:0}), sparkleDensity:0.16,
+    textDimMin:0.42, textDimFeather:84,
+    FAITHFUL_MODE:false
   };
 
   function oklchToRgb(L,C,h){
@@ -913,24 +904,25 @@ body.horus-scene .horus-manifesto{text-shadow:0 1px 26px oklch(0.205 0.016 152 /
     const f=x=>{x=x<=0.0031308?12.92*x:1.055*Math.pow(x,1/2.4)-0.055;return Math.max(0,Math.min(255,Math.round(x*255)));};
     return [f(r),f(g),f(bl)];
   }
-  HZ.ground=oklchToRgb(0.205,0.016,152);
-  HZ.near  =oklchToRgb(0.815,0.095,142);   // warm bright moss — near core
-  HZ.far   =oklchToRgb(0.430,0.052,190);   // cool dark teal-green — far filaments
-  HZ.clay  =oklchToRgb(0.730,0.110,55);
+  // dark (night) — luminous herbarium sea
+  const D_ground=oklchToRgb(0.205,0.016,152), D_base=oklchToRgb(0.745,0.085,150), D_far=oklchToRgb(0.520,0.060,178),
+        D_bright=[240,246,238], D_clay=oklchToRgb(0.730,0.105,55), D_haze=[220,234,216], D_key=[234,244,236];
+  // light (day) — misty ink-moss horizon on warm paper
+  const L_ground=oklchToRgb(0.930,0.012,140), L_base=oklchToRgb(0.460,0.072,150), L_far=oklchToRgb(0.660,0.030,150),
+        L_accent=oklchToRgb(0.330,0.060,150), L_clay=oklchToRgb(0.520,0.115,48), L_haze=oklchToRgb(0.740,0.022,150);
+  // faithful — raw Animus blue
+  const F_ground=[6,10,16], F_base=[92,150,208], F_far=[42,82,132], F_bright=[236,246,255], F_clay=[130,186,238], F_haze=[200,224,255];
 
   const hcv=$('#horusField'), hx=hcv?hcv.getContext('2d'):null;
   const rgb=a=>`rgb(${a[0]|0},${a[1]|0},${a[2]|0})`;
   const rgba=(a,al)=>`rgba(${a[0]|0},${a[1]|0},${a[2]|0},${al})`;
   const clamp=(v,a,b)=>v<a?a:v>b?b:v;
-  const lerp=(a,b,t)=>a+(b-a)*t;
-  const mix=(A,B,t)=>[lerp(A[0],B[0],t),lerp(A[1],B[1],t),lerp(A[2],B[2],t)];
 
-  // soft radial "probability cloud" sprites (pre-rendered once)
-  let spNear,spFar,spClay,spWhite,bloomCv,bloomX,grainPat;
+  let spD,spL,spF,bloomCv,bloomX,grainPat, THEME_DARK,THEME_LIGHT,THEME_FAITH,TH;
   function glowSprite(col,hard){
-    const s=96,c=document.createElement('canvas');c.width=c.height=s;const g=c.getContext('2d');
+    const s=80,c=document.createElement('canvas');c.width=c.height=s;const g=c.getContext('2d');
     const gr=g.createRadialGradient(s/2,s/2,0,s/2,s/2,s/2);
-    gr.addColorStop(0,rgba(col,1));gr.addColorStop(0.32,rgba(col,hard?0.66:0.5));gr.addColorStop(0.7,rgba(col,0.12));gr.addColorStop(1,rgba(col,0));
+    gr.addColorStop(0,rgba(col,1));gr.addColorStop(0.28,rgba(col,hard?0.7:0.5));gr.addColorStop(0.65,rgba(col,0.12));gr.addColorStop(1,rgba(col,0));
     g.fillStyle=gr;g.fillRect(0,0,s,s);return c;
   }
   function buildGrain(){
@@ -940,15 +932,22 @@ body.horus-scene .horus-manifesto{text-shadow:0 1px 26px oklch(0.205 0.016 152 /
     g.putImageData(img,0,0); grainPat=hx.createPattern(c,'repeat');
   }
   function buildAssets(){
-    spNear=glowSprite(HZ.near,true); spFar=glowSprite(HZ.far); spClay=glowSprite(HZ.clay,true); spWhite=glowSprite(HZ.bright,true);
-    bloomCv=document.createElement('canvas'); bloomX=bloomCv.getContext('2d'); buildGrain();
+    spD={base:glowSprite(D_base),soft:glowSprite(D_far),bright:glowSprite(D_bright,true),clay:glowSprite(D_clay,true)};
+    spL={base:glowSprite(L_base,true),soft:glowSprite(L_far),bright:glowSprite(L_accent,true),clay:glowSprite(L_clay,true)};
+    spF={base:glowSprite(F_base),soft:glowSprite(F_far),bright:glowSprite(F_bright,true),clay:glowSprite(F_clay,true)};
+    THEME_DARK ={night:true,  opaque:true,  ground:D_ground, haze:D_haze, key:D_key,  line:D_base, label:D_key,    hazeK:1.0, litFloor:0.12, moteCap:1.0,  vig:HZ.vignette, vigCol:D_ground, sp:spD};
+    THEME_LIGHT={night:false, opaque:false, ground:L_ground, haze:L_haze, key:L_haze, line:L_base, label:L_accent, hazeK:0.62, litFloor:0.22, moteCap:0.66, vig:0.14, vigCol:[60,64,56], sp:spL};
+    THEME_FAITH={night:true,  opaque:true,  ground:F_ground, haze:F_haze, key:F_haze, line:F_base, label:F_bright, hazeK:1.1, litFloor:0.1,  moteCap:1.0,  vig:0.55, vigCol:F_ground, sp:spF};
+    bloomCv=document.createElement('canvas'); bloomX=bloomCv.getContext('2d'); buildGrain(); TH=curTheme();
   }
+  function curTheme(){ return HZ.FAITHFUL_MODE?THEME_FAITH : (document.body.classList.contains('night')?THEME_DARK:THEME_LIGHT); }
 
   // ── state
-  let hActive=false, hRAF=0, hSeeded=false, fieldN=[], attrP=[], fieldPulses=[], streamPulses=[];
-  let W=0,H=0,VW=0,VH=0,HDPR=1,tt=0,lastT=0,textRect=null;
-  let sp=0,spTarget=0,spVel=0,drift=0,coreResolve=0,beatTimer=0,lastScrollY=0,manifestoFired=false;
-  const ptr={x:-9999,y:-9999,active:false,seed:0}; const TMP={};
+  let hActive=false,hRAF=0,hSeeded=false,motes=[];
+  let W=0,H=0,HDPR=1,tt=0,lastT=0,textRect=null;
+  let cx=0,horizonY=0,groundY=0,lightY=0,camZ=0,camShiftX=0;
+  let sp=0,spTarget=0,drift=0.5,lastScrollY=0,swellX=-9,beatT=0,manifestoFired=false;
+  const ptr={x:-9999,y:-9999,active:false};
 
   function sizeField(){
     if(!hcv||!hx) return;
@@ -956,334 +955,202 @@ body.horus-scene .horus-manifesto{text-shadow:0 1px 26px oklch(0.205 0.016 152 /
     W=window.innerWidth; H=window.innerHeight;
     hcv.width=Math.round(W*HDPR); hcv.height=Math.round(H*HDPR);
     hcv.style.width=W+'px'; hcv.style.height=H+'px'; hx.setTransform(HDPR,0,0,HDPR,0,0);
-    VW=W*0.62; VH=H*0.60;
     const bw=Math.max(1,Math.round(W/4)), bh=Math.max(1,Math.round(H/4));
     if(bloomCv){ bloomCv.width=bw; bloomCv.height=bh; }
     captureTextRect();
   }
-  function captureTextRect(){
-    const el=document.querySelector('.page[data-page="horus"] .reader-wrap');
-    if(el&&el.offsetWidth){const r=el.getBoundingClientRect(); textRect={l:r.left,t:Math.max(0,r.top),r:r.right,b:Math.min(H,r.bottom)};}
-    else textRect=null;
+  function captureTextRect(){ // protect the title→manifesto column (not the empty scroll-room)
+    const a=document.querySelector('.page[data-page="horus"] .reader-title');
+    const b=document.querySelector('.page[data-page="horus"] .horus-manifesto');
+    if(a&&a.offsetWidth){ const ra=a.getBoundingClientRect(); let l=ra.left,t=ra.top,r=ra.right,bt=ra.bottom;
+      if(b){const rb=b.getBoundingClientRect(); l=Math.min(l,rb.left);t=Math.min(t,rb.top);r=Math.max(r,rb.right);bt=Math.max(bt,rb.bottom);}
+      textRect={l,t:Math.max(-60,t),r,b:bt};
+    } else textRect=null;
   }
-  function dimAt(x,y){ // protect the reading column's luminance band
+  function dimAt(x,y){
     if(!textRect) return 1;
     const dx=Math.max(textRect.l-x,0,x-textRect.r), dy=Math.max(textRect.t-y,0,y-textRect.b);
     const o=Math.hypot(dx,dy); if(o>=HZ.textDimFeather) return 1;
     return HZ.textDimMin+(1-HZ.textDimMin)*(o/HZ.textDimFeather);
   }
 
-  // ── seed both layers
-  function seedScene(){
-    fieldN=[]; attrP=[]; fieldPulses=[]; streamPulses=[];
-    // Layer 1 — field nodes (five brighter H·O·R·U·S anchors optional-secondary)
-    const letters=['H','O','R','U','S'];
-    for(let i=0;i<5;i++){const a=(i/5)*6.283;
-      fieldN.push(mkNode(Math.cos(a)*VW*0.5,(Math.random()*2-1)*VH*0.42,(i/4*2-1)*HZ.depth*0.8,true,letters[i]));}
-    for(let i=fieldN.length;i<HZ.fieldNodes;i++)
-      fieldN.push(mkNode((Math.random()*2-1)*VW,(Math.random()*2-1)*VH,(Math.random()*2-1)*HZ.depth,false,null));
-    fieldN.forEach(f=>{ f.nbr=fieldN.map((g,gi)=>({gi,d:g===f?1e9:Math.hypot(g.x-f.x,g.y-f.y,g.z-f.z)-(g.anchor?90:0)}))
-      .sort((a,b)=>a.d-b.d).slice(0,4).map(o=>o.gi); });
-    // Layer 2 — attractor points assigned to the three streams by mass
-    const S=HZ.streams; let acc=[]; S.forEach((s,i)=>acc.push((acc[i-1]||0)+s.mass));
-    for(let i=0;i<HZ.attrPoints;i++){
-      const r=Math.random(); let si=acc.findIndex(a=>r<=a); if(si<0) si=S.length-1;
-      attrP.push(mkAttr(si));
-    }
+  function seedSea(){
+    motes=[]; const N=HZ.motes;
+    for(let i=0;i<N;i++) motes.push({
+      fx:(Math.random()*2-1)*0.95, z0:Math.random(), zEff:Math.random(),
+      ev:Math.pow(Math.random(),1.6), sz:0.5+Math.random()*1.2, ph:Math.random()*6.283, bob:Math.random()*6.283,
+      dx:0,dy:0, strand:Math.random()<HZ.sparkleDensity, clay:Math.random()<0.05,
+      sx:0,sy:0,scale:1,wv:0,cluster:-1,letter:'' });
+    if(HZ.clusters){ const L=['H','O','R','U','S'];  // five pillar light-clusters drifting in the current
+      for(let i=0;i<5;i++){ const m=motes[i*((N/6)|0)+3]; if(!m)continue; m.cluster=i; m.letter=L[i]; m.ev=0.2+Math.random()*0.2; m.sz=2.3; m.clay=false; m.z0=0.24+i*0.13; } }
   }
-  function mkNode(x,y,z,anchor,letter){
-    return {x,y,z,ph:Math.random()*6.283,anchor,letter,r0:anchor?3.3:1.5+Math.random(),
-      tone:(!anchor&&Math.random()<HZ.clayRarity),hot:0,lit:0,collapse:0,sx:0,sy:0,sz:0,scale:1,dn:.5,shp:{k:0,r:0}};
+  function waveVal(fx,z,t){
+    return 0.55*Math.sin(fx*HZ.wfreq1 + t*HZ.waveSpeed)
+         + 0.30*Math.sin(fx*HZ.wfreq2 - z*4 + t*HZ.waveSpeed*1.5)
+         + 0.20*Math.sin(z*6 + t*HZ.waveSpeed*0.7);
   }
-  function mkAttr(si){
-    const s=HZ.streams[si];
-    return {si, s:Math.random(), core:false,coreT:0,
-      ja:(Math.random()*2-1), jr:(Math.random()*2-1), jy:(Math.random()*2-1), ph:Math.random()*6.283,
-      clay: Math.random() < HZ.clayRarity*(0.4+s.warm), sx:0,sy:0,sz:0,scale:1,dn:.5,tx:0,ty:0,bri:0.5,col:HZ.near.slice(),bloom:0};
+  function projSea(m){
+    const z=m.zEff, t=Math.pow(1-z,HZ.persp), scale=HZ.fovFar+(HZ.fovNear-HZ.fovFar)*t;
+    m.wv=waveVal(m.fx,z,tt);
+    const hgt=(m.wv*HZ.waveAmp)*(1-m.ev*0.4) + m.ev*HZ.waveAmp*1.5 + Math.sin(tt*0.8+m.bob)*m.ev*8;
+    m.scale=scale;
+    m.sx=cx + m.fx*W*0.62*scale + m.dx;
+    m.sy=horizonY + (groundY-horizonY)*t - hgt*scale*HZ.waveScreen + m.dy;
   }
 
-  // ── shared projection (camera space). Returns nothing; writes sx,sy,sz,scale,dn onto obj.
-  let cT=1,sT=0,cP=1,sP=0,camDistEff=480;
-  function project(x,y,z,cx,cy,o){
-    const rx=x*cT+z*sT, rz=-x*sT+z*cT, ry=y*cP-rz*sP, rz2=y*sP+rz*cP;
-    const scale=HZ.fov/Math.max(80, rz2+HZ.depth+camDistEff);
-    o.sx=cx+rx*scale; o.sy=cy+ry*scale; o.sz=rz2; o.scale=scale; o.dn=clamp((rz2+HZ.depth)/(2*HZ.depth),0,1);
-    return rz2;
-  }
-  // lighting: dot of camera-space direction vs fixed key/rim lights
-  function shade(dx,dy,dz){
-    const m=Math.hypot(dx,dy,dz)||1, nx=dx/m,ny=dy/m,nz=dz/m;
-    const k=Math.max(0,nx*HZ.key.x+ny*HZ.key.y+nz*HZ.key.z);
-    const r=Math.max(0,nx*HZ.rim.x+ny*HZ.rim.y+nz*HZ.rim.z);
-    return {k,r};
-  }
+  function triggerSwell(){ if(beatT>0)return; beatT=HZ.beatCooldown; swellX=-1.4; }
 
-  // ── attractor point world position on its stream's inward spiral (+ jitter, weave, breath)
-  function streamPos(p,t,breath){
-    const s=HZ.streams[p.si];
-    const theta=s.ang + (1-t)*s.turns*6.283 + p.ja*0.18;
-    const rad=(HZ.coreR + (s.R-HZ.coreR)*Math.pow(t,0.9) + p.jr*s.width*t)*breath;
-    const yy = s.y*t + p.jy*s.width*0.5*t + Math.sin(theta*2+p.ph)*s.width*0.6;
-    return [Math.cos(theta)*rad, yy, Math.sin(theta)*rad];
-  }
-  function respawnAttr(p){ p.core=false; p.s=1; p.ja=Math.random()*2-1; p.jr=Math.random()*2-1; p.jy=Math.random()*2-1; }
-  function attrPos(p,now){ // used only for the reduced-motion composed frame
-    const breath=1+Math.sin(now*HZ.breathRate+p.ph)*HZ.breathAmp;
-    if(p.core){ const ca=p.ph+now*1.1, cr=HZ.coreR*0.72*breath; return [Math.cos(ca)*cr, p.jy*5, Math.sin(ca)*cr]; }
-    return streamPos(p,p.s,breath);
-  }
-
-  // ── firing
-  function seedFieldPulse(from){
-    if(fieldPulses.length>=HZ.maxPulses) return;
-    let fi=from!=null?from:(Math.random()<0.6?(Math.random()*5)|0:(Math.random()*fieldN.length)|0);
-    const f=fieldN[fi]; if(!f||!f.nbr.length) return;
-    const to=f.nbr[(Math.random()*f.nbr.length)|0]; if(to==null||to===fi) return;
-    fieldPulses.push({from:fi,to,p:0,hops:0});
-  }
-  function seedStreamPulse(si,dir){ // dir -1 = inward(emitter→core), +1 = outward(cascade bloom)
-    streamPulses.push({si, s: dir<0?1:0, dir, clay: HZ.streams[si].warm>0.6});
-  }
-  function triggerCascade(){
-    if(beatTimer>0) return; beatTimer=HZ.beatCooldown;
-    seedStreamPulse(2,-1);                          // TODAY ignites into the core
-    coreResolve=Math.min(1,coreResolve+0.9);        // the knot RESOLVES — tighter, brighter
-    setTimeout(()=>{ seedStreamPulse(0,1); seedStreamPulse(1,1); }, 220); // then blooms out WORK + LIFE
-  }
-
-  let emaDt=16, degraded=false;
   function step(now){
+    TH=curTheme();
     const dt=Math.min(0.05,(now-lastT)/1000)||0.016; lastT=now; tt+=dt;
-    // adaptive: if we blow the frame budget, shed the most expensive passes once
-    emaDt += (dt*1000-emaDt)*0.05;
-    if(emaDt>30 && !degraded){ degraded=true; HZ.bloom=0; HZ.grain=Math.min(HZ.grain,0.03); }
-    const still=reduce;
-    // smoothed scroll → dolly + drift energy (never raw)
     const sy=window.scrollY||0, rawV=Math.abs(sy-lastScrollY); lastScrollY=sy;
-    const maxScroll=Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
-    spTarget=clamp(sy/maxScroll,0,1);
-    spVel += ((spTarget>sp?1:-1)*Math.min(1,rawV/40) - spVel)*0.1;
-    if(!still){ sp += (spTarget-sp)*0.08; }
-    const anticip = still?0 : -0.05*Math.max(0,spVel)*Math.sign(spTarget-sp||1); // tiny pull-back before push-in
-    drift += ((0.5 + Math.min(1,rawV/30)*0.9) - drift)*0.06;   // scroll-velocity → drift energy
-    coreResolve=Math.max(0,coreResolve-dt*0.5);
-    beatTimer=Math.max(0,beatTimer-dt);
-
-    // camera angles (eased orbit: slow at profile, quicker through the turn)
-    const baseOrbit = HZ.FAITHFUL_MODE?0: tt*HZ.orbitSpeed*HZ.orbitAmp*(H_TOUCH?0.4:1);
-    const eased = baseOrbit + Math.sin(baseOrbit)*0.12;
-    const px=(ptr.x/W-0.5), py=(ptr.y/H-0.5);
-    const theta = eased + (HZ.parallax? px*HZ.parallax*2:0) + sp*0.5;
-    const phi   = (HZ.parallax? -py*HZ.parallax:0) + 0.06 + sp*0.12;
-    cT=Math.cos(theta);sT=Math.sin(theta);cP=Math.cos(phi);sP=Math.sin(phi);
-    camDistEff = HZ.camDist - HZ.dollyRange*clamp(sp+anticip,0,1);
-
-    // manifesto arrival cascade (dolly lands on a crescendo)
-    if(!still && !manifestoFired && sp>0.6){ manifestoFired=true; triggerCascade(); }
+    const maxS=Math.max(1,document.documentElement.scrollHeight-window.innerHeight);
+    spTarget=clamp(sy/maxS,0,1); sp+=(spTarget-sp)*0.07;                 // smoothed scroll (never raw)
+    drift += ((0.5+Math.min(1,rawV/30)*0.8)-drift)*0.05;                 // scroll velocity → drift energy
+    camZ += HZ.forwardBase*(0.5+drift)*dt;
+    const scrollZ = sp*HZ.scrollForward;                                 // scroll descends / pushes forward
+    horizonY = H*(HZ.horizon - sp*HZ.scrollHorizonRise);
+    groundY = H*1.05; lightY = horizonY + H*0.015;
+    const pxp = ptr.active?(ptr.x/W-0.5):0;
+    camShiftX = Math.sin(tt*0.11)*W*0.02 - pxp*W*HZ.parallax;            // eased sway + cursor parallax
+    cx = W*0.5 + camShiftX;
+    beatT=Math.max(0,beatT-dt);
+    if(Math.random()<HZ.swellFreq*dt) triggerSwell();
+    if(HZ.manifestoSwellOn&&!manifestoFired&&sp>0.6){ manifestoFired=true; triggerSwell(); }
     if(sp<0.4) manifestoFired=false;
-
-    // ── advance + project FIELD
-    for(const f of fieldN){
-      if(!still){
-        const s=HZ.flowScale, e=HZ.flowSpeed*(0.5+drift*0.9);
-        f.x+=(Math.sin(f.y*s+tt*0.3)+Math.sin(f.z*s*1.3-tt*0.22))*e*dt;
-        f.y+=(Math.sin(f.z*s*1.1+tt*0.26)+Math.sin(f.x*s*0.9+tt*0.16))*e*dt;
-        f.z+=(Math.sin(f.x*s*1.2-tt*0.2)+Math.sin(f.y*s*0.8+tt*0.24))*e*dt*0.6;
-        if(f.x>VW)f.x=-VW;else if(f.x<-VW)f.x=VW; if(f.y>VH)f.y=-VH;else if(f.y<-VH)f.y=VH;
-        if(f.z>HZ.depth)f.z=-HZ.depth;else if(f.z<-HZ.depth)f.z=HZ.depth;
+    if(swellX>-5){ swellX += HZ.swellSpeed*dt; if(swellX>1.7) swellX=-9; }
+    const cur=HZ.currentSpeed*(0.6+drift*0.7);
+    for(const m of motes){
+      m.fx += cur*dt*(0.4+m.ev*0.8); if(m.fx>0.98)m.fx-=1.96; else if(m.fx<-0.98)m.fx+=1.96;
+      m.zEff = m.z0 - (camZ+scrollZ)*(m.cluster<0?1:0.3); m.zEff -= Math.floor(m.zEff);
+      let tdx=0,tdy=0;
+      if(ptr.active && HZ.cursorPush>0){                                  // cursor parts the sea (spring)
+        const ddx=m.sx-ptr.x, ddy=m.sy-ptr.y, d=Math.hypot(ddx,ddy);
+        if(d<HZ.cursorRadius){ const f=(1-d/HZ.cursorRadius)*HZ.cursorPush*HZ.cursorRadius; tdx=ddx/(d||1)*f; tdy=ddy/(d||1)*f; }
       }
-      project(f.x,f.y,f.z,W/2,H/2,f); f.shp=shade(f.sx-W/2,f.sy-H/2,f.sz);
-      f.lit=Math.max(0,f.lit-dt*1.6); f.collapse=Math.max(0,f.collapse-dt*1.3);
-      if(!still&&ptr.active){
-        const dx=ptr.x-f.sx,dy=ptr.y-f.sy,d=Math.hypot(dx,dy),inf=d<HZ.cursorRadius?1-d/HZ.cursorRadius:0;
-        f.hot+=(inf-f.hot)*0.2; if(inf){f.sx+=dx*HZ.cursorPull*inf;f.sy+=dy*HZ.cursorPull*inf;}
-      } else f.hot+=(0-f.hot)*0.2;
+      m.dx += (tdx-m.dx)*HZ.spring; m.dy += (tdy-m.dy)*HZ.spring;
+      projSea(m);
     }
-    // ── advance + project ATTRACTOR (each point = a streak riding its streamline)
-    const acx=W*HZ.attrCX, acy=H*HZ.attrCY;
-    if(!HZ.FAITHFUL_MODE) for(const p of attrP){
-      const s=HZ.streams[p.si];
-      if(!still){
-        if(p.core){ p.coreT-=dt; if(p.coreT<=0) respawnAttr(p); }
-        else { p.s -= s.speed*dt*(0.6+drift*0.8);
-          if(p.s<=0){ if(Math.random()<0.34){ p.core=true; p.coreT=0.8+Math.random()*1.4; } else respawnAttr(p); } }
-      }
-      const breath=1+Math.sin(tt*HZ.breathRate+p.ph)*HZ.breathAmp, ds=0.02+s.speed*0.4;
-      let hx3,hy3,hz3,txx,tyy,tzz;
-      if(p.core){
-        const ca=p.ph+tt*1.1*(1+coreResolve), cr=(HZ.coreR*0.72)*(1-0.25*coreResolve)*breath, ca2=ca-0.28;
-        hx3=Math.cos(ca)*cr; hz3=Math.sin(ca)*cr; hy3=p.jy*5*(1-0.3*coreResolve);
-        txx=Math.cos(ca2)*cr; tzz=Math.sin(ca2)*cr; tyy=hy3;
-      } else {
-        const h=streamPos(p,p.s,breath), t=streamPos(p,Math.min(1,p.s+ds),breath);
-        hx3=h[0];hy3=h[1];hz3=h[2]; txx=t[0];tyy=t[1];tzz=t[2];
-      }
-      project(hx3,hy3,hz3,acx,acy,p);
-      project(txx,tyy,tzz,acx,acy,TMP); p.tx=TMP.sx; p.ty=TMP.sy;
-      const shp=shade(hx3,hy3,hz3);
-      const nearCore=1-clamp(p.core?0.05:p.s,0,1);          // 1 at core, 0 at emitter
-      p.bri = 0.44 + nearCore*0.4 + (p.core?0.14:0) + coreResolve*0.2*nearCore;
-      let c=mix(HZ.far,HZ.near, nearCore*0.6 + (1-p.dn)*0.4);
-      c=mix(c,HZ.keyWarm, shp.k*0.3); c=mix(c,HZ.rimCool, shp.r*0.18);
-      if(p.clay && (nearCore>0.5||coreResolve>0.3)) c=mix(c,HZ.clay,0.62);
-      if(p.core&&coreResolve>0.4) c=mix(c,HZ.bright,0.35*coreResolve);
-      p.col=c; p.bloom = p.bri*(0.6+coreResolve*0.5) + (p.core?0.18:0);
-    }
-    // ── spawn life
-    if(!still&&!HZ.FAITHFUL_MODE){
-      if(Math.random()<HZ.collapseFreq*dt) fieldN[(Math.random()*fieldN.length)|0].collapse=1;
-      if(Math.random()<HZ.fireFreq*dt) seedFieldPulse();
-      if(Math.random()<HZ.streamFireFreq*dt) seedStreamPulse((Math.random()*3)|0,-1);
-      if(Math.random()<HZ.cascadeFreq*dt) triggerCascade();
-      if(ptr.active&&ptr.seed){ let bi=-1,bd=HZ.cursorRadius; for(let i=0;i<fieldN.length;i++){const d=Math.hypot(ptr.x-fieldN[i].sx,ptr.y-fieldN[i].sy);if(d<bd){bd=d;bi=i;}} if(bi>=0)seedFieldPulse(bi); ptr.seed=0; }
-    }
-    // advance pulses
-    for(let i=fieldPulses.length-1;i>=0;i--){const pu=fieldPulses[i]; pu.p+=HZ.pulseSpeed*dt;
-      if(pu.p>=1){const b=fieldN[pu.to]; if(b)b.lit=1;
-        if(!HZ.FAITHFUL_MODE&&pu.hops<HZ.fireDepth&&Math.random()<0.75&&fieldPulses.length<HZ.maxPulses){
-          const c=(b?b.nbr:[]).filter(x=>x!==pu.from); if(c.length)fieldPulses.push({from:pu.to,to:c[(Math.random()*c.length)|0],p:0,hops:pu.hops+1});}
-        fieldPulses.splice(i,1);}}
-    for(let i=streamPulses.length-1;i>=0;i--){const pu=streamPulses[i]; pu.s += (pu.dir<0?-1:1)*HZ.cascadeSpeed*dt*0.5;
-      if(pu.s<=0){ coreResolve=Math.min(1,coreResolve+0.35); streamPulses.splice(i,1); }
-      else if(pu.s>=1){ streamPulses.splice(i,1); } }
   }
 
   function drawScene(){
-    const g=hx, ground=HZ.FAITHFUL_MODE?[7,8,9]:HZ.ground;
+    const g=hx, faith=HZ.FAITHFUL_MODE;
     g.setTransform(HDPR,0,0,HDPR,0,0); g.globalCompositeOperation='source-over'; g.globalAlpha=1;
-    g.fillStyle=rgb(ground); g.fillRect(0,0,W,H);
-    if(!HZ.FAITHFUL_MODE) paintGlows(g);
-    if(bloomX){ bloomX.setTransform(1,0,0,1,0,0); bloomX.clearRect(0,0,bloomCv.width,bloomCv.height); }
-    const bs = bloomX ? bloomCv.width/W : 0;
-    const acx=W*HZ.attrCX, acy=H*HZ.attrCY;
+    if(TH.opaque){ g.fillStyle=rgb(TH.ground); g.fillRect(0,0,W,H); if(!faith) paintGlows(g); }
+    else g.clearRect(0,0,W,H);                                            // day: transparent → warm paper shows
+    const bloomOn = bloomX && HZ.bloom>0 && TH.night;                     // additive bloom reads only on dark
+    if(bloomOn){ bloomX.setTransform(1,0,0,1,0,0); bloomX.clearRect(0,0,bloomCv.width,bloomCv.height); }
+    const bs = bloomOn? bloomCv.width/W : 0;
+    const bandW=HZ.bandWidth, keyPx=W*HZ.keyX;
 
-    // field mesh links
-    for(let i=0;i<fieldN.length;i++){const f=fieldN[i];
-      for(let j=i+1;j<fieldN.length;j++){const v=fieldN[j];
-        const dx=f.sx-v.sx,dy=f.sy-v.sy,d=Math.hypot(dx,dy); if(d>HZ.linkDist)continue;
-        let a=(1-d/HZ.linkDist)*(1-0.5*((f.dn+v.dn)/2))*((f.anchor||v.anchor)?0.8:0.5);
-        const hot=Math.max(f.hot,v.hot); if(hot>0)a=Math.min(1,a+hot*0.5);
-        a*=dimAt((f.sx+v.sx)/2,(f.sy+v.sy)/2); if(a<=0.012)continue;
-        const col=HZ.FAITHFUL_MODE?HZ.bright:((f.tone||v.tone)?HZ.clay:mix(HZ.far,HZ.near,1-(f.dn+v.dn)/2));
-        g.strokeStyle=rgba(col,a*0.5); g.lineWidth=((f.anchor||v.anchor)?1.1:0.75)*Math.max(0.5,1-((f.dn+v.dn)/2)*0.5);
-        g.beginPath();g.moveTo(f.sx,f.sy);g.lineTo(v.sx,v.sy);g.stroke();}}
-
-    // depth-sort ALL points (field + attractor), far → near
-    const pts=[];
-    for(const f of fieldN) pts.push(f);
-    if(!HZ.FAITHFUL_MODE) for(const p of attrP) pts.push(p);
-    pts.sort((a,b)=>b.sz-a.sz);
-    const fogK=HZ.fog;
-    for(const o of pts){
-      const dim=dimAt(o.sx,o.sy); if(dim<=0.02) continue;
-      const fog = 1-fogK*o.dn*0.7;                       // depth fog dims/desats far
-      if(o.si!==undefined){ // attractor point — luminous streak riding its streamline
-        let a=clamp(o.bri*fog,0,1)*dim; if(a<=0.02) continue;
-        g.strokeStyle=rgba(o.col,a*0.55); g.lineWidth=Math.max(0.6,(0.7+o.bri*1.5)*o.scale); g.lineCap='round';
-        g.beginPath(); g.moveTo(o.tx,o.ty); g.lineTo(o.sx,o.sy); g.stroke();
-        const R=(1.1+o.bri*1.5)*o.scale*(o.core?1.2:1);
-        const spr=(o.clay&&o.bri>0.66)?spClay:(o.dn<0.5?spNear:spFar);
-        const gr=R*2.6; g.globalAlpha=a*0.9; g.drawImage(spr,o.sx-gr,o.sy-gr,gr*2,gr*2);
-        if(o.bri>0.9){ g.globalAlpha=a*0.5; const cr=R*0.95; g.drawImage(spWhite,o.sx-cr,o.sy-cr,cr*2,cr*2); }
-        g.globalAlpha=1;
-        if(bs&&o.bloom>HZ.bloomThresh){ bloomX.globalAlpha=clamp((o.bloom-HZ.bloomThresh)*1.5,0,1); bloomX.drawImage(spr,(o.sx-gr)*bs,(o.sy-gr)*bs,gr*2*bs,gr*2*bs); bloomX.globalAlpha=1; }
-      } else { // field node
-        const near=1-o.dn, shim=1+((still_or_faith())?0:Math.sin(tt*1.6+o.ph)*HZ.shimmer*0.25);
-        const lit=0.32+o.shp.k*0.3+o.shp.r*0.12;
-        let a=Math.min(1,((o.anchor?0.85:0.56)*(0.55+near*0.65)*lit*2)+o.hot*0.6+o.lit*0.6+o.collapse*0.7)*dim*fog; if(a<=0.02)continue;
-        let R=o.r0*o.scale*shim*(1+o.hot*0.5); if(o.collapse>0)R*=1-0.35*o.collapse;
-        const spr=HZ.FAITHFUL_MODE?spWhite:(o.tone?spClay:(o.dn<0.5?spNear:spFar));
-        const gr=R*(o.anchor?4.2:3.3); g.globalAlpha=a; g.drawImage(spr,o.sx-gr,o.sy-gr,gr*2,gr*2);
-        const core=Math.max(o.lit,o.collapse,o.hot,(o.anchor&&!HZ.FAITHFUL_MODE)?0.2:0);
-        if(core>0){g.globalAlpha=Math.min(1,core)*dim;const cr=R*1.6;g.drawImage(spWhite,o.sx-cr,o.sy-cr,cr*2,cr*2);}
-        g.globalAlpha=1;
+    const arr=motes.slice().sort((a,b)=>b.zEff-a.zEff);                   // far → near
+    for(const m of arr){
+      if(m.sy<-60||m.sy>H+90) continue;
+      const dim=dimAt(m.sx,m.sy); if(dim<=0.02) continue;
+      const band=Math.exp(-Math.pow((m.sy-lightY)/bandW,2)*0.5);
+      const keyx=Math.exp(-Math.pow((m.sx-keyPx)/(W*0.55),2)*0.5);
+      const light=band*(0.35+0.65*keyx)*HZ.keyIntensity;
+      const crest=clamp(m.wv*0.5+0.5,0,1);
+      const tw=0.7+0.3*Math.sin(tt*HZ.shimmerPulseSpeed+m.ph);
+      const swb=swellX>-5?Math.exp(-Math.pow((m.fx-swellX)/0.28,2))*0.55:0;
+      const clb=m.cluster>=0?0.42+0.28*Math.sin(tt*1.2+m.ph):0;
+      let bri=(TH.litFloor + light*0.95 + crest*0.22*(1-m.ev) + sp*HZ.scrollBright*light)*tw + swb + clb;
+      bri=clamp(bri,0,1.4);
+      const fade=1 - Math.exp(-Math.pow((m.sy-horizonY)/(H*0.05),2)*0.5)*0.55;   // dissolve into the haze at the horizon
+      const a=clamp(bri,0,1)*TH.moteCap*dim*fade; if(a<=0.015) continue;
+      const R=(0.5+1.7*m.sz)*m.scale*(0.8+light*0.6), gr=R*2.3;
+      if(m.strand && HZ.strandOpacity>0){
+        g.strokeStyle=rgba(TH.line, a*HZ.strandOpacity); g.lineWidth=Math.max(0.5,m.scale*0.8);
+        g.beginPath(); g.moveTo(m.sx-16*m.scale,m.sy); g.lineTo(m.sx+5*m.scale,m.sy); g.stroke();
       }
+      let spr;
+      if(m.clay && light>0.4) spr=TH.sp.clay;
+      else if(bri>0.82) spr=TH.sp.bright;
+      else if(m.zEff>0.62) spr=TH.sp.soft;
+      else spr=TH.sp.base;
+      g.globalAlpha=a; g.drawImage(spr,m.sx-gr,m.sy-gr,gr*2,gr*2); g.globalAlpha=1;
+      if(bs && bri>HZ.bloomThresh){ bloomX.globalAlpha=clamp(bri-HZ.bloomThresh,0,1); bloomX.drawImage(spr,(m.sx-gr)*bs,(m.sy-gr)*bs,gr*2*bs,gr*2*bs); bloomX.globalAlpha=1; }
     }
 
-    // pulses — field (along mesh) + stream (along spirals)
-    for(const pu of fieldPulses){const a=fieldN[pu.from],b=fieldN[pu.to];if(!a||!b)continue;
-      const md=dimAt((a.sx+b.sx)/2,(a.sy+b.sy)/2);
-      g.strokeStyle=rgba(HZ.bright,0.26*md);g.lineWidth=1.3;g.beginPath();g.moveTo(a.sx,a.sy);g.lineTo(b.sx,b.sy);g.stroke();
-      const x=a.sx+(b.sx-a.sx)*pu.p,y=a.sy+(b.sy-a.sy)*pu.p,r=3*Math.max(0.5,b.scale);
-      g.globalAlpha=0.9*dimAt(x,y);g.drawImage(spWhite,x-r*3,y-r*3,r*6,r*6);g.globalAlpha=1;
-      if(bs){bloomX.globalAlpha=0.8;bloomX.drawImage(spWhite,(x-r*3)*bs,(y-r*3)*bs,r*6*bs,r*6*bs);bloomX.globalAlpha=1;}}
-    if(!HZ.FAITHFUL_MODE) for(const pu of streamPulses){
-      const tmp={}; const wp=attrPosPulse(pu); project(wp[0],wp[1],wp[2],acx,acy,tmp);
-      const r=3.4*Math.max(0.5,tmp.scale), dm=dimAt(tmp.sx,tmp.sy);
-      const spr=pu.clay?spClay:spWhite; g.globalAlpha=0.95*dm; g.drawImage(spr,tmp.sx-r*3,tmp.sy-r*3,r*6,r*6); g.globalAlpha=1;
-      if(bs){bloomX.globalAlpha=0.9;bloomX.drawImage(spr,(tmp.sx-r*3)*bs,(tmp.sy-r*3)*bs,r*6*bs,r*6*bs);bloomX.globalAlpha=1;}}
-
-    // BLOOM composite (blurred low-res buffer, added back)
-    if(bs&&HZ.bloom>0){ g.save(); g.globalCompositeOperation='lighter'; g.globalAlpha=HZ.bloom; g.filter=`blur(${HZ.bloomBlur}px)`;
-      g.drawImage(bloomCv,0,0,W,H); g.filter='none'; g.restore(); }
-
-    paintVignette(g,ground);
+    paintHaze(g);
+    if(HZ.godRay>0 && TH.night) paintGodRay(g);
+    if(bloomOn){ g.save(); g.globalCompositeOperation='lighter'; g.globalAlpha=HZ.bloom; g.filter=`blur(${HZ.bloomBlur}px)`; g.drawImage(bloomCv,0,0,W,H); g.filter='none'; g.restore(); }
+    paintVignette(g);
     if(HZ.grain>0&&grainPat){ g.save(); g.globalAlpha=HZ.grain; g.globalCompositeOperation='overlay';
       const ox=(Math.random()*140)|0, oy=(Math.random()*140)|0; g.translate(-ox,-oy); g.fillStyle=grainPat; g.fillRect(ox,oy,W,H); g.restore(); }
-    if(!isSmall()&&!HZ.FAITHFUL_MODE) drawStreamLabels(g,acx,acy);
-  }
-  function still_or_faith(){ return reduce||HZ.FAITHFUL_MODE; }
-  function isSmall(){ return H_TOUCH; }
-  function attrPosPulse(pu){ // sample a stream's spiral at param pu.s
-    const s=HZ.streams[pu.si], t=clamp(pu.s,0,1);
-    const theta=s.ang+(1-t)*s.turns*6.283, rad=HZ.coreR+(s.R-HZ.coreR)*Math.pow(t,1.25);
-    return [Math.cos(theta)*rad, s.y*t, Math.sin(theta)*rad];
-  }
-  function drawStreamLabels(g,acx,acy){
-    g.textAlign='center'; g.textBaseline='middle';
-    for(const s of HZ.streams){ const tmp={}; const th=s.ang, rad=s.R*1.02;
-      project(Math.cos(th)*rad, s.y, Math.sin(th)*rad, acx, acy, tmp);
-      const a=(0.14+ (ptr.active?Math.max(0,1-Math.hypot(ptr.x-tmp.sx,ptr.y-tmp.sy)/240)*0.5:0))*dimAt(tmp.sx,tmp.sy)*(1-tmp.dn*0.5);
-      if(a<=0.03) continue;
-      g.font=`600 ${(11+(1-tmp.dn)*4)}px 'Hanken Grotesk', system-ui, sans-serif`;
-      g.fillStyle=rgba(s.warm>0.6?HZ.clay:HZ.bright, a); g.fillText(s.id, tmp.sx, tmp.sy);
-    }
-  }
-  function paintGlows(g){
-    let gr=g.createRadialGradient(W*0.82,-H*0.08,0,W*0.82,-H*0.08,Math.max(W,H)*0.95);
-    gr.addColorStop(0,rgba([60,74,66],0.5));gr.addColorStop(0.6,rgba([60,74,66],0));g.fillStyle=gr;g.fillRect(0,0,W,H);
-    gr=g.createRadialGradient(0,H*0.05,0,0,H*0.05,Math.max(W,H)*0.7);
-    gr.addColorStop(0,rgba(HZ.clay,0.05));gr.addColorStop(0.55,rgba(HZ.clay,0));g.fillStyle=gr;g.fillRect(0,0,W,H);
-    gr=g.createRadialGradient(W*0.5,H*1.2,0,W*0.5,H*1.2,Math.max(W,H)*0.95);
-    gr.addColorStop(0,rgba(HZ.near,0.08));gr.addColorStop(0.6,rgba(HZ.near,0));g.fillStyle=gr;g.fillRect(0,0,W,H);
-  }
-  function paintVignette(g,ground){
-    const gr=g.createRadialGradient(W*HZ.attrCX,H*0.46,Math.min(W,H)*0.32,W*HZ.attrCX,H*0.5,Math.max(W,H)*0.75);
-    gr.addColorStop(0,rgba(ground,0));gr.addColorStop(1,rgba(ground,HZ.vignette));g.fillStyle=gr;g.fillRect(0,0,W,H);
+    if(HZ.figure==='silhouette' && !faith) drawFigure(g);
+    if(!H_TOUCH && HZ.clusters && !faith) drawClusterLabels(g);
   }
 
-  function loop(now){ if(!hActive) return; step(now); drawScene(); hRAF=requestAnimationFrame(loop); }
+  function paintGlows(g){
+    let gr=g.createRadialGradient(W*0.82,-H*0.08,0,W*0.82,-H*0.08,Math.max(W,H)*0.95);
+    gr.addColorStop(0,rgba([60,74,66],0.42));gr.addColorStop(0.6,rgba([60,74,66],0));g.fillStyle=gr;g.fillRect(0,0,W,H);
+    gr=g.createRadialGradient(0,H*0.05,0,0,H*0.05,Math.max(W,H)*0.7);
+    gr.addColorStop(0,rgba(D_clay,0.045));gr.addColorStop(0.55,rgba(D_clay,0));g.fillStyle=gr;g.fillRect(0,0,W,H);
+  }
+  function paintHaze(g){
+    const top=horizonY-H*0.24, hz=TH.haze, k=TH.hazeK*HZ.hazeDensity;
+    const gr=g.createLinearGradient(0,top,0,horizonY+H*0.5);
+    gr.addColorStop(0,rgba(hz,0)); gr.addColorStop(0.34,rgba(hz,0.5*k)); gr.addColorStop(0.5,rgba(hz,0.16*k)); gr.addColorStop(1,rgba(hz,0));
+    g.save(); g.globalCompositeOperation=TH.night?'lighter':'source-over'; g.fillStyle=gr; g.fillRect(0,0,W,H); g.restore();
+    const kg=g.createRadialGradient(W*HZ.keyX,horizonY,0,W*HZ.keyX,horizonY,Math.max(W,H)*0.5);
+    kg.addColorStop(0,rgba(TH.key,(TH.night?0.28:0.1)*HZ.keyIntensity)); kg.addColorStop(0.5,rgba(TH.key,0));
+    g.save(); g.globalCompositeOperation=TH.night?'lighter':'source-over'; g.fillStyle=kg; g.fillRect(0,0,W,H); g.restore();
+  }
+  function paintGodRay(g){
+    g.save(); g.globalCompositeOperation='lighter';
+    for(let i=0;i<4;i++){ const gx=W*HZ.keyX+(i-1.5)*W*0.05, w=W*0.02;
+      const gr=g.createLinearGradient(gx,horizonY,gx-W*0.02,H); gr.addColorStop(0,rgba(TH.key,0.05*HZ.godRay)); gr.addColorStop(1,rgba(TH.key,0));
+      g.fillStyle=gr; g.beginPath(); g.moveTo(gx-w,horizonY); g.lineTo(gx+w,horizonY); g.lineTo(gx+w*3.2,H); g.lineTo(gx-w*3.2,H); g.closePath(); g.fill(); }
+    g.restore();
+  }
+  function paintVignette(g){
+    const gr=g.createRadialGradient(W*0.5,H*0.56,Math.min(W,H)*0.3, W*0.5,H*0.6,Math.max(W,H)*0.82);
+    gr.addColorStop(0,rgba(TH.vigCol,0)); gr.addColorStop(1,rgba(TH.vigCol,TH.vig)); g.fillStyle=gr; g.fillRect(0,0,W,H);
+  }
+  function drawFigure(g){
+    const bx=W*0.5+camShiftX*0.5, by=groundY-H*0.03, hh=H*0.32, ww=hh*0.26;
+    g.save(); g.globalAlpha=HZ.figureDark; g.fillStyle=rgb(TH.night?[8,12,10]:[46,50,44]);
+    g.beginPath(); g.ellipse(bx,by-hh*0.5,ww*0.5,hh*0.5,0,0,6.2832); g.fill();
+    g.beginPath(); g.arc(bx,by-hh*0.92,ww*0.3,0,6.2832); g.fill(); g.restore();
+  }
+  function drawClusterLabels(g){
+    g.textAlign='center'; g.textBaseline='middle';
+    for(const m of motes){ if(m.cluster<0) continue;
+      const d=ptr.active?Math.hypot(ptr.x-m.sx,ptr.y-m.sy):999;
+      const a=(d<210?(1-d/210)*0.7:0)*dimAt(m.sx,m.sy); if(a<=0.04) continue;
+      g.font=`600 ${(12+(1-m.zEff)*4)|0}px 'Hanken Grotesk',system-ui,sans-serif`;
+      g.fillStyle=rgba(TH.label,a); g.fillText(m.letter, m.sx, m.sy-16);
+    }
+  }
+
+  function loop(now){ if(!hActive)return; step(now); drawScene(); hRAF=requestAnimationFrame(loop); }
+  function renderStatic(){
+    TH=curTheme(); tt=3.0; sp=0.42; drift=0.4; camZ=0.2;
+    horizonY=H*(HZ.horizon-sp*HZ.scrollHorizonRise); groundY=H*1.05; lightY=horizonY+H*0.015; cx=W*0.5;
+    for(const m of motes){ m.zEff=m.z0-(0.2+0.42*HZ.scrollForward)*(m.cluster<0?1:0.3); m.zEff-=Math.floor(m.zEff); m.dx=0;m.dy=0; projSea(m); }
+    drawScene();
+  }
   function enterHorus(){
     document.body.classList.add('horus-scene');
     if(!hx) return;
-    if(!spNear) buildAssets();
+    if(!spD) buildAssets();
     sizeField();
-    if(!hSeeded){ seedScene(); hSeeded=true; }
+    if(!hSeeded){ seedSea(); hSeeded=true; }
     hActive=true; setTimeout(captureTextRect,120); setTimeout(captureTextRect,700);
-    sp=0; spTarget=0; spVel=0; drift=0.5; manifestoFired=false; lastScrollY=window.scrollY||0;
+    sp=0; spTarget=0; drift=0.5; manifestoFired=false; lastScrollY=window.scrollY||0; swellX=-9; beatT=0;
     cancelAnimationFrame(hRAF);
-    if(reduce){ tt=6.5; sp=0.55; coreResolve=0.55; drift=0.5; lastT=performance.now();
-      cT=Math.cos(6.5+0.12);sT=Math.sin(6.5+0.12);cP=Math.cos(0.14);sP=Math.sin(0.14); camDistEff=HZ.camDist-HZ.dollyRange*0.5;
-      // one composed, fully-lit static frame (head + tail projected, no motion)
-      for(const f of fieldN){project(f.x,f.y,f.z,W/2,H/2,f);f.shp=shade(f.sx-W/2,f.sy-H/2,f.sz);}
-      const acx=W*HZ.attrCX,acy=H*HZ.attrCY;
-      for(const p of attrP){ const breath=1+Math.sin(6.5*HZ.breathRate+p.ph)*HZ.breathAmp;
-        const h=attrPos(p,6.5), tl=p.core?h:streamPos(p,Math.min(1,p.s+0.02+HZ.streams[p.si].speed*0.4),breath);
-        project(h[0],h[1],h[2],acx,acy,p); project(tl[0],tl[1],tl[2],acx,acy,TMP); p.tx=TMP.sx; p.ty=TMP.sy;
-        const shp=shade(h[0],h[1],h[2]); const nc=1-clamp(p.core?0.05:p.s,0,1);
-        p.bri=0.44+nc*0.4+coreResolve*0.2*nc; let c=mix(HZ.far,HZ.near,nc*0.6+(1-p.dn)*0.4);
-        c=mix(c,HZ.keyWarm,shp.k*0.3); c=mix(c,HZ.rimCool,shp.r*0.18);
-        if(p.clay&&nc>0.5)c=mix(c,HZ.clay,0.62); p.col=c; p.bloom=p.bri; }
-      drawScene();
-    } else { lastT=performance.now(); hRAF=requestAnimationFrame(loop); }
+    if(reduce){ renderStatic(); } else { lastT=performance.now(); hRAF=requestAnimationFrame(loop); }
   }
   function exitHorus(){ document.body.classList.remove('horus-scene'); hActive=false; cancelAnimationFrame(hRAF); hRAF=0; }
   if(hcv){
     window.addEventListener('resize',()=>{ if(hActive) sizeField(); });
     window.addEventListener('scroll',()=>{ if(hActive) captureTextRect(); },{passive:true});
-    window.addEventListener('pointermove',e=>{ ptr.x=e.clientX; ptr.y=e.clientY; ptr.active=true; if(Math.random()<0.05)ptr.seed=1; },{passive:true});
+    window.addEventListener('pointermove',e=>{ ptr.x=e.clientX; ptr.y=e.clientY; ptr.active=true; },{passive:true});
     window.addEventListener('pointerout',e=>{ if(!e.relatedTarget){ ptr.active=false; ptr.x=-9999; ptr.y=-9999; } });
     document.addEventListener('visibilitychange',()=>{ if(document.hidden){cancelAnimationFrame(hRAF);hRAF=0;} else if(hActive&&!reduce){lastT=performance.now();cancelAnimationFrame(hRAF);hRAF=requestAnimationFrame(loop);} });
+    // reduced-motion users toggling day/night on this page → recompose the static frame
+    new MutationObserver(()=>{ if(hActive&&reduce) renderStatic(); }).observe(document.body,{attributes:true,attributeFilter:['class']});
   }
 
   /* ABOUT — "Questions I've enjoyed facing" filter

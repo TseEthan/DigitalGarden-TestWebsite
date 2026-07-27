@@ -103,7 +103,7 @@ a{color:var(--moss-deep); text-decoration:none}
 .toc-foot{font-size:.8rem; color:var(--ink-3); line-height:2}
 .toc-foot a{display:block; color:var(--ink-3); transition:color .25s}
 .toc-foot a:hover{color:var(--moss-deep)}
-.night-hint{display:inline-flex; align-items:center; gap:.42em; margin:0 0 var(--s6); padding:0; background:none; border:0; cursor:pointer; font-family:var(--body); font-size:.7rem; letter-spacing:.03em; color:var(--ink-3); opacity:.55; transition:opacity .25s ease, color .25s ease}
+.night-hint{display:inline-flex; align-items:center; gap:.42em; margin:0 0 var(--s6); padding:0; background:none; border:0; cursor:pointer; font-family:var(--body); font-size:.74rem; font-weight:500; letter-spacing:.03em; color:var(--ink-2); opacity:1; transition:opacity .25s ease, color .25s ease}
 .night-hint:hover{opacity:1; color:var(--moss-deep)}
 .night-hint kbd{font-family:var(--body); font-size:.64rem; line-height:1; padding:.2em .45em; border:1px solid var(--line-2); border-radius:4px; color:var(--ink-2); background:oklch(0.52 0.072 150 / .05)}
 
@@ -881,13 +881,13 @@ body.horus-scene:not(.night) .horus-manifesto{text-shadow:0 0 16px var(--ground)
   const pick = o => o[H_QUALITY];
   const HZ = {
     QUALITY:H_QUALITY,
-    motes: pick({high:1610, med:1010, low:500}),         // particle-sea cost centre
+    motes: pick({high:2250, med:1410, low:700}),         // particle-sea cost centre
     horizon:0.34, persp:2.4, fovNear:1.5, fovFar:0.2, waveScreen:1,
-    waveAmp:26, wfreq1:8, wfreq2:17, waveSpeed:0.46,     // layered traveling swells (+15% speed)
+    waveAmp:44, wfreq1:5, wfreq2:11, waveSpeed:0.46,     // broad rolling ocean swells
     currentSpeed:0.0575, forwardBase:0.0115, scrollForward:0.6, scrollHorizonRise:0.05, scrollBright:0.5,
     keyX:0.58, keyIntensity:1, bandWidth:112, hazeDensity:1,   // one cold key light + haze
     bloom: pick({high:0.6,med:0.42,low:0}), bloomThresh:0.62, bloomBlur:9,
-    grain: pick({high:0.06,med:0.05,low:0}), vignette:0.5, godRay: pick({high:0.5,med:0.35,low:0}),
+    grain: pick({high:0.06,med:0.05,low:0}), vignette:0.5, godRay:0,   // god-rays off (no triangular shafts)
     cursorRadius:160, cursorPush: H_TOUCH?0:0.3, parallax: H_TOUCH?0:0.035, spring:0.12,
     shimmerPulseSpeed:1.3, swellFreq:0.05, swellSpeed:0.45, manifestoSwellOn:true, beatCooldown:6,
     clusters:true, figure:'absent', figureDark:0.86, logoMode:'fixed',
@@ -1089,13 +1089,12 @@ body.horus-scene:not(.night) .horus-manifesto{text-shadow:0 0 16px var(--ground)
     gr.addColorStop(0,rgba(D_clay,0.045));gr.addColorStop(0.55,rgba(D_clay,0));g.fillStyle=gr;g.fillRect(0,0,W,H);
   }
   function paintHaze(g){
-    const top=horizonY-H*0.24, hz=TH.haze, k=TH.hazeK*HZ.hazeDensity;
+    // one soft horizontal luminescent band along the horizon — no circular hotspot,
+    // no triangular shafts; the light is even across the full width.
+    const top=horizonY-H*0.26, hz=TH.haze, k=TH.hazeK*HZ.hazeDensity;
     const gr=g.createLinearGradient(0,top,0,horizonY+H*0.5);
-    gr.addColorStop(0,rgba(hz,0)); gr.addColorStop(0.34,rgba(hz,0.5*k)); gr.addColorStop(0.5,rgba(hz,0.16*k)); gr.addColorStop(1,rgba(hz,0));
+    gr.addColorStop(0,rgba(hz,0)); gr.addColorStop(0.3,rgba(hz,0.64*k)); gr.addColorStop(0.45,rgba(hz,0.22*k)); gr.addColorStop(1,rgba(hz,0));
     g.save(); g.globalCompositeOperation=TH.night?'lighter':'source-over'; g.fillStyle=gr; g.fillRect(0,0,W,H); g.restore();
-    const kg=g.createRadialGradient(W*HZ.keyX,horizonY,0,W*HZ.keyX,horizonY,Math.max(W,H)*0.5);
-    kg.addColorStop(0,rgba(TH.key,(TH.night?0.28:0.1)*HZ.keyIntensity)); kg.addColorStop(0.5,rgba(TH.key,0));
-    g.save(); g.globalCompositeOperation=TH.night?'lighter':'source-over'; g.fillStyle=kg; g.fillRect(0,0,W,H); g.restore();
   }
   function paintGodRay(g){
     g.save(); g.globalCompositeOperation='lighter';

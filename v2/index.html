@@ -78,7 +78,7 @@ a{color:var(--moss-deep); text-decoration:none}
 /* ToC */
 .toc{position:relative}
 .toc-inner{position:sticky; top:0; padding:var(--s8) 0 var(--s6)}
-.toc-brand{margin-bottom:var(--s7); display:flex; flex-direction:column; gap:.6rem; align-items:flex-start; background:none; border:0; padding:0; cursor:pointer; text-align:left}
+.toc-brand{margin-bottom:.7rem; display:flex; flex-direction:column; gap:.6rem; align-items:flex-start; background:none; border:0; padding:0; cursor:pointer; text-align:left}
 .toc-brand .sprig{width:1.5rem; height:1.5rem; color:var(--moss)}
 .toc-brand .gw{font-family:var(--display); font-size:1.05rem; line-height:1.3; color:var(--ink); letter-spacing:-.005em; max-width:12.5rem; transition:color .25s ease}
 .toc-brand .gw em{font-style:normal; color:var(--moss-deep)}
@@ -103,7 +103,7 @@ a{color:var(--moss-deep); text-decoration:none}
 .toc-foot{font-size:.8rem; color:var(--ink-3); line-height:2}
 .toc-foot a{display:block; color:var(--ink-3); transition:color .25s}
 .toc-foot a:hover{color:var(--moss-deep)}
-.night-hint{display:inline-flex; align-items:center; gap:.42em; margin-top:var(--s3); padding:0; background:none; border:0; cursor:pointer; font-family:var(--body); font-size:.7rem; letter-spacing:.03em; color:var(--ink-3); opacity:.55; transition:opacity .25s ease, color .25s ease}
+.night-hint{display:inline-flex; align-items:center; gap:.42em; margin:0 0 var(--s6); padding:0; background:none; border:0; cursor:pointer; font-family:var(--body); font-size:.7rem; letter-spacing:.03em; color:var(--ink-3); opacity:.55; transition:opacity .25s ease, color .25s ease}
 .night-hint:hover{opacity:1; color:var(--moss-deep)}
 .night-hint kbd{font-family:var(--body); font-size:.64rem; line-height:1; padding:.2em .45em; border:1px solid var(--line-2); border-radius:4px; color:var(--ink-2); background:oklch(0.52 0.072 150 / .05)}
 
@@ -396,6 +396,7 @@ body.horus-scene:not(.night) .horus-manifesto{text-shadow:0 0 16px var(--ground)
           <svg class="sprig" aria-hidden="true"><use href="#leaf"/></svg>
           <span class="gw">My digital garden —<br/><em>where I go to muse</em></span>
         </a>
+        <button class="night-hint" id="nightHint" type="button">press <kbd>n</kbd> for <span id="nmWord">night</span> mode</button>
         <nav class="toc-nav" aria-label="Sections">
           <span class="toc-marker" id="tocMarker" aria-hidden="true"></span>
           <ul class="toc-list">
@@ -429,7 +430,6 @@ body.horus-scene:not(.night) .horus-manifesto{text-shadow:0 0 16px var(--ground)
         <div class="toc-foot">
           <a href="mailto:contact.ethantse@gmail.com">contact.ethantse@gmail.com</a>
           <a href="https://www.linkedin.com/in/tse-ethan/" target="_blank" rel="noopener">LinkedIn ↗</a>
-          <button class="night-hint" id="nightHint" type="button">press <kbd>n</kbd> for <span id="nmWord">night</span> mode</button>
         </div>
       </div>
     </aside>
@@ -881,10 +881,10 @@ body.horus-scene:not(.night) .horus-manifesto{text-shadow:0 0 16px var(--ground)
   const pick = o => o[H_QUALITY];
   const HZ = {
     QUALITY:H_QUALITY,
-    motes: pick({high:1150, med:720, low:360}),          // particle-sea cost centre
+    motes: pick({high:1610, med:1010, low:500}),         // particle-sea cost centre
     horizon:0.34, persp:2.4, fovNear:1.5, fovFar:0.2, waveScreen:1,
-    waveAmp:26, wfreq1:8, wfreq2:17, waveSpeed:0.4,      // layered traveling swells
-    currentSpeed:0.05, forwardBase:0.01, scrollForward:0.6, scrollHorizonRise:0.05, scrollBright:0.5,
+    waveAmp:26, wfreq1:8, wfreq2:17, waveSpeed:0.46,     // layered traveling swells (+15% speed)
+    currentSpeed:0.0575, forwardBase:0.0115, scrollForward:0.6, scrollHorizonRise:0.05, scrollBright:0.5,
     keyX:0.58, keyIntensity:1, bandWidth:112, hazeDensity:1,   // one cold key light + haze
     bloom: pick({high:0.6,med:0.42,low:0}), bloomThresh:0.62, bloomBlur:9,
     grain: pick({high:0.06,med:0.05,low:0}), vignette:0.5, godRay: pick({high:0.5,med:0.35,low:0}),
@@ -994,7 +994,7 @@ body.horus-scene:not(.night) .horus-manifesto{text-shadow:0 0 16px var(--ground)
     m.wv=waveVal(m.fx,z,tt);
     const hgt=(m.wv*HZ.waveAmp)*(1-m.ev*0.4) + m.ev*HZ.waveAmp*1.5 + Math.sin(tt*0.8+m.bob)*m.ev*8;
     m.scale=scale;
-    m.sx=cx + m.fx*W*0.62*scale + m.dx;
+    m.sx=cx + m.fx*W*(0.55+0.5*scale) + m.dx;   // decouple lateral spread from depth so the band fills east–west
     m.sy=horizonY + (groundY-horizonY)*t - hgt*scale*HZ.waveScreen + m.dy;
   }
 
@@ -1048,7 +1048,7 @@ body.horus-scene:not(.night) .horus-manifesto{text-shadow:0 0 16px var(--ground)
       if(m.sy<-60||m.sy>H+90) continue;
       const dim=dimAt(m.sx,m.sy); if(dim<=0.02) continue;
       const band=Math.exp(-Math.pow((m.sy-lightY)/bandW,2)*0.5);
-      const keyx=Math.exp(-Math.pow((m.sx-keyPx)/(W*0.55),2)*0.5);
+      const keyx=Math.exp(-Math.pow((m.sx-keyPx)/(W*0.8),2)*0.5);
       const light=band*(0.35+0.65*keyx)*HZ.keyIntensity;
       const crest=clamp(m.wv*0.5+0.5,0,1);
       const tw=0.7+0.3*Math.sin(tt*HZ.shimmerPulseSpeed+m.ph);

@@ -883,13 +883,16 @@ body.horus-scene:not(.night) .horus-manifesto{text-shadow:0 0 16px var(--ground)
     QUALITY:H_QUALITY,
     motes: pick({high:2250, med:1410, low:700}),         // particle-sea cost centre
     horizon:0.34, persp:2.4, fovNear:1.5, fovFar:0.2, waveScreen:1,
-    waveAmp:44, wfreq1:5, wfreq2:11, waveSpeed:0.46,     // broad rolling ocean swells
+    waveAmp:44,                                          // float-mote baseline height
+    // multi-octave Gerstner swell — sharp crests, broad troughs, rolling orbital churn
+    swellAmp:64, chopAmp:20, rippleAmp:7, swellSpeed:0.34, crestSharpness:1.0, orbitalStrength:0.6,
+    rogueAmp:34, breathAmp:0.014, breathRate:0.22,
     currentSpeed:0.0575, forwardBase:0.0115, scrollForward:0.6, scrollHorizonRise:0.05, scrollBright:0.5,
     keyX:0.58, keyIntensity:1, bandWidth:112, hazeDensity:1,   // one cold key light + haze
     bloom: pick({high:0.6,med:0.42,low:0}), bloomThresh:0.62, bloomBlur:9,
     grain: pick({high:0.06,med:0.05,low:0}), vignette:0.5, godRay:0,   // god-rays off (no triangular shafts)
     cursorRadius:160, cursorPush: H_TOUCH?0:0.3, parallax: H_TOUCH?0:0.035, spring:0.12,
-    shimmerPulseSpeed:1.3, swellFreq:0.05, swellSpeed:0.45, manifestoSwellOn:true, beatCooldown:6,
+    shimmerPulseSpeed:1.3, swellFreq:0.05, swellTravel:0.45, manifestoSwellOn:true, beatCooldown:6,
     clusters:true, figure:'absent', figureDark:0.86, logoMode:'fixed',
     strandOpacity: pick({high:0.4,med:0.3,low:0}), sparkleDensity:0.16,
     textDimMin:0.42, textDimFeather:84,
@@ -938,7 +941,7 @@ body.horus-scene:not(.night) .horus-manifesto{text-shadow:0 0 16px var(--ground)
     THEME_DARK ={night:true,  opaque:true,  ground:D_ground, haze:D_haze, key:D_key,  line:D_base, label:D_key,    hazeK:1.0, litFloor:0.12, moteCap:1.0,  vig:HZ.vignette, vigCol:D_ground, sp:spD};
     THEME_LIGHT={night:false, opaque:false, ground:L_ground, haze:L_haze, key:L_haze, line:L_base, label:L_accent, hazeK:0.62, litFloor:0.22, moteCap:0.66, vig:0.14, vigCol:[60,64,56], sp:spL};
     THEME_FAITH={night:true,  opaque:true,  ground:F_ground, haze:F_haze, key:F_haze, line:F_base, label:F_bright, hazeK:1.1, litFloor:0.1,  moteCap:1.0,  vig:0.55, vigCol:F_ground, sp:spF};
-    bloomCv=document.createElement('canvas'); bloomX=bloomCv.getContext('2d'); buildGrain(); TH=curTheme();
+    buildWaves(); bloomCv=document.createElement('canvas'); bloomX=bloomCv.getContext('2d'); buildGrain(); TH=curTheme();
   }
   function curTheme(){ return HZ.FAITHFUL_MODE?THEME_FAITH : (document.body.classList.contains('night')?THEME_DARK:THEME_LIGHT); }
 
@@ -980,22 +983,34 @@ body.horus-scene:not(.night) .horus-manifesto{text-shadow:0 0 16px var(--ground)
       fx:(Math.random()*2-1)*0.95, z0:Math.random(), zEff:Math.random(),
       ev:Math.pow(Math.random(),1.6), sz:0.5+Math.random()*1.2, ph:Math.random()*6.283, bob:Math.random()*6.283,
       dx:0,dy:0, strand:Math.random()<HZ.sparkleDensity, clay:Math.random()<0.05,
-      sx:0,sy:0,scale:1,wv:0,cluster:-1,letter:'' });
+      sx:0,sy:0,scale:1,crest:0.5,cluster:-1,letter:'' });
     if(HZ.clusters){ const L=['H','O','R','U','S'];  // five pillar light-clusters drifting in the current
       for(let i=0;i<5;i++){ const m=motes[i*((N/6)|0)+3]; if(!m)continue; m.cluster=i; m.letter=L[i]; m.ev=0.2+Math.random()*0.2; m.sz=2.3; m.clay=false; m.z0=0.24+i*0.13; } }
   }
-  function waveVal(fx,z,t){
-    return 0.55*Math.sin(fx*HZ.wfreq1 + t*HZ.waveSpeed)
-         + 0.30*Math.sin(fx*HZ.wfreq2 - z*4 + t*HZ.waveSpeed*1.5)
-         + 0.20*Math.sin(z*6 + t*HZ.waveSpeed*0.7);
+  // layered Gerstner octaves [k lateral freq, kz depth freq (diagonal), amp, speed, q steepness]
+  let WAVES=[], WAVE_TOTAL=1;
+  function buildWaves(){
+    const cs=HZ.crestSharpness, s=HZ.swellSpeed;
+    WAVES=[
+      {k:3.0, kz: 1.2, a:HZ.swellAmp,      s:s,      q:0.62*cs},   // dominant groundswell — long, slow, tall
+      {k:6.3, kz:-2.1, a:HZ.chopAmp,       s:s*1.7,  q:0.5*cs},    // cross chop
+      {k:9.6, kz: 3.0, a:HZ.chopAmp*0.55,  s:s*1.25, q:0.44*cs},   // finer chop, other angle
+      {k:17,  kz: 0.4, a:HZ.rippleAmp,     s:s*2.5,  q:0.32*cs}    // ripple shimmer
+    ];
+    WAVE_TOTAL = WAVES.reduce((t,w)=>t+w.a,0) || 1;
   }
   function projSea(m){
     const z=m.zEff, t=Math.pow(1-z,HZ.persp), scale=HZ.fovFar+(HZ.fovNear-HZ.fovFar)*t;
-    m.wv=waveVal(m.fx,z,tt);
-    const hgt=(m.wv*HZ.waveAmp)*(1-m.ev*0.4) + m.ev*HZ.waveAmp*1.5 + Math.sin(tt*0.8+m.bob)*m.ev*8;
+    // sum the octaves: vertical height h + horizontal orbital offset xo (Gerstner roll)
+    let h=0, xo=0; const bph=m.bob*0.15;
+    for(let i=0;i<WAVES.length;i++){ const w=WAVES[i], ph=m.fx*w.k + z*w.kz - tt*w.s + bph;
+      h += w.a*Math.sin(ph); xo += w.q*w.a*Math.cos(ph); }
+    if(swellX>-5) h += Math.exp(-Math.pow((m.fx-swellX)/0.4,2))*HZ.rogueAmp;   // rogue groundswell rolling through
+    m.crest = clamp((h/WAVE_TOTAL)*0.5+0.5, 0, 1);
+    const hgt = h*(1-m.ev*0.4) + m.ev*HZ.waveAmp*1.4 + Math.sin(tt*0.8+m.bob)*m.ev*8;
     m.scale=scale;
-    m.sx=cx + m.fx*W*(0.55+0.5*scale) + m.dx;   // decouple lateral spread from depth so the band fills east–west
-    m.sy=horizonY + (groundY-horizonY)*t - hgt*scale*HZ.waveScreen + m.dy;
+    m.sx = cx + m.fx*W*(0.55+0.5*scale) + xo*scale*HZ.orbitalStrength + m.dx;  // lateral spread + orbital churn
+    m.sy = horizonY + (groundY-horizonY)*t - hgt*scale*HZ.waveScreen + m.dy;
   }
 
   function triggerSwell(){ if(beatT>0)return; beatT=HZ.beatCooldown; swellX=-1.4; }
@@ -1009,7 +1024,7 @@ body.horus-scene:not(.night) .horus-manifesto{text-shadow:0 0 16px var(--ground)
     drift += ((0.5+Math.min(1,rawV/30)*0.8)-drift)*0.05;                 // scroll velocity → drift energy
     camZ += HZ.forwardBase*(0.5+drift)*dt;
     const scrollZ = sp*HZ.scrollForward;                                 // scroll descends / pushes forward
-    horizonY = H*(HZ.horizon - sp*HZ.scrollHorizonRise);
+    horizonY = H*(HZ.horizon - sp*HZ.scrollHorizonRise) + Math.sin(tt*HZ.breathRate)*H*HZ.breathAmp;  // whole-sea breathing
     groundY = H*1.05; lightY = horizonY + H*0.015;
     const pxp = ptr.active?(ptr.x/W-0.5):0;
     camShiftX = Math.sin(tt*0.11)*W*0.02 - pxp*W*HZ.parallax;            // eased sway + cursor parallax
@@ -1018,7 +1033,7 @@ body.horus-scene:not(.night) .horus-manifesto{text-shadow:0 0 16px var(--ground)
     if(Math.random()<HZ.swellFreq*dt) triggerSwell();
     if(HZ.manifestoSwellOn&&!manifestoFired&&sp>0.6){ manifestoFired=true; triggerSwell(); }
     if(sp<0.4) manifestoFired=false;
-    if(swellX>-5){ swellX += HZ.swellSpeed*dt; if(swellX>1.7) swellX=-9; }
+    if(swellX>-5){ swellX += HZ.swellTravel*dt; if(swellX>1.7) swellX=-9; }
     const cur=HZ.currentSpeed*(0.6+drift*0.7);
     for(const m of motes){
       m.fx += cur*dt*(0.4+m.ev*0.8); if(m.fx>0.98)m.fx-=1.96; else if(m.fx<-0.98)m.fx+=1.96;
@@ -1050,15 +1065,16 @@ body.horus-scene:not(.night) .horus-manifesto{text-shadow:0 0 16px var(--ground)
       const band=Math.exp(-Math.pow((m.sy-lightY)/bandW,2)*0.5);
       const keyx=Math.exp(-Math.pow((m.sx-keyPx)/(W*0.8),2)*0.5);
       const light=band*(0.35+0.65*keyx)*HZ.keyIntensity;
-      const crest=clamp(m.wv*0.5+0.5,0,1);
+      const crest=m.crest;                                    // 0 trough .. 1 crest (from the swell)
+      const cr=Math.max(0,crest-0.5)*2*(1-m.ev);              // foam-sparkle: only the upper half of the swell lights
       const tw=0.7+0.3*Math.sin(tt*HZ.shimmerPulseSpeed+m.ph);
       const swb=swellX>-5?Math.exp(-Math.pow((m.fx-swellX)/0.28,2))*0.55:0;
       const clb=m.cluster>=0?0.42+0.28*Math.sin(tt*1.2+m.ph):0;
-      let bri=(TH.litFloor + light*0.95 + crest*0.22*(1-m.ev) + sp*HZ.scrollBright*light)*tw + swb + clb;
+      let bri=(TH.litFloor + light*0.95 + cr*0.34 + crest*0.06 + sp*HZ.scrollBright*light)*tw + swb + clb;
       bri=clamp(bri,0,1.4);
       const fade=1 - Math.exp(-Math.pow((m.sy-horizonY)/(H*0.05),2)*0.5)*0.55;   // dissolve into the haze at the horizon
       const a=clamp(bri,0,1)*TH.moteCap*dim*fade; if(a<=0.015) continue;
-      const R=(0.5+1.7*m.sz)*m.scale*(0.8+light*0.6), gr=R*2.3;
+      const R=(0.5+1.7*m.sz)*m.scale*(0.8+light*0.6+cr*0.35), gr=R*2.3;   // crests ride bigger
       if(m.strand && HZ.strandOpacity>0){
         g.strokeStyle=rgba(TH.line, a*HZ.strandOpacity); g.lineWidth=Math.max(0.5,m.scale*0.8);
         g.beginPath(); g.moveTo(m.sx-16*m.scale,m.sy); g.lineTo(m.sx+5*m.scale,m.sy); g.stroke();

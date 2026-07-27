@@ -892,6 +892,9 @@ body.horus-scene:not(.night) .horus-manifesto{text-shadow:0 0 16px var(--ground)
     bloom: pick({high:0.6,med:0.42,low:0}), bloomThresh:0.62, bloomBlur:9,
     grain: pick({high:0.06,med:0.05,low:0}), vignette:0.5, godRay:0,   // god-rays off (no triangular shafts)
     cursorRadius:160, cursorPush: H_TOUCH?0:0.3, parallax: H_TOUCH?0:0.035, spring:0.12,
+    // easter eggs
+    wakeStrength: H_TOUCH?0:1, wakeLife:1.1, wakeGap:9, wakeMax:30,
+    rippleLife:1.7, rippleSpeed:340, rippleMax:6, rippleRing:26,
     shimmerPulseSpeed:1.3, swellFreq:0.05, swellTravel:0.45, manifestoSwellOn:true, beatCooldown:6,
     clusters:true, figure:'absent', figureDark:0.86, logoMode:'fixed',
     strandOpacity: pick({high:0.4,med:0.3,low:0}), sparkleDensity:0.16,
@@ -951,6 +954,7 @@ body.horus-scene:not(.night) .horus-manifesto{text-shadow:0 0 16px var(--ground)
   let cx=0,horizonY=0,groundY=0,lightY=0,camZ=0,camShiftX=0;
   let sp=0,spTarget=0,drift=0.5,lastScrollY=0,swellX=-9,beatT=0,manifestoFired=false;
   const ptr={x:-9999,y:-9999,active:false};
+  let wake=[], ripples=[], keyBuf='', saluteT=-1, saluteFired=false, lastWakeX=-1, lastWakeY=-1;
 
   function sizeField(){
     if(!hcv||!hx) return;
@@ -1014,6 +1018,25 @@ body.horus-scene:not(.night) .horus-manifesto{text-shadow:0 0 16px var(--ground)
   }
 
   function triggerSwell(){ if(beatT>0)return; beatT=HZ.beatCooldown; swellX=-1.4; }
+  function triggerSalute(){ if(saluteT>=0) return; saluteT=0; saluteFired=false; }   // typed "horus"
+  function advanceEggs(dt){
+    for(let i=wake.length-1;i>=0;i--){ const w=wake[i]; w.age=tt-w.born; w.x += 9*dt; if(w.age>HZ.wakeLife) wake.splice(i,1); }
+    for(let i=ripples.length-1;i>=0;i--){ const rp=ripples[i]; rp.age=tt-rp.born; rp.rad=rp.age*HZ.rippleSpeed; rp.str=Math.max(0,1-rp.age/HZ.rippleLife)*0.8; if(rp.age>HZ.rippleLife) ripples.splice(i,1); }
+    if(saluteT>=0){ saluteT+=dt; if(saluteT>0.95 && !saluteFired){ saluteFired=true; swellX=-1.5; } if(saluteT>2.6) saluteT=-1; }
+  }
+  function drawEggs(g,bs){
+    const wspr=TH.sp.bright;
+    for(const w of wake){ const k=Math.max(0,1-w.age/HZ.wakeLife); const a=Math.pow(k,1.4)*HZ.wakeStrength*(TH.night?1:0.55);
+      if(a<=0.02) continue; const R=(7+w.age*26)*(TH.night?1:0.8), dm=dimAt(w.x,w.y);
+      g.globalAlpha=a*0.7*dm; g.drawImage(wspr, w.x-R, w.y-R, R*2, R*2); g.globalAlpha=1;
+      if(bs){ bloomX.globalAlpha=a*0.6; bloomX.drawImage(wspr,(w.x-R)*bs,(w.y-R)*bs,R*2*bs,R*2*bs); bloomX.globalAlpha=1; } }
+    for(const rp of ripples){ const dm=dimAt(rp.x,rp.y);
+      if(rp.age<0.35){ const sa=(1-rp.age/0.35)*0.9*dm, sr=10+rp.age*40; g.globalAlpha=sa; g.drawImage(TH.sp.bright,rp.x-sr,rp.y-sr,sr*2,sr*2); g.globalAlpha=1;
+        if(bs){ bloomX.globalAlpha=sa*0.8; bloomX.drawImage(TH.sp.bright,(rp.x-sr)*bs,(rp.y-sr)*bs,sr*2*bs,sr*2*bs); bloomX.globalAlpha=1; } }
+      for(let r=0;r<2;r++){ const rad=rp.rad - r*36; if(rad<4) continue; const ra=rp.str*(1-r*0.4)*dm;
+        g.strokeStyle=rgba(TH.label, ra*0.6); g.lineWidth=Math.max(0.6,2.4*(1-rp.age/HZ.rippleLife));
+        g.beginPath(); g.ellipse(rp.x, rp.y, rad, rad*0.42, 0, 0, 6.2832); g.stroke(); } }
+  }
 
   function step(now){
     TH=curTheme();
@@ -1034,6 +1057,7 @@ body.horus-scene:not(.night) .horus-manifesto{text-shadow:0 0 16px var(--ground)
     if(HZ.manifestoSwellOn&&!manifestoFired&&sp>0.6){ manifestoFired=true; triggerSwell(); }
     if(sp<0.4) manifestoFired=false;
     if(swellX>-5){ swellX += HZ.swellTravel*dt; if(swellX>1.7) swellX=-9; }
+    advanceEggs(dt);
     const cur=HZ.currentSpeed*(0.6+drift*0.7);
     for(const m of motes){
       m.fx += cur*dt*(0.4+m.ev*0.8); if(m.fx>0.98)m.fx-=1.96; else if(m.fx<-0.98)m.fx+=1.96;
@@ -1069,8 +1093,10 @@ body.horus-scene:not(.night) .horus-manifesto{text-shadow:0 0 16px var(--ground)
       const cr=Math.max(0,crest-0.5)*2*(1-m.ev);              // foam-sparkle: only the upper half of the swell lights
       const tw=0.7+0.3*Math.sin(tt*HZ.shimmerPulseSpeed+m.ph);
       const swb=swellX>-5?Math.exp(-Math.pow((m.fx-swellX)/0.28,2))*0.55:0;
-      const clb=m.cluster>=0?0.42+0.28*Math.sin(tt*1.2+m.ph):0;
-      let bri=(TH.litFloor + light*0.95 + cr*0.34 + crest*0.06 + sp*HZ.scrollBright*light)*tw + swb + clb;
+      let clb=m.cluster>=0?0.42+0.28*Math.sin(tt*1.2+m.ph):0;
+      if(saluteT>=0 && m.cluster>=0){ const lt=saluteT-m.cluster*0.16; clb += Math.exp(-Math.pow((lt-0.18)/0.16,2))*0.95; }  // pillar salute
+      let rip=0; for(let ri=0;ri<ripples.length;ri++){ const rp=ripples[ri], dd=Math.hypot(m.sx-rp.x,m.sy-rp.y); rip += Math.exp(-Math.pow((dd-rp.rad)/HZ.rippleRing,2))*rp.str; }
+      let bri=(TH.litFloor + light*0.95 + cr*0.34 + crest*0.06 + sp*HZ.scrollBright*light)*tw + swb + clb + rip*0.6;
       bri=clamp(bri,0,1.4);
       const fade=1 - Math.exp(-Math.pow((m.sy-horizonY)/(H*0.05),2)*0.5)*0.55;   // dissolve into the haze at the horizon
       const a=clamp(bri,0,1)*TH.moteCap*dim*fade; if(a<=0.015) continue;
@@ -1088,6 +1114,7 @@ body.horus-scene:not(.night) .horus-manifesto{text-shadow:0 0 16px var(--ground)
       if(bs && bri>HZ.bloomThresh){ bloomX.globalAlpha=clamp(bri-HZ.bloomThresh,0,1); bloomX.drawImage(spr,(m.sx-gr)*bs,(m.sy-gr)*bs,gr*2*bs,gr*2*bs); bloomX.globalAlpha=1; }
     }
 
+    drawEggs(g,bs);
     paintHaze(g);
     if(HZ.godRay>0 && TH.night) paintGodRay(g);
     if(bloomOn){ g.save(); g.globalCompositeOperation='lighter'; g.globalAlpha=HZ.bloom; g.filter=`blur(${HZ.bloomBlur}px)`; g.drawImage(bloomCv,0,0,W,H); g.filter='none'; g.restore(); }
@@ -1154,6 +1181,7 @@ body.horus-scene:not(.night) .horus-manifesto{text-shadow:0 0 16px var(--ground)
     if(!hSeeded){ seedSea(); hSeeded=true; }
     hActive=true; setTimeout(captureTextRect,120); setTimeout(captureTextRect,700);
     sp=0; spTarget=0; drift=0.5; manifestoFired=false; lastScrollY=window.scrollY||0; swellX=-9; beatT=0;
+    wake.length=0; ripples.length=0; saluteT=-1; keyBuf='';
     cancelAnimationFrame(hRAF);
     if(reduce){ renderStatic(); } else { lastT=performance.now(); hRAF=requestAnimationFrame(loop); }
   }
@@ -1161,8 +1189,21 @@ body.horus-scene:not(.night) .horus-manifesto{text-shadow:0 0 16px var(--ground)
   if(hcv){
     window.addEventListener('resize',()=>{ if(hActive) sizeField(); });
     window.addEventListener('scroll',()=>{ if(hActive) captureTextRect(); },{passive:true});
-    window.addEventListener('pointermove',e=>{ ptr.x=e.clientX; ptr.y=e.clientY; ptr.active=true; },{passive:true});
+    window.addEventListener('pointermove',e=>{ ptr.x=e.clientX; ptr.y=e.clientY; ptr.active=true;
+      if(hActive && !reduce && HZ.wakeStrength>0){                                   // #1 bioluminescent wake
+        const dx=e.clientX-lastWakeX, dy=e.clientY-lastWakeY;
+        if(dx*dx+dy*dy > HZ.wakeGap*HZ.wakeGap){ wake.push({x:e.clientX,y:e.clientY,born:tt,age:0}); if(wake.length>HZ.wakeMax) wake.shift(); lastWakeX=e.clientX; lastWakeY=e.clientY; }
+      } },{passive:true});
     window.addEventListener('pointerout',e=>{ if(!e.relatedTarget){ ptr.active=false; ptr.x=-9999; ptr.y=-9999; } });
+    window.addEventListener('pointerdown',e=>{                                       // #4 skip-a-stone ripple
+      if(!hActive || reduce) return;
+      if(e.target && e.target.closest && e.target.closest('a,button,input,textarea,label,kbd,.toc-link,.toc-sublink,.toc-brand')) return;
+      if(ripples.length<HZ.rippleMax) ripples.push({x:e.clientX,y:e.clientY,born:tt,age:0,rad:0,str:0.8});
+    });
+    window.addEventListener('keydown',e=>{                                           // #5 type "horus"
+      if(!hActive || !e.key || e.key.length!==1) return;
+      keyBuf=(keyBuf+e.key.toLowerCase()).slice(-6); if(keyBuf.endsWith('horus')) triggerSalute();
+    });
     document.addEventListener('visibilitychange',()=>{ if(document.hidden){cancelAnimationFrame(hRAF);hRAF=0;} else if(hActive&&!reduce){lastT=performance.now();cancelAnimationFrame(hRAF);hRAF=requestAnimationFrame(loop);} });
     // reduced-motion users toggling day/night on this page → recompose the static frame
     new MutationObserver(()=>{ if(hActive&&reduce) renderStatic(); }).observe(document.body,{attributes:true,attributeFilter:['class']});

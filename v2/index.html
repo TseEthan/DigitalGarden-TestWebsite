@@ -190,6 +190,8 @@ p{margin:0 0 var(--s3); color:var(--ink-2); text-wrap:pretty}
 .entry:hover{background:linear-gradient(90deg, oklch(0.52 0.072 150 / .06), transparent 70%)}
 .entry:hover > div{transform:translateX(8px)}
 .entry-tag{font-size:.72rem; letter-spacing:.16em; text-transform:uppercase; font-weight:600; color:var(--clay-deep); margin-bottom:.7rem; display:block}
+.entry-date{color:var(--ink-2); font-weight:500}
+.entry-date::before{content:"·"; margin:0 .45em; opacity:.55}
 .entry h3{font-size:clamp(1.45rem,2.6vw,1.9rem); letter-spacing:-.012em; line-height:1.1; margin-bottom:.4rem; transition:color .25s ease}
 .entry:hover h3{color:var(--moss-deep)}
 .entry p{font-size:.96rem; color:var(--ink-2); margin:0; max-width:52ch}
@@ -637,16 +639,16 @@ body.horus-scene:not(.night) .horus-manifesto{text-shadow:0 0 16px var(--ground)
       <section class="page" data-page="articles" aria-labelledby="art-h" tabindex="-1">
         <h2 class="h-section anim" id="art-h">Essays</h2>
         <div class="index anim d1">
-          <a class="entry" href="/articles/public-health" data-route><div><span class="entry-tag">Origins</span><h3>Why I studied Public Health</h3></div><span class="go">Read <span class="arr">→</span></span></a>
-          <a class="entry" href="/articles/unstuck" data-route><div><span class="entry-tag">Life</span><h3>How to get unstuck</h3></div><span class="go">Read <span class="arr">→</span></span></a>
-          <a class="entry" href="/articles/force-multiplier" data-route><div><span class="entry-tag">Work</span><h3>Are you a force multiplier?</h3></div><span class="go">Read <span class="arr">→</span></span></a>
+          <a class="entry" href="/articles/public-health" data-route><div><span class="entry-tag">Origins <span class="entry-date">May 2026</span></span><h3>Why I studied Public Health</h3></div><span class="go">Read <span class="arr">→</span></span></a>
+          <a class="entry" href="/articles/unstuck" data-route><div><span class="entry-tag">Life <span class="entry-date">June 2026</span></span><h3>How to get unstuck</h3></div><span class="go">Read <span class="arr">→</span></span></a>
+          <a class="entry" href="/articles/force-multiplier" data-route><div><span class="entry-tag">Work <span class="entry-date">June 2026</span></span><h3>Are you a force multiplier?</h3></div><span class="go">Read <span class="arr">→</span></span></a>
         </div>
       </section>
 
       <!-- ARTICLE readers (editable) -->
       <section class="page" data-page="article-unstuck" tabindex="-1">
         <a class="reader-back" href="/articles" data-route><span class="arr">←</span> Back to Essays</a>
-        <div class="reader-wrap"><p class="kicker">Essay — Life · 4 min read</p><h1 class="reader-title">How to get unstuck</h1>
+        <div class="reader-wrap"><p class="kicker">Essay — Life · June 2026 · 4 min read</p><h1 class="reader-title">How to get unstuck</h1>
         <div class="reader-body" style="margin-top:var(--s5)">
           <blockquote class="pull">Most people think they need more confidence. What they really need is more evidence.</blockquote>
           <p class="drop">There's an idea in decision theory called <b>optimal stopping</b>: the problem of knowing when to quit gathering options or information and just commit — because while waiting can have upside, it also has a cost, and after some amount of time, the cost definitively outweighs the upside.</p>
@@ -690,7 +692,7 @@ body.horus-scene:not(.night) .horus-manifesto{text-shadow:0 0 16px var(--ground)
       </section>
       <section class="page" data-page="article-public-health" tabindex="-1">
         <a class="reader-back" href="/articles" data-route><span class="arr">←</span> Back to Essays</a>
-        <div class="reader-wrap"><p class="kicker">Essay — Origins · 3 min read</p><h1 class="reader-title">Why I studied Public Health</h1>
+        <div class="reader-wrap"><p class="kicker">Essay — Origins · May 2026 · 3 min read</p><h1 class="reader-title">Why I studied Public Health</h1>
         <div class="reader-body" style="margin-top:var(--s5)">
           <blockquote class="pull">"Isn't a Public Health degree kind of useless?"</blockquote>
           <p class="drop">This, said to me, the host of a party, by a guest, during a playful round of hot takes. I was in my final semester of a degree (bachelors and a subsequent masters) that had taken me five and a half years.</p>
@@ -715,7 +717,7 @@ body.horus-scene:not(.night) .horus-manifesto{text-shadow:0 0 16px var(--ground)
       </section>
       <section class="page" data-page="article-force-multiplier" tabindex="-1">
         <a class="reader-back" href="/articles" data-route><span class="arr">←</span> Back to Essays</a>
-        <div class="reader-wrap"><p class="kicker">Essay — Work · 6 min read</p><h1 class="reader-title">Are you a force multiplier?</h1>
+        <div class="reader-wrap"><p class="kicker">Essay — Work · June 2026 · 6 min read</p><h1 class="reader-title">Are you a force multiplier?</h1>
         <div class="reader-body" style="margin-top:var(--s5)">
           <div class="riddle">I am the ramp, the wheel, the wedge,<br>the clever angle, the strategic edge.<br>Whatever you have, I help it do more,<br>the same effort in, but greater the score.<br><span class="rq">What am I?</span></div>
           <p class="drop">You've probably guessed it: the answer is the title. And credit where it's due, an AI generated twenty of those riddles for me to pick from in about seven seconds. That itself is one small example of a force multiplier.</p>

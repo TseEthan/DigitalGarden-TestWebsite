@@ -478,10 +478,10 @@ body.horus-scene:not(.night) .horus-manifesto{text-shadow:0 0 16px var(--ground)
           <blockquote class="quote">Be a force multiplier for the people shaping real progress.</blockquote>
         </figure>
         <div class="caps anim d3" role="group" aria-label="Capabilities — select one to filter questions">
-          <button type="button" class="cap" data-cat="strategy" aria-pressed="false" aria-controls="qPanel"><span class="cl">Strategy</span><h3>Turning complexity into direction</h3><p>Using knowledge, trends, and incentives to identify the next step.</p></button>
-          <button type="button" class="cap" data-cat="operations" aria-pressed="false" aria-controls="qPanel"><span class="cl">Operations</span><h3>Turning chaos into function</h3><p>Maintaining systems and processes that consistently execute.</p></button>
-          <button type="button" class="cap" data-cat="business-development" aria-pressed="false" aria-controls="qPanel"><span class="cl">Business Development</span><h3>Turning leads into opportunities</h3><p>Developing partnerships, ecosystems, and channels that grow over time.</p></button>
-          <button type="button" class="cap" data-cat="product" aria-pressed="false" aria-controls="qPanel"><span class="cl">Product</span><h3>Turning signal into substance</h3><p>Building, designing, and launching experiences that the market needs.</p></button>
+          <button type="button" class="cap" data-cat="growth" aria-pressed="false" aria-controls="qPanel"><span class="cl">Growth</span><h3>Turning leads into revenue</h3><p>Uniting sales, business development, and marketing into a go-to-market machine.</p></button>
+          <button type="button" class="cap" data-cat="product" aria-pressed="false" aria-controls="qPanel"><span class="cl">Product</span><h3>Turning signal into substance</h3><p>Planning, designing, and building experiences around user pain points.</p></button>
+          <button type="button" class="cap" data-cat="strategy" aria-pressed="false" aria-controls="qPanel"><span class="cl">Strategy</span><h3>Turning complexity into direction</h3><p>Using research, evidence, and ontologies that define the next step.</p></button>
+          <button type="button" class="cap" data-cat="operations" aria-pressed="false" aria-controls="qPanel"><span class="cl">Operations</span><h3>Turning chaos into function</h3><p>Tailoring infrastructure, processes, and workflows that make everything repeatable.</p></button>
         </div>
         <div class="qcue anim d4" id="qCue">
           <span class="qcue-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M6 11l6-6 6 6"/></svg></span>
@@ -1286,7 +1286,7 @@ body.horus-scene:not(.night) .horus-manifesto{text-shadow:0 0 16px var(--ground)
       "How do you build growth ops from scratch when there's no playbook to inherit?",
       "How do you design a personal operating system that lets AI agents catalyze research and tasks?"
     ],
-    'business-development': [
+    'growth': [
       "Which vendors and partners can help a portco scale?",
       "Where should you source the highest-potential deals for the investment team?",
       "How do you juggle stakeholder relationships when nobody's sure what their calendar looks like 2 months out?",
@@ -1305,7 +1305,7 @@ body.horus-scene:not(.night) .horus-manifesto{text-shadow:0 0 16px var(--ground)
       "When the buyer and the user aren't the same person, whose needs win?"
     ]
   };
-  const QCAT_LABEL = { 'strategy':'Strategy', 'operations':'Operations', 'business-development':'Business Development', 'product':'Product' };
+  const QCAT_LABEL = { 'strategy':'Strategy', 'operations':'Operations', 'growth':'Growth', 'product':'Product' };
 
   const qCaps = $$('.cap[data-cat]'), qCapsWrap = $('.caps');
   const qPanel = $('#qPanel'), qList = $('#qList'), qCat = $('#qCat'), qCue = $('#qCue'), qClose = $('#qClose');

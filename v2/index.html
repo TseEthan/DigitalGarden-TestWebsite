@@ -124,7 +124,8 @@ h1,h2,h3,h4{font-family:var(--display); font-weight:400; color:var(--ink); margi
 .h-section{font-size:clamp(2.1rem,4.3vw,3.2rem); line-height:1.06; letter-spacing:-.012em; margin-bottom:var(--s4)}
 .sys-head{display:flex; align-items:center; gap:var(--s3); margin-bottom:var(--s4); flex-wrap:wrap}
 .sys-head .h-section{margin-bottom:0}
-.sys-head-img{width:clamp(64px,9vw,104px); height:auto; border-radius:10px; flex:none}
+.sys-head-img{width:clamp(64px,9vw,104px); height:auto; border-radius:10px; flex:none; cursor:pointer; transition:transform .45s cubic-bezier(.16,1,.3,1)}
+.sys-head-img.flipped{transform:scaleX(-1)}
 .kicker{font-size:.74rem; letter-spacing:.16em; text-transform:uppercase; font-weight:600; color:var(--clay-deep); margin:0 0 var(--s3); display:inline-flex; align-items:center; gap:.5rem}
 p{margin:0 0 var(--s3); color:var(--ink-2); text-wrap:pretty}
 .lede{font-size:clamp(1.18rem,2vw,1.42rem); line-height:1.55; color:var(--ink); max-width:38ch; margin-bottom:var(--s4)}
@@ -296,6 +297,8 @@ p{margin:0 0 var(--s3); color:var(--ink-2); text-wrap:pretty}
 .reader-body .fig a{display:block; border-radius:8px}
 .reader-body .fig img{width:100%; height:auto; display:block; border-radius:8px; border:1px solid var(--line-2); box-shadow:0 5px 16px -10px oklch(0.25 0.02 150 / .35)}
 .reader-body .fig figcaption{margin-top:.75rem; font-size:.8rem; color:var(--ink-3); line-height:1.5; letter-spacing:.02em}
+#forCap{cursor:pointer; transition:opacity .16s ease}
+#forCap:focus-visible{outline:2px solid var(--moss); outline-offset:3px; border-radius:4px}
 .reader-body p:last-child{margin-bottom:0}
 .editable-note{margin-top:var(--s6); padding:var(--s4); border:1px dashed var(--line-2); border-radius:4px; font-size:.82rem; letter-spacing:.01em; color:var(--ink-3); line-height:1.7; background:oklch(0.52 0.072 150 / .03)}
 .editable-note b{color:var(--moss-deep); font-weight:600}
@@ -822,7 +825,7 @@ body.horus-scene:not(.night) .horus-manifesto{text-shadow:0 0 16px var(--ground)
           <p>Because leverage isn't absolute. It's relative. Whether your work counts as <b>"high-leverage" depends entirely on the frame of reference of whoever's measuring it.</b></p>
           <p>Stephen Hawking used a version of this in <em>A Brief History of Time</em>. Imagine two people playing ping-pong on a train moving at constant speed. To the players, the ball bounces straight up and down. But to someone on the platform watching the train rush past, that same ball traces a long horizontal arc. Same ball, same bounce, two completely different paths. Neither observer is wrong.</p>
           <p>There's no "true" point of view. The physics is identical for both; their measurements differ only because they're moving relative to each other.</p>
-          <figure class="fig"><a href="/assets/frame-of-reference.jpg" target="_blank" rel="noopener"><img src="/assets/frame-of-reference.jpg" alt="Hawking's train and ping-pong thought experiment: the same bounce looks vertical inside the train and a long arc from the platform" loading="lazy" onerror="this.closest('.fig').style.display='none'"></a><figcaption>Same ball, same bounce — perspective changes what you see.</figcaption></figure>
+          <figure class="fig"><a href="/assets/frame-of-reference.jpg" target="_blank" rel="noopener"><img src="/assets/frame-of-reference.jpg" alt="Hawking's train and ping-pong thought experiment: the same bounce looks vertical inside the train and a long arc from the platform" loading="lazy" onerror="this.closest('.fig').style.display='none'"></a><figcaption id="forCap" tabindex="0">Same ball, same bounce — perspective changes what you see.</figcaption></figure>
           <p>Now apply that to your work. You can put in tremendous effort: pages of analysis, a working prototype, full customer feedback, all delivered two weeks early. From your frame, the work landed exactly where it should: clean, obvious, valuable. But if your manager's frame shifts (a new directive comes down, priorities change overnight), that same work is suddenly scored from the platform, not the train. Thirteen meters off. All that effort landed as nothing. You weren't lazy; you measured from inside the train while they stood on the platform.</p>
           <p>Yes, that's partly an unfair quirk of organizations, where directives can change without warning. But pretending it isn't real doesn't help you. The lesson: multiplying your output isn't enough. You have to stay locked onto the right frame while you do it.</p>
           <h2 class="turn">An AI Operating System designed ONLY for you</h2>
@@ -1445,6 +1448,32 @@ body.horus-scene:not(.night) .horus-manifesto{text-shadow:0 0 16px var(--ground)
     if (tag === 'input' || tag === 'textarea' || el.isContentEditable) return;
     toggleNight();
   });
+
+  /* 5. Two halves — click the Systems brain to swap the software and human sides */
+  const halves = $('.sys-head-img');
+  if (halves) halves.addEventListener('click', () => halves.classList.toggle('flipped'));
+
+  /* 6. Frame of reference — click the caption to ride the train, then stand on the platform */
+  const forCap = $('#forCap');
+  if (forCap){
+    const views = [
+      'Same ball, same bounce — perspective changes what you see.',
+      'From the train: the ball drops and rebounds straight up and down.',
+      'From the platform: that same bounce traces a long horizontal arc.'
+    ];
+    let vi = 0;
+    function cycleView(){
+      vi = (vi + 1) % views.length;
+      if (reduce){ forCap.textContent = views[vi]; return; }
+      forCap.style.opacity = '0';
+      setTimeout(() => { forCap.textContent = views[vi]; forCap.style.opacity = '1'; }, 160);
+    }
+    forCap.addEventListener('click', cycleView);
+    forCap.addEventListener('keydown', e => {
+      if (e.key !== 'Enter' && e.key !== ' ') return;
+      e.preventDefault(); cycleView();
+    });
+  }
 
   /* INTRO — words + many leaves in calm wind (4s) */
   const intro = $('#intro'), introSkip = $('#introSkip');

@@ -122,6 +122,9 @@ a{color:var(--moss-deep); text-decoration:none}
 h1,h2,h3,h4{font-family:var(--display); font-weight:400; color:var(--ink); margin:0; text-wrap:balance; font-variant-numeric:lining-nums; font-feature-settings:"lnum" 1}
 .h-display{font-size:clamp(2.7rem,6vw,4.6rem); line-height:1.02; letter-spacing:-.018em}
 .h-section{font-size:clamp(2.1rem,4.3vw,3.2rem); line-height:1.06; letter-spacing:-.012em; margin-bottom:var(--s4)}
+.sys-head{display:flex; align-items:center; gap:var(--s3); margin-bottom:var(--s4); flex-wrap:wrap}
+.sys-head .h-section{margin-bottom:0}
+.sys-head-img{width:clamp(64px,9vw,104px); height:auto; border-radius:10px; flex:none}
 .kicker{font-size:.74rem; letter-spacing:.16em; text-transform:uppercase; font-weight:600; color:var(--clay-deep); margin:0 0 var(--s3); display:inline-flex; align-items:center; gap:.5rem}
 p{margin:0 0 var(--s3); color:var(--ink-2); text-wrap:pretty}
 .lede{font-size:clamp(1.18rem,2vw,1.42rem); line-height:1.55; color:var(--ink); max-width:38ch; margin-bottom:var(--s4)}
@@ -608,7 +611,10 @@ body.horus-scene:not(.night) .horus-manifesto{text-shadow:0 0 16px var(--ground)
 
       <!-- SYSTEMS (hub) -->
       <section class="page" data-page="systems" aria-labelledby="sys-h" tabindex="-1">
-        <h2 class="h-section anim" id="sys-h">Systems</h2>
+        <div class="sys-head anim">
+          <img class="sys-head-img" src="/assets/two-halves.png" alt="A brain split down the middle: circuit traces on one half, flowers on the other">
+          <h2 class="h-section" id="sys-h">Systems</h2>
+        </div>
         <p class="prose anim">Two halves: the software I run on, and the habits no software can run for me.</p>
         <p class="prose anim">See essay "<a href="/articles/force-multiplier" data-route>Are you a force multiplier?</a>" to understand more of what I mean.</p>
 
@@ -826,10 +832,10 @@ body.horus-scene:not(.night) .horus-manifesto{text-shadow:0 0 16px var(--ground)
           <p>It isn't a single app (i.e. just Claude, or just ChatGPT). It's a stack: a connected set of tools that handles your <em>specific</em> goals, workflows, and decisions in one system—<b>non replicable by anyone in the world</b>. AI helps because it collapses the cost of the 80% (the gathering, drafting, formatting, first-pass thinking), so your time and judgment go to the 20% only you can do. It strengthens the base of your pyramid so you can live at the top.</p>
           <p>What's genuinely new is that building one no longer requires being an engineer, and the proof is who's building these tools now. PewDiePie, a YouTuber, released Odysseus, a private AI workspace that bundles chat, research, and memory into one system. Milla Jovovich, the actress from Resident Evil, co-built MemPalace, an AI memory system that holds onto past conversations so your AI stops losing the reasoning behind your decisions.</p>
           <figure class="fig"><a href="/assets/ai-os.jpg" target="_blank" rel="noopener"><img src="/assets/ai-os.jpg" alt="Creators building personal AI systems — MemPalace memory and the Odysseus private AI workspace" loading="lazy" onerror="this.closest('.fig').style.display='none'"></a><figcaption>Personal AI operating systems, built by creators rather than just engineers.</figcaption></figure>
-          <p><b>You create your own stack for your identity.</b> Building one is humanity's next step to becoming a 10x force multiplier. But here's where the essay folds back on itself: knowing when to deploy that leverage is itself a frame-of-reference judgment.</p>
+          <p><b>You create your own stack for your identity.</b> Building one is humanity's next step to becoming a 10x force multiplier. But here's where the essay folds back on itself: knowing when to deploy that leverage is itself a frame-of-reference judgment—like in Hawking's ping-pong train analogy.</p>
           <p>If you'd like to learn some ways that I'm attempting to be a force multiplier, see <a href="/systems" data-route>Systems</a>.</p>
           <p>I'd caution most people against over-indexing on it right now. At most organizations, management doesn't yet know what AI can do, let alone whether burning maximum usage ("token-maxxing") pays for itself. More importantly, does management truly appreciate it was YOUR IDENTITY that did the force multiplying?</p>
-          <p>And there's the <b>slippery slope</b>: AI takes the 80% of busy work, then comes for the 20% of taste and judgment that was supposed to be your identity... Will the labs be held accountable for protecting that 20%? <b>I wouldn't bet my career on this assumption... And you shouldn't either...</b> So if you do build a personal AI OS, you must rigorously <b>invest time to understand and ensure that AI doesn't replace your identity</b>...</p>
+          <p>And there's the <b>slippery slope</b>: AI takes the 80% of busy work, then comes for the 20% of taste and judgment that was supposed to be your identity... Will the labs be held accountable for protecting that 20%? <b>I wouldn't bet my career on this assumption... And you shouldn't either...</b> So if you do build a personal AI OS, you must rigorously <b>invest time to understand and ensure that AI doesn't replace your identity... but helps it.</b></p>
           <h2 class="turn">So, are you a force multiplier?</h2>
           <p>This is where the most interesting idea of the moment shows up. We're hearing a lot about "one-person companies": solo operators running businesses that used to need a full staff.</p>
           <p>I'm skeptical, with a caveat. Picture the choice plainly: would you rather have one human with twenty years of hard-won judgment, or a young prodigy who learns anything quickly and yet, in a real sense, knows nothing — no scars, no taste, no read on the room? You don't always need the prodigy. That's the point.</p>

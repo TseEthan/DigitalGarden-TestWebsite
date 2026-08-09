@@ -107,17 +107,7 @@ a{color:var(--moss-deep); text-decoration:none}
 .toc-disclaimer b{font-weight:600; letter-spacing:.04em; color:var(--ink-2)}
 .night-hint{display:inline-flex; align-items:center; gap:.42em; margin:0 0 var(--s6); padding:0; background:none; border:0; cursor:pointer; font-family:var(--body); font-size:.74rem; font-weight:500; letter-spacing:.03em; color:var(--ink-2); opacity:1; transition:opacity .25s ease, color .25s ease}
 .night-hint:hover{opacity:1; color:var(--moss-deep)}
-.night-hint kbd{font-family:var(--body); font-size:.64rem; line-height:1; padding:.2em .45em; border:1px solid var(--line-2); border-radius:4px; color:var(--ink-2); background:oklch(0.52 0.072 150 / .05); flex:none; min-width:2em; text-align:center}   /* n and m share one cap size */
-/* the two keyboard hints read as one vocabulary — night sets the bottom gap for both */
-.hints{display:flex; flex-direction:column; align-items:flex-start; gap:.5rem; margin:0 0 var(--s6)}
-.hints .night-hint{margin:0}
-/* the status dot trails the label so both hints stay flush with the nav's left edge */
-.sound-hint .sig{width:.4em; height:.4em; margin-left:.1em; border-radius:50%; background:var(--line-2); flex:none; transition:background .35s ease}
-.sound-hint[aria-pressed="true"]{color:var(--moss-deep)}
-.sound-hint[aria-pressed="true"] .sig{background:var(--moss); animation:sigBreathe 4.2s ease-in-out infinite}
-.sound-hint[aria-pressed="true"] kbd{border-color:oklch(0.52 0.072 150 / .45); color:var(--moss-deep)}
-@keyframes sigBreathe{0%,100%{opacity:.3; transform:scale(.8)} 50%{opacity:1; transform:scale(1.25)}}
-@media (prefers-reduced-motion: reduce){ .sound-hint[aria-pressed="true"] .sig{animation:none; opacity:.95} }
+.night-hint kbd{font-family:var(--body); font-size:.64rem; line-height:1; padding:.2em .45em; border:1px solid var(--line-2); border-radius:4px; color:var(--ink-2); background:oklch(0.52 0.072 150 / .05)}
 
 /* content + pages */
 .content{padding:var(--s8) 0 var(--s9); min-width:0; position:relative}
@@ -441,10 +431,7 @@ body.horus-scene:not(.night) .horus-manifesto{text-shadow:0 0 16px var(--ground)
           <svg class="sprig" aria-hidden="true"><use href="#leaf"/></svg>
           <span class="gw">My digital garden —<br/><em>where I go to muse</em></span>
         </a>
-        <div class="hints">
-          <button class="night-hint" id="nightHint" type="button">press <kbd>n</kbd> for <span id="nmWord">night</span> mode</button>
-          <button class="night-hint sound-hint" id="soundHint" type="button" aria-pressed="false">press <kbd>m</kbd> for <span id="smWord">garden sound</span><span class="sig" aria-hidden="true"></span></button>
-        </div>
+        <button class="night-hint" id="nightHint" type="button">press <kbd>n</kbd> for <span id="nmWord">night</span> mode</button>
         <nav class="toc-nav" aria-label="Sections">
           <span class="toc-marker" id="tocMarker" aria-hidden="true"></span>
           <ul class="toc-list">
@@ -968,7 +955,6 @@ body.horus-scene:not(.night) .horus-manifesto{text-shadow:0 0 16px var(--ground)
     cancelAnimationFrame(cRAF); cRAF=0;
     if (page==='systems') requestAnimationFrame(()=>{ sizeConstellation(); reduce ? drawConst(0) : (cRAF=requestAnimationFrame(constLoop)); });
     page==='horus' ? enterHorus() : exitHorus();
-    GardenSound.tune(page);
   }
 
   /* ═══════════════════════════════════════════════════════════════════
@@ -1448,166 +1434,9 @@ body.horus-scene:not(.night) .horus-manifesto{text-shadow:0 0 16px var(--ground)
     nsStar.addEventListener('animationend', () => nsStar.classList.remove('twinkle'));
   }
 
-  /* ═══════════════════════════════════════════════════════════════════
-     GARDEN SOUND — press "m". A generative field recording built in the
-     browser: a pink-noise wind bed under a slow detuned pad, with sparse
-     pentatonic chimes scattered across the stereo field, everything fed
-     to a procedurally-generated reverb. No audio files, no libraries,
-     no rAF loop — the chimes schedule themselves off one timer.
-
-     Each page tunes the same instrument rather than swapping the track:
-     Horus drops to the memory sea, essays thin out so they never fight
-     the reading, Systems goes crystalline, night closes the filter and
-     slows the scattering. It never autoplays — the browser wouldn't
-     allow it, and it shouldn't.
-     ═══════════════════════════════════════════════════════════════════ */
-  const GardenSound = (() => {
-    const BASE  = {root:220, scale:[0,2,4,7,9], gap:[3.2,7.5], cut:760, pad:.050, wind:.042, oct:[0,0,1], rev:.34};
-    const PAGES = {
-      about:        {},
-      introspection:{gap:[4.5,10],  cut:640, pad:.055, rev:.44},
-      learnings:    {gap:[5.0,11],  cut:600, pad:.046},
-      quotes:       {gap:[5.0,11],  cut:600, pad:.046},
-      flaws:        {gap:[6.0,13],  cut:520, pad:.052, scale:[0,3,5,7,10]},   /* minor pentatonic — the honest one */
-      dreams:       {gap:[3.5,8.0], cut:880, pad:.048, oct:[1,1,2]},
-      systems:      {gap:[2.2,5.0], cut:980, pad:.038, oct:[1,1,2], rev:.26},
-      horus:        {gap:[4.0,9.0], cut:470, pad:.072, root:110, rev:.58, wind:.055},
-      articles:     {gap:[6.0,13],  cut:560, pad:.036},
-      contact:      {gap:[3.5,8.0], cut:820, pad:.048}
-    };
-    const MASTER = 0.11;                       /* deliberately quiet — this is a room tone, not a track */
-    const PARTIALS = [[1,-4,.90],[1.5,5,.55],[2,-7,.42],[3,6,.16]];
-
-    let ac=null, master=null, wet=null, dry=null, windF=null, windG=null, padF=null, padG=null;
-    let oscs=[], timer=0, live=false, booted=false, page='about', cfg=Object.assign({}, BASE);
-
-    const rnd=(a,b)=>a+Math.random()*(b-a);
-    const night=()=>document.body.classList.contains('night');
-
-    function pinkBuffer(secs){                 /* Kellet's pink approximation — warmer than white for wind */
-      const len=(ac.sampleRate*secs)|0, buf=ac.createBuffer(2,len,ac.sampleRate);
-      for (let c=0;c<2;c++){
-        const d=buf.getChannelData(c); let b0=0,b1=0,b2=0;
-        for (let i=0;i<len;i++){
-          const w=Math.random()*2-1;
-          b0=0.99765*b0+w*0.0990460; b1=0.96300*b1+w*0.2965164; b2=0.57000*b2+w*1.0526913;
-          d[i]=(b0+b1+b2+w*0.1848)*0.22;
-        }
-      }
-      return buf;
-    }
-    function irBuffer(secs, decay){            /* noise burst with an exponential tail = a serviceable hall */
-      const len=Math.max(1,(ac.sampleRate*secs)|0), buf=ac.createBuffer(2,len,ac.sampleRate);
-      for (let c=0;c<2;c++){
-        const d=buf.getChannelData(c);
-        for (let i=0;i<len;i++){ const t=i/len; d[i]=(Math.random()*2-1)*Math.pow(1-t,decay); }
-      }
-      return buf;
-    }
-    function panner(v){
-      if (ac.createStereoPanner){ const p=ac.createStereoPanner(); p.pan.value=v; return p; }
-      const p=ac.createPanner(); p.panningModel='equalpower'; p.setPosition(v,0,1-Math.abs(v)); return p;
-    }
-    function ramp(p,v,t,d){ try{ p.cancelScheduledValues(t); p.setValueAtTime(p.value,t); p.linearRampToValueAtTime(v,t+d); }catch(e){} }
-
-    function build(){
-      if (booted) return; booted=true;
-      master=ac.createGain(); master.gain.value=0; master.connect(ac.destination);
-      dry=ac.createGain(); dry.gain.value=1; dry.connect(master);
-      const conv=ac.createConvolver(); conv.buffer=irBuffer(3.2,2.4);
-      wet=ac.createGain(); wet.gain.value=cfg.rev; wet.connect(conv); conv.connect(master);
-
-      /* wind — pink noise through a lowpass that breathes on its own slow clock */
-      const src=ac.createBufferSource(); src.buffer=pinkBuffer(6); src.loop=true;
-      windF=ac.createBiquadFilter(); windF.type='lowpass'; windF.frequency.value=cfg.cut; windF.Q.value=.4;
-      windG=ac.createGain(); windG.gain.value=cfg.wind;
-      src.connect(windF); windF.connect(windG); windG.connect(dry); windG.connect(wet); src.start();
-      const gust=ac.createOscillator(), gustA=ac.createGain();
-      gust.frequency.value=0.045; gustA.gain.value=cfg.wind*0.55;   /* stays positive — no phase flip */
-      gust.connect(gustA); gustA.connect(windG.gain); gust.start();
-
-      /* pad — a detuned stack, each partial shimmering against the others */
-      padF=ac.createBiquadFilter(); padF.type='lowpass'; padF.frequency.value=cfg.cut*1.2; padF.Q.value=.5;
-      padG=ac.createGain(); padG.gain.value=cfg.pad;
-      padF.connect(padG); padG.connect(dry); padG.connect(wet);
-      PARTIALS.forEach(([mul,det,amp],i)=>{
-        const o=ac.createOscillator(), g=ac.createGain();
-        o.type='triangle'; o.frequency.value=cfg.root*mul; o.detune.value=det;
-        g.gain.value=amp*0.50;
-        const lfo=ac.createOscillator(), la=ac.createGain();
-        lfo.frequency.value=0.030+i*0.017; la.gain.value=amp*0.32;
-        lfo.connect(la); la.connect(g.gain); lfo.start();
-        o.connect(g); g.connect(padF); o.start(); oscs.push(o);
-      });
-    }
-
-    function chime(){
-      const t=ac.currentTime+0.03, sc=cfg.scale, oc=cfg.oct;
-      const semi=sc[(Math.random()*sc.length)|0] + 12*oc[(Math.random()*oc.length)|0];
-      const f=cfg.root*Math.pow(2,semi/12)*2, vel=rnd(.055,.130), dur=rnd(2.4,4.6);
-      const g=ac.createGain(), p=panner(rnd(-.72,.72));
-      g.gain.setValueAtTime(0.0001,t);
-      g.gain.linearRampToValueAtTime(vel,t+0.014);
-      g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
-      const o=ac.createOscillator();  o.type='sine';  o.frequency.value=f;
-      const o2=ac.createOscillator(); o2.type='sine'; o2.frequency.value=f*2.0027;  /* slightly inharmonic = bell, not beep */
-      const g2=ac.createGain(); g2.gain.value=0.22;
-      o.connect(g); o2.connect(g2); g2.connect(g); g.connect(p); p.connect(dry); p.connect(wet);
-      o.start(t); o2.start(t); o.stop(t+dur+0.1); o2.stop(t+dur+0.1);
-      o.onended=()=>{ try{ p.disconnect(); g.disconnect(); g2.disconnect(); }catch(e){} };
-    }
-    function tick(){
-      if (!live) return;
-      chime();
-      timer=setTimeout(tick, rnd(cfg.gap[0],cfg.gap[1])*1000*(night()?1.35:1));
-    }
-
-    function tune(next){
-      if (next) page=next;
-      const key=String(page).indexOf('article-')===0 ? 'articles' : page;
-      cfg=Object.assign({}, BASE, PAGES[key]||{});
-      if (!booted) return;
-      const t=ac.currentTime, D=2.2, cut=cfg.cut*(night()?0.68:1);
-      ramp(windF.frequency, cut, t, D);
-      ramp(padF.frequency,  cut*1.2, t, D);
-      ramp(windG.gain, cfg.wind, t, D);
-      ramp(padG.gain,  cfg.pad,  t, D);
-      ramp(wet.gain,   cfg.rev*(night()?1.2:1), t, D);
-      oscs.forEach((o,i)=>ramp(o.frequency, cfg.root*PARTIALS[i][0], t, D));
-    }
-
-    function start(){
-      if (!ac){
-        const C=window.AudioContext||window.webkitAudioContext; if (!C) return false;
-        try { ac=new C(); } catch(e){ return false; }
-      }
-      build(); tune();
-      if (ac.state==='suspended') ac.resume();
-      live=true;
-      ramp(master.gain, MASTER, ac.currentTime, 2.4);
-      clearTimeout(timer); timer=setTimeout(tick, 700);
-      return true;
-    }
-    function stop(){
-      live=false; clearTimeout(timer);
-      if (!booted) return;
-      ramp(master.gain, 0, ac.currentTime, 1.1);
-      setTimeout(()=>{ if (!live && ac && ac.state==='running') ac.suspend(); }, 1300);
-    }
-
-    /* don't play to an empty room */
-    document.addEventListener('visibilitychange', () => {
-      if (!booted || !live) return;
-      if (document.hidden){ ramp(master.gain, 0, ac.currentTime, .5); }
-      else { if (ac.state==='suspended') ac.resume(); ramp(master.gain, MASTER, ac.currentTime, 1.6); }
-    });
-
-    return { start, stop, tune, isOn:()=>live };
-  })();
-
   /* 4. Press "n" — hidden night / dark herbarium theme */
   const nmWord = $('#nmWord'), nightHint = $('#nightHint');
-  function applyNight(on){ document.body.classList.toggle('night', on); if (nmWord) nmWord.textContent = on ? 'day' : 'night'; try { localStorage.setItem('gardenNight', on ? '1' : '0'); } catch(e){} GardenSound.tune(); }
+  function applyNight(on){ document.body.classList.toggle('night', on); if (nmWord) nmWord.textContent = on ? 'day' : 'night'; try { localStorage.setItem('gardenNight', on ? '1' : '0'); } catch(e){} }
   function toggleNight(){
     const next = !document.body.classList.contains('night');
     if (document.startViewTransition && !reduce){ document.startViewTransition(() => applyNight(next)); }
@@ -1648,35 +1477,6 @@ body.horus-scene:not(.night) .horus-manifesto{text-shadow:0 0 16px var(--ground)
       e.preventDefault(); cycleView();
     });
   }
-
-
-  /* 7. Press "m" — the garden's own room tone */
-  const smWord = $('#smWord'), soundHint = $('#soundHint');
-  function applySound(on){
-    if (soundHint) soundHint.setAttribute('aria-pressed', on ? 'true' : 'false');
-    if (smWord) smWord.textContent = on ? 'silence' : 'garden sound';
-    try { localStorage.setItem('gardenSound', on ? '1' : '0'); } catch(e){}
-  }
-  function toggleSound(){
-    if (GardenSound.isOn()){ GardenSound.stop(); applySound(false); }
-    else if (GardenSound.start()) applySound(true);
-  }
-  if (soundHint) soundHint.addEventListener('click', toggleSound);
-  document.addEventListener('keydown', e => {
-    if (e.key !== 'm' && e.key !== 'M') return;
-    if (e.metaKey || e.ctrlKey || e.altKey) return;
-    const el = e.target, tag = (el.tagName || '').toLowerCase();
-    if (tag === 'input' || tag === 'textarea' || el.isContentEditable) return;
-    toggleSound();
-  });
-  /* a returning visitor who left it on gets it back — but only once they've
-     touched the page, since no browser will start audio before that */
-  try {
-    if (localStorage.getItem('gardenSound') === '1' && !reduce){
-      const arm = () => { if (!GardenSound.isOn() && GardenSound.start()) applySound(true); };
-      document.addEventListener('pointerdown', arm, {once:true});
-    }
-  } catch(e){}
 
   /* INTRO — words + many leaves in calm wind (4s) */
   const intro = $('#intro'), introSkip = $('#introSkip');

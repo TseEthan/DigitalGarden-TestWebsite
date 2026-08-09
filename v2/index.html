@@ -107,11 +107,12 @@ a{color:var(--moss-deep); text-decoration:none}
 .toc-disclaimer b{font-weight:600; letter-spacing:.04em; color:var(--ink-2)}
 .night-hint{display:inline-flex; align-items:center; gap:.42em; margin:0 0 var(--s6); padding:0; background:none; border:0; cursor:pointer; font-family:var(--body); font-size:.74rem; font-weight:500; letter-spacing:.03em; color:var(--ink-2); opacity:1; transition:opacity .25s ease, color .25s ease}
 .night-hint:hover{opacity:1; color:var(--moss-deep)}
-.night-hint kbd{font-family:var(--body); font-size:.64rem; line-height:1; padding:.2em .45em; border:1px solid var(--line-2); border-radius:4px; color:var(--ink-2); background:oklch(0.52 0.072 150 / .05)}
+.night-hint kbd{font-family:var(--body); font-size:.64rem; line-height:1; padding:.2em .45em; border:1px solid var(--line-2); border-radius:4px; color:var(--ink-2); background:oklch(0.52 0.072 150 / .05); flex:none; min-width:2em; text-align:center}   /* n and m share one cap size */
 /* the two keyboard hints read as one vocabulary — night sets the bottom gap for both */
 .hints{display:flex; flex-direction:column; align-items:flex-start; gap:.5rem; margin:0 0 var(--s6)}
 .hints .night-hint{margin:0}
-.sound-hint .sig{width:.4em; height:.4em; margin-right:.1em; border-radius:50%; background:var(--line-2); flex:none; transition:background .35s ease}
+/* the status dot trails the label so both hints stay flush with the nav's left edge */
+.sound-hint .sig{width:.4em; height:.4em; margin-left:.1em; border-radius:50%; background:var(--line-2); flex:none; transition:background .35s ease}
 .sound-hint[aria-pressed="true"]{color:var(--moss-deep)}
 .sound-hint[aria-pressed="true"] .sig{background:var(--moss); animation:sigBreathe 4.2s ease-in-out infinite}
 .sound-hint[aria-pressed="true"] kbd{border-color:oklch(0.52 0.072 150 / .45); color:var(--moss-deep)}
@@ -442,7 +443,7 @@ body.horus-scene:not(.night) .horus-manifesto{text-shadow:0 0 16px var(--ground)
         </a>
         <div class="hints">
           <button class="night-hint" id="nightHint" type="button">press <kbd>n</kbd> for <span id="nmWord">night</span> mode</button>
-          <button class="night-hint sound-hint" id="soundHint" type="button" aria-pressed="false"><span class="sig" aria-hidden="true"></span>press <kbd>m</kbd> for <span id="smWord">garden sound</span></button>
+          <button class="night-hint sound-hint" id="soundHint" type="button" aria-pressed="false">press <kbd>m</kbd> for <span id="smWord">garden sound</span><span class="sig" aria-hidden="true"></span></button>
         </div>
         <nav class="toc-nav" aria-label="Sections">
           <span class="toc-marker" id="tocMarker" aria-hidden="true"></span>
@@ -592,6 +593,7 @@ body.horus-scene:not(.night) .horus-manifesto{text-shadow:0 0 16px var(--ground)
           <li><p class="q">"We all have two lives. The second begins when we realize we only have one."</p><span class="by">— Confucius</span></li>
           <li><p class="q">"Do not wait to strike till the iron is hot, but make it hot by striking."</p><span class="by">— William Butler Yeats</span></li>
           <li><p class="q">"Give me a place to stand, and a lever long enough, and I will move the world."</p><span class="by">— Archimedes</span></li>
+          <li><p class="q">"The absurd is born of this confrontation between the human need and the unreasonable silence of the world."</p><span class="by">— Albert Camus</span></li>
         </ul>
       </section>
 

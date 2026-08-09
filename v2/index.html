@@ -898,10 +898,24 @@ body.horus-scene:not(.night) .horus-manifesto{text-shadow:0 0 16px var(--ground)
     moveMarker(top);
     const lbl = $('.toc-toggle-label'); if (lbl){ const a = $('.toc-link.active'); lbl.textContent = a ? a.querySelector('span:last-child').textContent : 'Menu'; }
   }
+  /* The submenus take .42s to fold shut, so a straight measure here reads the OLD
+     layout — which is how the dot used to end up parked down by the footer links
+     when you landed on Contact. Settle every sub above the target first, so the
+     dot travels to where the nav is going, not where it was. */
   function moveMarker(top){
     const link = $$('.toc-link').find(l => new URL(l.href).pathname === PATH_FOR[top]); if (!link || !marker) return;
     const nav = link.closest('.toc-nav'); const lr = link.getBoundingClientRect(), nr = nav.getBoundingClientRect();
-    marker.style.transform = `translateY(${(lr.top-nr.top)+lr.height/2 - marker.offsetHeight/2}px)`; marker.style.opacity = '1';
+    let settle = 0;
+    if (marker.offsetHeight){                                     /* skipped on mobile, where the dot is hidden */
+      const cap = 24 * parseFloat(getComputedStyle(document.documentElement).fontSize);   /* .toc-sub max-height */
+      $$('.toc-sub', nav).forEach(sub => {
+        const sr = sub.getBoundingClientRect(); if (sr.top > lr.top) return;   /* below the link — can't push it */
+        const open = sub.closest('.toc-item').classList.contains('open');
+        settle += (open ? Math.min(sub.scrollHeight, cap) : 0) - sr.height;
+      });
+    }
+    marker.style.transform = `translateY(${(lr.top-nr.top)+lr.height/2 - marker.offsetHeight/2 + settle}px)`;
+    marker.style.opacity = '1';
   }
 
   function render(path, push){

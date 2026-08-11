@@ -384,6 +384,22 @@ body.horus-scene .horus-lockup .horus-eye{filter:drop-shadow(0 0 13px oklch(0.74
 .horus-manifesto .m-clay{color:var(--clay-deep)}
 body.horus-scene.night .horus-manifesto{text-shadow:0 1px 26px oklch(0.205 0.016 152 / .97), 0 0 4px oklch(0.205 0.016 152 / .92)}
 body.horus-scene:not(.night) .horus-manifesto{text-shadow:0 0 16px var(--ground), 0 0 5px var(--ground)}
+/* the citation — a quiet aside closing the manifesto. It carries its own
+   surface rather than a text-shadow, since the sea keeps moving underneath
+   and only an opaque ground holds the small type steady. Whole box is the
+   link: one target, and the hover reads on the border instead of a underline. */
+.horus-cite{display:flex; flex-direction:column; gap:.45rem; align-items:flex-start; margin:var(--s5) 0 0; width:fit-content; max-width:min(35rem,100%);
+  padding:var(--s3) var(--s4); border:1px solid var(--line-2); border-radius:5px; background:oklch(0.965 0.009 140 / .86);
+  color:var(--ink-2); font-family:var(--body); transition:border-color .35s ease, background .35s ease, transform .45s cubic-bezier(.16,1,.3,1)}
+.horus-cite .cite-line{font-size:.95rem; line-height:1.55; color:var(--ink); text-wrap:pretty}
+.horus-cite .cite-term{font-style:normal; font-family:var(--display); color:var(--clay-deep)}
+.horus-cite .cite-src{display:inline-flex; align-items:center; gap:.4em; font-size:.72rem; letter-spacing:.02em; color:var(--ink-3); transition:color .3s ease}
+.horus-cite .cite-arr{transition:transform .45s cubic-bezier(.16,1,.3,1)}
+.horus-cite:hover{border-color:var(--moss); background:oklch(0.965 0.009 140 / .96); transform:translateY(-2px)}
+.horus-cite:hover .cite-src{color:var(--moss-deep)}
+.horus-cite:hover .cite-arr{transform:translate(2px,-2px)}
+body.night .horus-cite{background:oklch(0.258 0.020 152 / .84)}
+body.night .horus-cite:hover{background:oklch(0.258 0.020 152 / .94)}
 .horus-scroll-room{height:82vh; pointer-events:none}
 @media (max-width:920px){ .horus-lockup .horus-eye{width:1.8rem;height:1.8rem} .horus-scroll-room{height:36vh} }
 @media (prefers-reduced-motion:reduce){ .horus-scroll-room{height:0} }
@@ -717,6 +733,10 @@ body.horus-scene:not(.night) .horus-manifesto{text-shadow:0 0 16px var(--ground)
           <blockquote class="horus-manifesto anim d3" id="horusManifesto">
             <span class="m-lead">Our identities have momentum.</span> <span class="m-clay">Work</span> gives it velocity. <span class="m-clay">Life</span> gives it mass. And <span class="m-clay">Today</span> is where that momentum actually exists, because the present is the only moment we ever actually live, even as the mind stretches across past, present, and future. Attempting to understand all that accumulated momentum across time and space is why we have difficulty <span class="m-clay">10x'ing our identities</span>. HORUS is my personal AI OS that serves as my force multiplier—helping carry my <span class="m-clay">identity momentum</span>: sensing, nudging, and co-piloting it, so the system does the holding, while I can do the living.
           </blockquote>
+          <a class="horus-cite anim d4" href="https://www.youtube.com/watch?v=eRrc1pUY5oU" target="_blank" rel="noopener">
+            <span class="cite-line">Garry Tan calls it <span class="cite-term">“Personal AGI.”</span></span>
+            <span class="cite-src">Own Your Intelligence <span class="cite-arr" aria-hidden="true">↗</span></span>
+          </a>
           <div class="horus-scroll-room" aria-hidden="true"></div>
         </div>
       </section>

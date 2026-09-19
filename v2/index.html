@@ -149,47 +149,6 @@ p{margin:0 0 var(--s3); color:var(--ink-2); text-wrap:pretty}
 .northstar .quote{font-family:var(--display); font-size:clamp(1.6rem,3.1vw,2.3rem); line-height:1.22; color:var(--ink); letter-spacing:-.01em; max-width:20ch; margin:0}
 .northstar .quote::before{content:"“"; color:var(--clay)} .northstar .quote::after{content:"”"; color:var(--clay)}
 
-/* capability boxes */
-.caps{margin-top:var(--s6); display:grid; grid-template-columns:1fr 1fr; gap:var(--s4)}
-.cap{border:1px solid var(--line); border-radius:5px; padding:var(--s5); background:var(--surface); transition:transform .35s cubic-bezier(.16,1,.3,1), box-shadow .35s ease, border-color .35s ease, opacity .35s ease; font-family:inherit; text-align:left; width:100%; display:block; cursor:pointer; color:inherit; -webkit-appearance:none; appearance:none}
-.cap:hover{transform:translateY(-3px); box-shadow:var(--shadow-lift); border-color:var(--line-2)}
-.cap[aria-pressed="true"]{border-color:var(--clay); box-shadow:inset 0 0 0 1.5px var(--clay), var(--shadow-lift); transform:translateY(-4px)}
-.caps.has-active .cap:not([aria-pressed="true"]){opacity:.45}
-.caps.has-active .cap:not([aria-pressed="true"]):hover{opacity:.78; transform:translateY(-2px)}
-.cap .cl{font-size:.74rem; letter-spacing:.16em; text-transform:uppercase; font-weight:600; color:var(--clay-deep); display:block; margin-bottom:.6rem; transition:color .3s ease}
-.cap[aria-pressed="true"] .cl{color:var(--clay)}
-.cap h3{font-size:1.4rem; letter-spacing:-.01em; line-height:1.12; margin-bottom:.55rem}
-.cap p{font-size:.96rem; margin:0; color:var(--ink-2)}
-
-/* About — "Questions I've enjoyed facing" cue + panel */
-.qcue{margin-top:var(--s4); display:flex; flex-direction:column; align-items:center; gap:.45rem; text-align:center; max-height:8rem; overflow:hidden; transition:opacity .5s ease, max-height .5s ease, margin-top .5s ease}
-.qcue.is-dismissed{opacity:0; max-height:0; margin-top:0; pointer-events:none}
-.qcue-eyebrow{font-size:.74rem; letter-spacing:.16em; text-transform:uppercase; font-weight:600; color:var(--clay-deep); max-width:34ch; line-height:1.55}
-.qcue-arrow{display:inline-flex; color:var(--clay)}
-.qcue-arrow svg{width:1.05rem; height:1.05rem; animation:cueBob 1.9s ease-in-out infinite}
-@keyframes cueBob{0%,100%{transform:translateY(2px); opacity:.45} 50%{transform:translateY(-3px); opacity:1}}
-
-.qpanel{margin-top:var(--s3); padding-top:var(--s5); border-top:1px solid var(--line-2); max-width:46rem}
-.qpanel[hidden]{display:none}
-.qpanel-head{display:flex; justify-content:space-between; align-items:flex-start; gap:var(--s4); margin-bottom:var(--s4)}
-.qpanel-eyebrow{font-size:.74rem; letter-spacing:.16em; text-transform:uppercase; font-weight:600; color:var(--clay-deep); margin:0 0 .55rem; display:flex; align-items:center; gap:.7rem}
-.qpanel-eyebrow::after{content:""; height:1.5px; width:2.2rem; background:var(--clay); border-radius:2px; transform:scaleX(0); transform-origin:left}
-.qpanel-title{font-family:var(--display); font-weight:400; font-size:clamp(1.5rem,2.7vw,2rem); letter-spacing:-.01em; line-height:1.14; margin:0; color:var(--ink)}
-.qpanel-close{flex:none; font-family:var(--body); font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; font-weight:600; color:var(--ink-3); background:none; border:0; cursor:pointer; display:inline-flex; align-items:center; gap:.45rem; padding:.3rem .1rem; transition:color .25s ease}
-.qpanel-close:hover{color:var(--clay-deep)}
-.qlist{list-style:none; margin:0; padding:0}
-.qlist li{padding:.75rem 0; border-top:1px solid var(--line); color:var(--ink); line-height:1.55; font-size:1.02rem; max-width:62ch}
-.qlist li:first-child{border-top:0}
-.qpanel.is-in .qpanel-eyebrow{animation:qHeadIn .38s cubic-bezier(.16,1,.3,1) both}
-.qpanel.is-in .qpanel-eyebrow::after{animation:qLine .55s cubic-bezier(.16,1,.3,1) .14s both}
-.qpanel.is-in .qpanel-title{animation:qHeadIn .44s cubic-bezier(.16,1,.3,1) .06s both}
-.qlist li.q-anim{opacity:0; animation:qIn .42s cubic-bezier(.22,1.18,.36,1) both}
-.qpanel.is-out .qlist li,.qpanel.is-out .qpanel-eyebrow,.qpanel.is-out .qpanel-title{animation:qOut .2s ease-in forwards}
-@keyframes qHeadIn{from{opacity:0; transform:translateY(8px)} to{opacity:1; transform:translateY(0)}}
-@keyframes qIn{from{opacity:0; transform:translateY(12px)} to{opacity:1; transform:translateY(0)}}
-@keyframes qOut{from{opacity:1; transform:translateY(0)} to{opacity:0; transform:translateY(8px)}}
-@keyframes qLine{from{transform:scaleX(0)} to{transform:scaleX(1)}}
-
 /* index (sub-section / article links) */
 .index{margin-top:var(--s6); border-top:1px solid var(--line-2)}
 .entry{display:grid; grid-template-columns:1fr auto; gap:var(--s4) var(--s5); align-items:center; width:100%; text-align:left; background:none; border:0; border-bottom:1px solid var(--line); padding:var(--s5) var(--s2); cursor:pointer; color:inherit; font-family:var(--body); transition:background .3s ease}
@@ -322,7 +281,7 @@ body.menu-open .toc-toggle .bars i:nth-child(3){transform:translateY(-5px) rotat
   .toc-sublink::before{top:1.0em}
   .toc-sub{max-height:none; opacity:1; overflow:visible}
   .content{padding-top:var(--s8)}
-  .caps,.frameworks{grid-template-columns:1fr}
+  .frameworks{grid-template-columns:1fr}
   .entry{grid-template-columns:1fr; gap:var(--s3)} .entry .go{align-self:start}
 }
 @media (max-width:560px){ body{font-size:16px} .layout{padding:0 var(--s4)} }
@@ -332,14 +291,7 @@ body.menu-open .toc-toggle .bars i:nth-child(3){transform:translateY(-5px) rotat
 .read-bar{position:fixed; top:0; left:0; height:3px; width:0; background:linear-gradient(90deg,var(--moss),var(--moss-deep)); z-index:45; opacity:0; transition:opacity .35s ease; pointer-events:none; box-shadow:0 0 8px oklch(0.52 0.072 150 / .5)}
 body.reading .read-bar{opacity:1}
 
-/* 2. Cursor-aware sheen on the capability cards */
-.cap{position:relative; isolation:isolate}
-.cap::after{content:""; position:absolute; inset:0; border-radius:inherit; pointer-events:none; z-index:-1; opacity:0; transition:opacity .4s ease;
-  background:radial-gradient(240px circle at var(--mx,50%) var(--my,50%), oklch(0.60 0.085 150 / .18), transparent 60%)}
-.cap:hover::after{opacity:1}
-.cap[aria-pressed="true"]::after{background:radial-gradient(240px circle at var(--mx,50%) var(--my,50%), oklch(0.62 0.10 55 / .18), transparent 60%)}
-
-/* 3. North Star twinkle + mini constellation */
+/* 2. North Star twinkle + mini constellation */
 .northstar{position:relative}
 .ns-canvas{position:absolute; inset:0; pointer-events:none; z-index:3}
 .northstar .jit{cursor:pointer}
@@ -528,26 +480,6 @@ body.night .horus-note{background:oklch(0.258 0.020 152 / .84)}
           <figcaption class="label"><span class="jit" role="img" aria-label="star">⭐</span>My North Star</figcaption>
           <blockquote class="quote">Be a force multiplier for the people shaping real progress.</blockquote>
         </figure>
-        <div class="caps anim d3" role="group" aria-label="Capabilities — select one to filter questions">
-          <button type="button" class="cap" data-cat="growth" aria-pressed="false" aria-controls="qPanel"><span class="cl">Growth</span><h3>Turning leads into revenue</h3><p>Uniting sales, business development, and marketing into a go-to-market engine.</p></button>
-          <button type="button" class="cap" data-cat="product" aria-pressed="false" aria-controls="qPanel"><span class="cl">Product</span><h3>Turning signal into substance</h3><p>Planning, designing, and iterating experiences around user pain points.</p></button>
-          <button type="button" class="cap" data-cat="strategy" aria-pressed="false" aria-controls="qPanel"><span class="cl">Strategy</span><h3>Turning complexity into direction</h3><p>Using research, evidence, and ontologies to uncover the truth and define our next steps.</p></button>
-          <button type="button" class="cap" data-cat="operations" aria-pressed="false" aria-controls="qPanel"><span class="cl">Operations</span><h3>Turning chaos into function</h3><p>Tailoring infrastructure, processes, and workflows that make everything repeatable.</p></button>
-        </div>
-        <div class="qcue anim d4" id="qCue">
-          <span class="qcue-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M6 11l6-6 6 6"/></svg></span>
-          <span class="qcue-eyebrow">Tap a card to see some questions I've enjoyed facing</span>
-        </div>
-        <section class="qpanel" id="qPanel" aria-labelledby="qTitle" hidden>
-          <div class="qpanel-head">
-            <div class="qpanel-headings">
-              <p class="qpanel-eyebrow" id="qCat"></p>
-              <h2 class="qpanel-title" id="qTitle">Questions I've enjoyed facing</h2>
-            </div>
-            <button type="button" class="qpanel-close" id="qClose" aria-label="Hide questions">Clear <span aria-hidden="true">✕</span></button>
-          </div>
-          <ul class="qlist" id="qList" aria-live="polite"></ul>
-        </section>
       </section>
 
       <!-- INTROSPECTION (hub) -->
@@ -1372,96 +1304,6 @@ body.night .horus-note{background:oklch(0.258 0.020 152 / .84)}
     new MutationObserver(()=>{ if(hActive&&reduce) renderStatic(); }).observe(document.body,{attributes:true,attributeFilter:['class']});
   }
 
-  /* ABOUT — "Questions I've enjoyed facing" filter
-     Edit the questions here: one array per category key. */
-  const QUESTIONS = {
-    'strategy': [
-      "How do you earn enough trust with a client that they'll be transparent with their problems and needs?",
-      "How do you translate your research into impact that affects real lives?",
-      "What evidence do payers, providers, and policymakers need to back a novel care pilot?",
-      "With one week to diligence a $2M acquisition target, what factors decide if we go deeper?",
-      "For a product entering the market, what proof point opens the most doors: outcomes, economics, or workflow fit?",
-      "How do you tell a client what they need to hear, not just what they asked for?",
-      "What factors tell you it's not a market risk, but a product risk?",
-      "How do you prove microgreens demand is real before pouring resources into supply?",
-      "When you're tracking portfolio companies, how do you spot the one quietly heading for trouble?"
-    ],
-    'operations': [
-      "How do you build lean but scalable systems that track the KPIs of every portfolio company?",
-      "How do you standardize reporting across 30+ companies that all operate differently?",
-      "How do you keep delivery plans synced when a client's product, IT, and compliance teams each move at their own pace?",
-      "When you run a 100-person conference, what has to be locked in 3 months out, 3 weeks out, and 3 days out?",
-      "How do you maintain a deal-flow funnel that surfaces 5–8 quality investment targets a week without drowning in noise?",
-      "How do you build growth ops from scratch when there's no playbook to inherit?",
-      "How do you design a personal operating system that lets AI agents catalyze research and tasks?"
-    ],
-    'growth': [
-      "Which vendors and partners can help a portco scale?",
-      "Where should you source the highest-potential deals for the investment team?",
-      "How do you juggle stakeholder relationships when nobody's sure what their calendar looks like 2 months out?",
-      "Which channels most attract a talent network that spans 15+ universities?",
-      "How do you convene the right mix of veterans, founders, and young talent to catalyze real career connections?",
-      "How do you land your first restaurant accounts when you're an unknown selling to busy chefs?",
-      "How do you find the real decision-maker when you've been routed to the wrong person?"
-    ],
-    'product': [
-      "How do you find product-market fit for a device the market has never seen before?",
-      "Which outcomes prove a product's adoption is sticky, not a fad?",
-      "How do you ship a product from first idea to something live?",
-      "What does a credible go-to-market look like for a novel product entering established workflows?",
-      "How do you prototype use cases that prove an AI tool is genuinely useful, not just clever?",
-      "How do you know when a product is ready to launch versus when it needs another iteration?",
-      "When the buyer and the user aren't the same person, whose needs win?"
-    ]
-  };
-  const QCAT_LABEL = { 'strategy':'Strategy', 'operations':'Operations', 'growth':'Growth', 'product':'Product' };
-
-  const qCaps = $$('.cap[data-cat]'), qCapsWrap = $('.caps');
-  const qPanel = $('#qPanel'), qList = $('#qList'), qCat = $('#qCat'), qCue = $('#qCue'), qClose = $('#qClose');
-  let qActive = null, qSwitching = false;
-
-  function qBuild(cat){
-    qList.innerHTML = '';
-    (QUESTIONS[cat] || []).forEach((text, i) => {
-      const li = document.createElement('li');
-      li.textContent = text;
-      if (!reduce){ li.classList.add('q-anim'); li.style.animationDelay = (120 + i*50) + 'ms'; }
-      qList.appendChild(li);
-    });
-  }
-  function qOpen(cat){
-    qActive = cat;
-    qCaps.forEach(c => c.setAttribute('aria-pressed', String(c.dataset.cat === cat)));
-    qCapsWrap.classList.add('has-active');
-    qCat.textContent = QCAT_LABEL[cat];
-    qBuild(cat);
-    qPanel.hidden = false;
-    qPanel.classList.remove('is-out', 'is-in');
-    if (!reduce){ void qPanel.offsetWidth; qPanel.classList.add('is-in'); }   /* restart header reveal */
-    qCue.classList.remove('anim','d4'); qCue.classList.add('is-dismissed');   /* tuck the cue away while a category is open */
-  }
-  function qCloseFn(){
-    qActive = null;
-    qCaps.forEach(c => c.setAttribute('aria-pressed', 'false'));
-    qCapsWrap.classList.remove('has-active');
-    qPanel.classList.remove('is-in', 'is-out');
-    qPanel.hidden = true;
-    qCue.classList.remove('is-dismissed');   /* bring the cue back on Clear / toggle-off */
-  }
-  function qSelect(cat){
-    if (qActive === cat){ qCloseFn(); return; }      /* same card → hide */
-    if (qActive && !reduce){                          /* switch → animate out, then in */
-      if (qSwitching) return;
-      qSwitching = true;
-      qPanel.classList.remove('is-in'); qPanel.classList.add('is-out');
-      setTimeout(() => { qPanel.classList.remove('is-out'); qOpen(cat); qSwitching = false; }, 200);
-    } else {
-      qOpen(cat);
-    }
-  }
-  qCaps.forEach(c => c.addEventListener('click', () => qSelect(c.dataset.cat)));
-  if (qClose) qClose.addEventListener('click', qCloseFn);
-
   /* ════════ Easter eggs ════════ */
 
   /* 1. Reading-progress hairline — fills as you scroll an article */
@@ -1474,16 +1316,7 @@ body.night .horus-note{background:oklch(0.258 0.020 152 / .84)}
   window.addEventListener('scroll', updateRead, { passive: true });
   window.addEventListener('resize', updateRead);
 
-  /* 2. Cursor-aware sheen on the capability cards */
-  if (!reduce) qCaps.forEach(card => {
-    card.addEventListener('pointermove', e => {
-      const r = card.getBoundingClientRect();
-      card.style.setProperty('--mx', (e.clientX - r.left) + 'px');
-      card.style.setProperty('--my', (e.clientY - r.top) + 'px');
-    });
-  });
-
-  /* 3. North Star — click to twinkle + draw a tiny constellation */
+  /* 2. North Star — click to twinkle + draw a tiny constellation */
   const nsStar = $('.northstar .jit'), nsFig = $('.northstar');
   if (nsStar && nsFig){
     let nsCanvas, nsCtx, nsGroups = [], nsRAF = 0;

@@ -389,21 +389,21 @@ body.night .horus-note{background:oklch(0.258 0.020 152 / .84)}
 
 /* ══════════════ ABOUT — the framework ══════════════ */
 .sr-only{position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0}
-.fx-stage{position:relative; margin:var(--s6) 0 0; --vdrop:230px}
+.fx-stage{position:relative; margin:var(--s6) 0 0; --vdrop:150px}
 .fx{position:absolute; inset:0; width:100%; height:100%; overflow:visible; pointer-events:none}
 .fx .hit{pointer-events:auto}
 /* the nodes layer spans the whole stage, so it must not swallow events aimed at the rails */
 .fx-nodes{position:relative; display:flex; flex-direction:column; align-items:center; pointer-events:none}
 .fx-nodes .nd{pointer-events:auto}
-.fx-row{display:grid; grid-template-columns:1fr 1fr; gap:var(--s4); width:100%; max-width:40rem}
+.fx-row{display:grid; grid-template-columns:1fr 1fr; gap:var(--s3); width:100%; max-width:32rem}
 .nd{font-family:inherit; color:inherit; background:none; border:0; padding:0; text-align:center}
 [data-tip]{cursor:help}
-.fx-nodes .gap-arrow{margin-bottom:56px}
-.fx-nodes .gap-bracket{margin-bottom:54px}
+.fx-nodes .gap-arrow{margin-bottom:84px}
+.fx-nodes .gap-bracket{margin-bottom:44px}
 .fx-nodes .gap-v{margin-bottom:var(--vdrop)}
 
 .fx .ln{fill:none; stroke:var(--line-2); stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round; transition:stroke .3s ease, stroke-width .3s ease}
-.fx .rail{font-family:var(--body); font-size:12.5px; letter-spacing:.15em; text-transform:uppercase; font-weight:600; fill:var(--ink-3); transition:fill .3s ease}
+.fx .rail{font-family:var(--body); font-size:10.5px; letter-spacing:.13em; text-transform:uppercase; font-weight:600; fill:var(--ink-3); transition:fill .3s ease}
 /* generous invisible target so the whole rail is hoverable, not just the glyphs */
 .fx .lnhit{fill:none; stroke:transparent; stroke-width:30; pointer-events:stroke}
 .fx .rail-g{cursor:help}
@@ -412,22 +412,24 @@ body.night .horus-note{background:oklch(0.258 0.020 152 / .84)}
 .fx .ln[data-lit="1"]{stroke:var(--clay); stroke-width:2.1}
 
 /* the North Star, promoted to the head of the funnel */
-.northstar.nd-star{margin:0 auto; max-width:26rem}
+/* long-hand: the `margin` shorthand would reset the gap-arrow bottom margin set above,
+   since both selectors land on the same specificity */
+.northstar.nd-star{margin-top:0; margin-left:auto; margin-right:auto; max-width:21rem}
 .nd-star .label{justify-content:center; margin-bottom:.8rem}
-.nd-star .quote{font-size:clamp(1.4rem,2.7vw,1.95rem); line-height:1.24; max-width:none}
+.nd-star .quote{font-size:clamp(1.12rem,2.16vw,1.56rem); line-height:1.24; max-width:none}
 
-.nd-card{border:1px solid var(--line); border-radius:5px; background:var(--surface); padding:var(--s4); box-shadow:var(--shadow-soft); text-align:left;
+.nd-card{border:1px solid var(--line); border-radius:5px; background:var(--surface); padding:var(--s3); box-shadow:var(--shadow-soft); text-align:left;
   display:flex; flex-direction:column; align-items:flex-start; justify-content:flex-start;
   transition:transform .35s cubic-bezier(.16,1,.3,1), box-shadow .35s ease, border-color .35s ease}
 .nd-card:hover,.nd-card:focus-visible{transform:translateY(-3px); border-color:var(--clay); box-shadow:var(--shadow-lift)}
 /* one column of .fx-row: (40rem minus the 1.5rem gap) / 2 */
-.nd-strategy{width:100%; max-width:19.25rem}
+.nd-strategy{width:100%; max-width:15.5rem}
 /* the category name leads; the tagline takes the small-caps kicker treatment */
-.nd-card .cl{font-family:var(--display); font-size:1.5rem; font-weight:400; letter-spacing:-.01em; line-height:1.1;
-  text-transform:none; color:var(--ink); display:block; margin-bottom:.5rem; transition:color .3s ease}
-.nd-card h3{font-family:var(--body); font-size:.78rem; font-weight:600; letter-spacing:.14em; text-transform:uppercase;
+.nd-card .cl{font-family:var(--display); font-size:1.2rem; font-weight:400; letter-spacing:-.01em; line-height:1.1;
+  text-transform:none; color:var(--ink); display:block; margin-bottom:.4rem; transition:color .3s ease}
+.nd-card h3{font-family:var(--body); font-size:.66rem; font-weight:600; letter-spacing:.14em; text-transform:uppercase;
   line-height:1.4; color:var(--clay-deep); margin:0}
-.nd-term{font-family:var(--display); font-size:1.85rem; letter-spacing:-.015em; color:var(--moss-deep); margin-top:.3rem;
+.nd-term{font-family:var(--display); font-size:1.48rem; letter-spacing:-.015em; color:var(--moss-deep); margin-top:.3rem;
   text-shadow:0 0 26px oklch(0.52 0.072 150 / .28)}
 
 /* definitions toggle */

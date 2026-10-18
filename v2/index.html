@@ -11,7 +11,7 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2C6.5 6.5 4.5 13.5 11.4 22 11.7 16 12 9 12 2Z' fill='%234a7553'/%3E%3Cpath d='M12 2C17.5 6.5 19.5 13.5 12.6 22 12.3 16 12 9 12 2Z' fill='%232e5437'/%3E%3C/svg%3E" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet" />
 
 <style>
 /* ============================================================
@@ -30,6 +30,7 @@
   --s1:.5rem; --s2:.75rem; --s3:1rem; --s4:1.5rem; --s5:2rem; --s6:3rem; --s7:4.5rem; --s8:7rem; --s9:10rem;
   --shadow-soft:0 1px 2px oklch(0.25 0.02 150 / .05), 0 10px 26px -12px oklch(0.25 0.02 150 / .18);
   --shadow-lift:0 1px 1px oklch(0.25 0.02 150 / .05), 0 22px 44px -22px oklch(0.41 0.066 150 / .30);
+  --note:oklch(0.893 0.021 150); --note-line:oklch(0.520 0.072 150 / 0.32);
   --z-base:1; --z-content:2; --z-menu:50; --z-toggle:60; --z-intro:70; --z-skip:80;
   --maxw:77.5rem; --reader-w:42rem;
   --leaf-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2C6.5 6.5 4.5 13.5 11.4 22 11.7 16 12 9 12 2Z' fill='black'/%3E%3Cpath d='M12 2C17.5 6.5 19.5 13.5 12.6 22 12.3 16 12 9 12 2Z' fill='black'/%3E%3C/svg%3E");
@@ -149,45 +150,6 @@ p{margin:0 0 var(--s3); color:var(--ink-2); text-wrap:pretty}
 .northstar .quote{font-family:var(--display); font-size:clamp(1.6rem,3.1vw,2.3rem); line-height:1.22; color:var(--ink); letter-spacing:-.01em; max-width:20ch; margin:0}
 .northstar .quote::before{content:"“"; color:var(--clay)} .northstar .quote::after{content:"”"; color:var(--clay)}
 
-/* capability boxes */
-.caps{margin-top:var(--s6); display:grid; grid-template-columns:1fr 1fr; gap:var(--s4)}
-.cap{border:1px solid var(--line); border-radius:5px; padding:var(--s5); background:var(--surface); transition:transform .35s cubic-bezier(.16,1,.3,1), box-shadow .35s ease, border-color .35s ease, opacity .35s ease; font-family:inherit; text-align:left; width:100%; display:block; cursor:pointer; color:inherit; -webkit-appearance:none; appearance:none}
-.cap:hover{transform:translateY(-3px); box-shadow:var(--shadow-lift); border-color:var(--line-2)}
-.cap[aria-pressed="true"]{border-color:var(--clay); box-shadow:inset 0 0 0 1.5px var(--clay), var(--shadow-lift); transform:translateY(-4px)}
-.caps.has-active .cap:not([aria-pressed="true"]){opacity:.45}
-.caps.has-active .cap:not([aria-pressed="true"]):hover{opacity:.78; transform:translateY(-2px)}
-.cap .cl{font-size:.74rem; letter-spacing:.16em; text-transform:uppercase; font-weight:600; color:var(--clay-deep); display:block; margin-bottom:.6rem; transition:color .3s ease}
-.cap[aria-pressed="true"] .cl{color:var(--clay)}
-.cap h3{font-size:1.4rem; letter-spacing:-.01em; line-height:1.12; margin-bottom:.55rem}
-.cap p{font-size:.96rem; margin:0; color:var(--ink-2)}
-
-/* About — "Questions I've enjoyed facing" cue + panel */
-.qcue{margin-top:var(--s4); display:flex; flex-direction:column; align-items:center; gap:.45rem; text-align:center; max-height:8rem; overflow:hidden; transition:opacity .5s ease, max-height .5s ease, margin-top .5s ease}
-.qcue.is-dismissed{opacity:0; max-height:0; margin-top:0; pointer-events:none}
-.qcue-eyebrow{font-size:.74rem; letter-spacing:.16em; text-transform:uppercase; font-weight:600; color:var(--clay-deep); max-width:34ch; line-height:1.55}
-.qcue-arrow{display:inline-flex; color:var(--clay)}
-.qcue-arrow svg{width:1.05rem; height:1.05rem; animation:cueBob 1.9s ease-in-out infinite}
-@keyframes cueBob{0%,100%{transform:translateY(2px); opacity:.45} 50%{transform:translateY(-3px); opacity:1}}
-
-.qpanel{margin-top:var(--s3); padding-top:var(--s5); border-top:1px solid var(--line-2); max-width:46rem}
-.qpanel[hidden]{display:none}
-.qpanel-head{display:flex; justify-content:space-between; align-items:flex-start; gap:var(--s4); margin-bottom:var(--s4)}
-.qpanel-eyebrow{font-size:.74rem; letter-spacing:.16em; text-transform:uppercase; font-weight:600; color:var(--clay-deep); margin:0 0 .55rem; display:flex; align-items:center; gap:.7rem}
-.qpanel-eyebrow::after{content:""; height:1.5px; width:2.2rem; background:var(--clay); border-radius:2px; transform:scaleX(0); transform-origin:left}
-.qpanel-title{font-family:var(--display); font-weight:400; font-size:clamp(1.5rem,2.7vw,2rem); letter-spacing:-.01em; line-height:1.14; margin:0; color:var(--ink)}
-.qpanel-close{flex:none; font-family:var(--body); font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; font-weight:600; color:var(--ink-3); background:none; border:0; cursor:pointer; display:inline-flex; align-items:center; gap:.45rem; padding:.3rem .1rem; transition:color .25s ease}
-.qpanel-close:hover{color:var(--clay-deep)}
-.qlist{list-style:none; margin:0; padding:0}
-.qlist li{padding:.75rem 0; border-top:1px solid var(--line); color:var(--ink); line-height:1.55; font-size:1.02rem; max-width:62ch}
-.qlist li:first-child{border-top:0}
-.qpanel.is-in .qpanel-eyebrow{animation:qHeadIn .38s cubic-bezier(.16,1,.3,1) both}
-.qpanel.is-in .qpanel-eyebrow::after{animation:qLine .55s cubic-bezier(.16,1,.3,1) .14s both}
-.qpanel.is-in .qpanel-title{animation:qHeadIn .44s cubic-bezier(.16,1,.3,1) .06s both}
-.qlist li.q-anim{opacity:0; animation:qIn .42s cubic-bezier(.22,1.18,.36,1) both}
-.qpanel.is-out .qlist li,.qpanel.is-out .qpanel-eyebrow,.qpanel.is-out .qpanel-title{animation:qOut .2s ease-in forwards}
-@keyframes qHeadIn{from{opacity:0; transform:translateY(8px)} to{opacity:1; transform:translateY(0)}}
-@keyframes qIn{from{opacity:0; transform:translateY(12px)} to{opacity:1; transform:translateY(0)}}
-@keyframes qOut{from{opacity:1; transform:translateY(0)} to{opacity:0; transform:translateY(8px)}}
 @keyframes qLine{from{transform:scaleX(0)} to{transform:scaleX(1)}}
 
 /* index (sub-section / article links) */
@@ -323,7 +285,7 @@ body.menu-open .toc-toggle .bars i:nth-child(3){transform:translateY(-5px) rotat
   .toc-sublink::before{top:1.0em}
   .toc-sub{max-height:none; opacity:1; overflow:visible}
   .content{padding-top:var(--s8)}
-  .caps,.frameworks{grid-template-columns:1fr}
+  .frameworks{grid-template-columns:1fr}
   .entry{grid-template-columns:1fr; gap:var(--s3)} .entry .go{align-self:start}
 }
 @media (max-width:560px){ body{font-size:16px} .layout{padding:0 var(--s4)} }
@@ -332,13 +294,6 @@ body.menu-open .toc-toggle .bars i:nth-child(3){transform:translateY(-5px) rotat
 /* 1. Reading-progress hairline (article pages only) */
 .read-bar{position:fixed; top:0; left:0; height:3px; width:0; background:linear-gradient(90deg,var(--moss),var(--moss-deep)); z-index:45; opacity:0; transition:opacity .35s ease; pointer-events:none; box-shadow:0 0 8px oklch(0.52 0.072 150 / .5)}
 body.reading .read-bar{opacity:1}
-
-/* 2. Cursor-aware sheen on the capability cards */
-.cap{position:relative; isolation:isolate}
-.cap::after{content:""; position:absolute; inset:0; border-radius:inherit; pointer-events:none; z-index:-1; opacity:0; transition:opacity .4s ease;
-  background:radial-gradient(240px circle at var(--mx,50%) var(--my,50%), oklch(0.60 0.085 150 / .18), transparent 60%)}
-.cap:hover::after{opacity:1}
-.cap[aria-pressed="true"]::after{background:radial-gradient(240px circle at var(--mx,50%) var(--my,50%), oklch(0.62 0.10 55 / .18), transparent 60%)}
 
 /* 3. North Star twinkle + mini constellation */
 .northstar{position:relative}
@@ -356,6 +311,7 @@ body.night{
   --line:oklch(0.940 0.012 140 / 0.15); --line-2:oklch(0.940 0.012 140 / 0.27);
   --shadow-soft:0 1px 2px oklch(0 0 0 / .35), 0 10px 26px -12px oklch(0 0 0 / .55);
   --shadow-lift:0 1px 1px oklch(0 0 0 / .35), 0 22px 44px -22px oklch(0 0 0 / .60);
+  --note:oklch(0.240 0.024 152); --note-line:oklch(0.745 0.085 150 / 0.28);
   background-image:radial-gradient(120% 80% at 82% -8%, oklch(0.300 0.030 152 / .8), transparent 60%),radial-gradient(90% 60% at 0% 4%, oklch(0.60 0.11 50 / .07), transparent 55%),radial-gradient(120% 90% at 50% 122%, oklch(0.50 0.072 150 / .16), transparent 60%);
 }
 body.night .grain{opacity:.055; mix-blend-mode:screen}
@@ -430,6 +386,87 @@ body.night .horus-note{background:oklch(0.258 0.020 152 / .84)}
   *,*::before,*::after{animation-duration:.001ms!important; animation-iteration-count:1!important; transition-duration:.001ms!important}
   .page.is-active .anim{animation:none}
 }
+
+/* ══════════════ ABOUT — the framework ══════════════ */
+.sr-only{position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0}
+.fx-stage{position:relative; margin:var(--s6) 0 0; --vdrop:230px}
+.fx{position:absolute; inset:0; width:100%; height:100%; overflow:visible; pointer-events:none}
+.fx .hit{pointer-events:auto}
+/* the nodes layer spans the whole stage, so it must not swallow events aimed at the rails */
+.fx-nodes{position:relative; display:flex; flex-direction:column; align-items:center; pointer-events:none}
+.fx-nodes .nd{pointer-events:auto}
+.fx-row{display:grid; grid-template-columns:1fr 1fr; gap:var(--s4); width:100%; max-width:40rem}
+.nd{font-family:inherit; color:inherit; background:none; border:0; padding:0; text-align:center}
+[data-tip]{cursor:help}
+.fx-nodes .gap-arrow{margin-bottom:56px}
+.fx-nodes .gap-bracket{margin-bottom:54px}
+.fx-nodes .gap-v{margin-bottom:var(--vdrop)}
+
+.fx .ln{fill:none; stroke:var(--line-2); stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round; transition:stroke .3s ease, stroke-width .3s ease}
+.fx .rail{font-family:var(--body); font-size:12.5px; letter-spacing:.15em; text-transform:uppercase; font-weight:600; fill:var(--ink-3); transition:fill .3s ease}
+/* generous invisible target so the whole rail is hoverable, not just the glyphs */
+.fx .lnhit{fill:none; stroke:transparent; stroke-width:30; pointer-events:stroke}
+.fx .rail-g{cursor:help}
+.fx .rail-g:hover .rail,.fx .rail-g:focus-visible .rail{fill:var(--clay-deep)}
+.fx-stage[data-lit] .ln:not([data-lit="1"]){stroke:var(--line)}
+.fx .ln[data-lit="1"]{stroke:var(--clay); stroke-width:2.1}
+
+/* the North Star, promoted to the head of the funnel */
+.northstar.nd-star{margin:0 auto; max-width:26rem}
+.nd-star .label{justify-content:center; margin-bottom:.8rem}
+.nd-star .quote{font-size:clamp(1.4rem,2.7vw,1.95rem); line-height:1.24; max-width:none}
+
+.nd-card{border:1px solid var(--line); border-radius:5px; background:var(--surface); padding:var(--s4); box-shadow:var(--shadow-soft); text-align:left;
+  display:flex; flex-direction:column; align-items:flex-start; justify-content:flex-start;
+  transition:transform .35s cubic-bezier(.16,1,.3,1), box-shadow .35s ease, border-color .35s ease}
+.nd-card:hover,.nd-card:focus-visible{transform:translateY(-3px); border-color:var(--clay); box-shadow:var(--shadow-lift)}
+/* one column of .fx-row: (40rem minus the 1.5rem gap) / 2 */
+.nd-strategy{width:100%; max-width:19.25rem}
+/* the category name leads; the tagline takes the small-caps kicker treatment */
+.nd-card .cl{font-family:var(--display); font-size:1.5rem; font-weight:400; letter-spacing:-.01em; line-height:1.1;
+  text-transform:none; color:var(--ink); display:block; margin-bottom:.5rem; transition:color .3s ease}
+.nd-card h3{font-family:var(--body); font-size:.78rem; font-weight:600; letter-spacing:.14em; text-transform:uppercase;
+  line-height:1.4; color:var(--clay-deep); margin:0}
+.nd-term{font-family:var(--display); font-size:1.85rem; letter-spacing:-.015em; color:var(--moss-deep); margin-top:.3rem;
+  text-shadow:0 0 26px oklch(0.52 0.072 150 / .28)}
+
+/* definitions toggle */
+.defs-toggle{position:absolute; top:0; right:0; z-index:7; font-family:var(--body); font-size:.66rem;
+  letter-spacing:.14em; text-transform:uppercase; font-weight:600; color:var(--ink-3);
+  background:var(--surface); border:1px solid var(--line-2); border-radius:999px; padding:.4rem .85rem;
+  cursor:pointer; transition:color .25s ease, border-color .25s ease, background .25s ease}
+.defs-toggle:hover{color:var(--clay-deep); border-color:var(--clay)}
+.defs-toggle[aria-pressed="true"]{color:var(--clay); border-color:var(--clay); background:oklch(0.60 0.11 50 / .08)}
+
+/* floating description: a step DOWN from the page, so notes recede while cards rise */
+.tip{position:absolute; z-index:6; width:max-content; max-width:11.5rem; min-width:9rem; padding:.85rem 1rem;
+  background:var(--note); border:1px solid var(--note-line); border-radius:5px; box-shadow:var(--shadow-soft);
+  font-size:.86rem; line-height:1.56; color:var(--ink-2); text-align:left;
+  opacity:0; transform:translateY(4px); pointer-events:none; visibility:hidden;
+  transition:opacity .2s ease, transform .2s cubic-bezier(.16,1,.3,1), visibility .2s}
+.tip.is-on{opacity:1; transform:translateY(0); visibility:visible}
+.tip .tip-empty{font-style:italic; color:var(--ink-3)}
+.tip em{font-style:italic; color:var(--ink)}
+.tip::after{content:""; position:absolute; width:9px; height:9px; background:var(--note); border:1px solid var(--note-line); border-top:0; border-left:0}
+.tip[data-side="top"]::after   {bottom:-5.5px; left:calc(var(--caret) - 4.5px); transform:rotate(45deg)}
+.tip[data-side="bottom"]::after{top:-5.5px;    left:calc(var(--caret) - 4.5px); transform:rotate(225deg)}
+.tip[data-side="right"]::after {left:-5.5px;   top:calc(var(--caret) - 4.5px);  transform:rotate(135deg)}
+.tip[data-side="left"]::after  {right:-5.5px;  top:calc(var(--caret) - 4.5px);  transform:rotate(-45deg)}
+/* seven boxes at once need to be smaller to all find a home */
+.fx-stage[data-all] .tip{max-width:10rem; font-size:.78rem; padding:.6rem .7rem}
+@media (max-width:1400px){ .tip{max-width:11rem} }
+@media (max-width:1320px){ .fx-stage[data-all] .tip{max-width:10.5rem; font-size:.76rem} }
+@media (max-width:1150px){ .tip{max-width:10rem} }
+@media (max-width:760px){
+  .defs-toggle{display:none}
+  .fx-stage{--vdrop:120px}
+  .fx-row{max-width:none; gap:var(--s2)}
+  .nd-card{padding:var(--s3)}
+  .nd-card .cl{font-size:1.2rem}
+  .nd-card h3{font-size:.7rem}
+  .tip{max-width:16rem}
+}
+@media (prefers-reduced-motion:reduce){ .tip{transition:opacity .01s} .nd-card{transition:border-color .2s ease} }
 </style>
 <noscript><style>
   #intro,.toc-toggle{display:none!important}
@@ -521,34 +558,52 @@ body.night .horus-note{background:oklch(0.258 0.020 152 / .84)}
         <p class="lede anim d1">Los Angeles born and raised, now based on the East Coast.</p>
         <div class="about-bio anim d1">
           <p>I've always been drawn to people who build lasting things: companies, communities, movements, and ideas that outlive them.</p>
-          <p>I've spent the past few years in healthcare, software, and technology—mainly in operational roles, with advisory and investing on the side. Along the way, I leveraged my quirky, generalist background to help operators turn ambitious goals into reality, founders grow companies, investors evaluate opportunities, and researchers translate their work into impact.</p>
-          <p>I studied Public Health and Entrepreneurship at Cal Poly and the University of Pennsylvania, where I engaged diverse communities solving challenging problems.</p>
-          <p class="lead-in">Today, what I'm really chasing is simple:</p>
+          <p>I've spent the past few years in healthcare, software, and technology—mainly in operational and advisory roles. Along the way, I leveraged my generalist background to help operators turn ambitious goals into reality, founders grow companies, investors evaluate opportunities, and researchers translate their work into impact.</p>
+          <p class="lead-in">Today, I'm a high-volume Technology Sales professional whose cumulative experiences formed the foundations of my mental model:</p>
         </div>
-        <figure class="northstar anim d2">
-          <figcaption class="label"><span class="jit" role="img" aria-label="star">⭐</span>My North Star</figcaption>
-          <blockquote class="quote">Be a force multiplier for the people shaping real progress.</blockquote>
-        </figure>
-        <div class="caps anim d3" role="group" aria-label="Capabilities — select one to filter questions">
-          <button type="button" class="cap" data-cat="growth" aria-pressed="false" aria-controls="qPanel"><span class="cl">Growth</span><h3>Turning leads into revenue</h3><p>Uniting sales, business development, and marketing into a go-to-market engine.</p></button>
-          <button type="button" class="cap" data-cat="product" aria-pressed="false" aria-controls="qPanel"><span class="cl">Product</span><h3>Turning signal into substance</h3><p>Planning, designing, and iterating experiences around user pain points.</p></button>
-          <button type="button" class="cap" data-cat="strategy" aria-pressed="false" aria-controls="qPanel"><span class="cl">Strategy</span><h3>Turning complexity into direction</h3><p>Using research, evidence, and ontologies to uncover the truth and define our next steps.</p></button>
-          <button type="button" class="cap" data-cat="operations" aria-pressed="false" aria-controls="qPanel"><span class="cl">Operations</span><h3>Turning chaos into function</h3><p>Tailoring infrastructure, processes, and workflows that make everything repeatable.</p></button>
-        </div>
-        <div class="qcue anim d4" id="qCue">
-          <span class="qcue-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M6 11l6-6 6 6"/></svg></span>
-          <span class="qcue-eyebrow">Tap a card to see some questions I've enjoyed facing</span>
-        </div>
-        <section class="qpanel" id="qPanel" aria-labelledby="qTitle" hidden>
-          <div class="qpanel-head">
-            <div class="qpanel-headings">
-              <p class="qpanel-eyebrow" id="qCat"></p>
-              <h2 class="qpanel-title" id="qTitle">Questions I've enjoyed facing</h2>
+        <div class="fx-stage anim d2">
+          <svg class="fx">
+            <path class="ln" data-ln="stem"></path>
+            <path class="ln" data-ln="bracket"></path>
+            <path class="ln" data-ln="floor"></path>
+            <path id="tp-l" fill="none" stroke="none"></path>
+            <path id="tp-r" fill="none" stroke="none"></path>
+            <g class="rail-g hit" data-tip="science" tabindex="0" role="img" aria-label="Experimentation">
+              <path class="ln" data-ln="vl"></path>
+              <path class="lnhit" data-hit="vl"></path>
+              <text class="rail" dy="-10"><textPath href="#tp-l" startOffset="50%" text-anchor="middle">Experimentation</textPath></text>
+            </g>
+            <g class="rail-g hit" data-tip="operations" tabindex="0" role="img" aria-label="Operations">
+              <path class="ln" data-ln="vr"></path>
+              <path class="lnhit" data-hit="vr"></path>
+              <text class="rail" dy="-10"><textPath href="#tp-r" startOffset="50%" text-anchor="middle">Operations</textPath></text>
+            </g>
+          </svg>
+
+          <div class="fx-nodes">
+            <figure class="northstar nd nd-star gap-arrow" data-node="humanity" data-tip="north-star" tabindex="0">
+              <figcaption class="label"><span class="jit" role="img" aria-label="star">⭐</span>My North Star</figcaption>
+              <blockquote class="quote">Be a force multiplier for the people shaping real progress.</blockquote>
+            </figure>
+
+            <button type="button" class="nd nd-card nd-strategy gap-bracket" data-node="strategy" data-tip="strategy">
+              <span class="cl">Strategy</span>
+              <h3>Turning complexity into direction</h3></button>
+
+            <div class="fx-row gap-v">
+              <button type="button" class="nd nd-card" data-node="product" data-tip="product">
+                <span class="cl">Product</span>
+                <h3>Turning signal into solutions</h3></button>
+              <button type="button" class="nd nd-card" data-node="growth" data-tip="growth">
+                <span class="cl">Growth</span>
+                <h3>Turning attention into adoption</h3></button>
             </div>
-            <button type="button" class="qpanel-close" id="qClose" aria-label="Hide questions">Clear <span aria-hidden="true">✕</span></button>
+
+            <div class="nd nd-term" data-node="progress">Someone better off</div>
           </div>
-          <ul class="qlist" id="qList" aria-live="polite"></ul>
-        </section>
+
+          <button type="button" class="defs-toggle" aria-pressed="false">Show definitions</button>
+        </div>
       </section>
 
       <!-- INTROSPECTION (hub) -->
@@ -1374,95 +1429,227 @@ body.night .horus-note{background:oklch(0.258 0.020 152 / .84)}
     new MutationObserver(()=>{ if(hActive&&reduce) renderStatic(); }).observe(document.body,{attributes:true,attributeFilter:['class']});
   }
 
-  /* ABOUT — "Questions I've enjoyed facing" filter
-     Edit the questions here: one array per category key. */
-  const QUESTIONS = {
-    'strategy': [
-      "How do you earn enough trust with a client that they'll be transparent with their problems and needs?",
-      "How do you translate your research into impact that affects real lives?",
-      "What evidence do payers, providers, and policymakers need to back a novel care pilot?",
-      "With one week to diligence a $2M acquisition target, what factors decide if we go deeper?",
-      "For a product entering the market, what proof point opens the most doors: outcomes, economics, or workflow fit?",
-      "How do you tell a client what they need to hear, not just what they asked for?",
-      "What factors tell you it's not a market risk, but a product risk?",
-      "How do you prove microgreens demand is real before pouring resources into supply?",
-      "When you're tracking portfolio companies, how do you spot the one quietly heading for trouble?"
-    ],
-    'operations': [
-      "How do you build lean but scalable systems that track the KPIs of every portfolio company?",
-      "How do you standardize reporting across 30+ companies that all operate differently?",
-      "How do you keep delivery plans synced when a client's product, IT, and compliance teams each move at their own pace?",
-      "When you run a 100-person conference, what has to be locked in 3 months out, 3 weeks out, and 3 days out?",
-      "How do you maintain a deal-flow funnel that surfaces 5–8 quality investment targets a week without drowning in noise?",
-      "How do you build growth ops from scratch when there's no playbook to inherit?",
-      "How do you design a personal operating system that lets AI agents catalyze research and tasks?"
-    ],
-    'growth': [
-      "Which vendors and partners can help a portco scale?",
-      "Where should you source the highest-potential deals for the investment team?",
-      "How do you juggle stakeholder relationships when nobody's sure what their calendar looks like 2 months out?",
-      "Which channels most attract a talent network that spans 15+ universities?",
-      "How do you convene the right mix of veterans, founders, and young talent to catalyze real career connections?",
-      "How do you land your first restaurant accounts when you're an unknown selling to busy chefs?",
-      "How do you find the real decision-maker when you've been routed to the wrong person?"
-    ],
-    'product': [
-      "How do you find product-market fit for a device the market has never seen before?",
-      "Which outcomes prove a product's adoption is sticky, not a fad?",
-      "How do you ship a product from first idea to something live?",
-      "What does a credible go-to-market look like for a novel product entering established workflows?",
-      "How do you prototype use cases that prove an AI tool is genuinely useful, not just clever?",
-      "How do you know when a product is ready to launch versus when it needs another iteration?",
-      "When the buyer and the user aren't the same person, whose needs win?"
-    ]
+  /* ════════ ABOUT — the framework ════════
+     THE DESCRIPTIONS — the only block you need to edit. 1-2 sentences each.
+     Simple inline markup is allowed, e.g. <em>word</em>. Leave text as '' for a placeholder.
+     `place` lists where the box may sit, best first; the first side that is on
+     screen AND lands on nothing wins. */
+  const TIPS = {
+    'north-star': { place:['top','bottom','right','left'],
+      text:'What does humanity need <em>now</em>? And how do we fulfill that need in the next 5 years instead of 100?' },
+    'strategy':   { place:['right','left','top','bottom'],
+      text:'Using research, evidence, and ontologies to uncover the truth and define our next steps.' },
+    'product':    { place:['bottom','left','top','right'],
+      text:'Building, designing, and iterating answers around user pain points and systemic bottlenecks.' },
+    'growth':     { place:['bottom','right','top','left'],
+      text:'Uniting sales, business development, and marketing into a go-to-market engine.' },
+    'science':    { place:['left','bottom','right','top'],
+      text:'Harnessing hypothesis-led, data-driven experimentation to safely navigate reality and imagination.' },
+    'operations': { place:['right','bottom','left','top'],
+      text:'Tailoring infrastructure, processes, and workflows that make everything repeatable.' }
   };
-  const QCAT_LABEL = { 'strategy':'Strategy', 'operations':'Operations', 'growth':'Growth', 'product':'Product' };
+  const LIT = { 'north-star':['stem'], 'strategy':['stem','bracket'],
+                'product':['bracket','floor'], 'growth':['bracket','floor'], 'science':['vl'], 'operations':['vr'] };
 
-  const qCaps = $$('.cap[data-cat]'), qCapsWrap = $('.caps');
-  const qPanel = $('#qPanel'), qList = $('#qList'), qCat = $('#qCat'), qCue = $('#qCue'), qClose = $('#qClose');
-  let qActive = null, qSwitching = false;
-
-  function qBuild(cat){
-    qList.innerHTML = '';
-    (QUESTIONS[cat] || []).forEach((text, i) => {
-      const li = document.createElement('li');
-      li.textContent = text;
-      if (!reduce){ li.classList.add('q-anim'); li.style.animationDelay = (120 + i*50) + 'ms'; }
-      qList.appendChild(li);
-    });
-  }
-  function qOpen(cat){
-    qActive = cat;
-    qCaps.forEach(c => c.setAttribute('aria-pressed', String(c.dataset.cat === cat)));
-    qCapsWrap.classList.add('has-active');
-    qCat.textContent = QCAT_LABEL[cat];
-    qBuild(cat);
-    qPanel.hidden = false;
-    qPanel.classList.remove('is-out', 'is-in');
-    if (!reduce){ void qPanel.offsetWidth; qPanel.classList.add('is-in'); }   /* restart header reveal */
-    qCue.classList.remove('anim','d4'); qCue.classList.add('is-dismissed');   /* tuck the cue away while a category is open */
-  }
-  function qCloseFn(){
-    qActive = null;
-    qCaps.forEach(c => c.setAttribute('aria-pressed', 'false'));
-    qCapsWrap.classList.remove('has-active');
-    qPanel.classList.remove('is-in', 'is-out');
-    qPanel.hidden = true;
-    qCue.classList.remove('is-dismissed');   /* bring the cue back on Clear / toggle-off */
-  }
-  function qSelect(cat){
-    if (qActive === cat){ qCloseFn(); return; }      /* same card → hide */
-    if (qActive && !reduce){                          /* switch → animate out, then in */
-      if (qSwitching) return;
-      qSwitching = true;
-      qPanel.classList.remove('is-in'); qPanel.classList.add('is-out');
-      setTimeout(() => { qPanel.classList.remove('is-out'); qOpen(cat); qSwitching = false; }, 200);
-    } else {
-      qOpen(cat);
+  const fxStage = $('.fx-stage');
+  if (fxStage) (function(){
+    const GAP = 12;
+    const lines = fxStage.querySelectorAll('.ln');
+    const defsBtn = fxStage.querySelector('.defs-toggle');
+    const tips = {};
+    for (const key of Object.keys(TIPS)){
+      const d = document.createElement('div');
+      d.className='tip'; d.setAttribute('role','tooltip'); d.setAttribute('aria-hidden','true');
+      fxStage.appendChild(d); tips[key]=d;
     }
-  }
-  qCaps.forEach(c => c.addEventListener('click', () => qSelect(c.dataset.cat)));
-  if (qClose) qClose.addEventListener('click', qCloseFn);
+    const nodeOf = k => fxStage.querySelector('[data-tip="'+k+'"]');
+    let openKey=null, allOn=false;
+
+    function overlapArea(a,c){
+      const w=Math.min(a.right,c.right)-Math.max(a.left,c.left), h=Math.min(a.bottom,c.bottom)-Math.max(a.top,c.top);
+      return (w>0&&h>0)?w*h:0;
+    }
+    /* the box must never sit on top of the words it describes, so that overlap is weighted hard */
+    function costOf(rect,obs,el){ let c=0; for(const o of obs){const a=overlapArea(rect,o.r); if(a) c+=a*(o.el===el?12:(o.w||1));} return c; }
+    function fitsV(r){ return r.left>=8 && r.right<=innerWidth-8 && r.top>=4 && r.bottom<=innerHeight-4; }
+    function place(side,b,R,tw,th,slide){
+      slide=slide||0;
+      const cx=b.left+b.width/2-R.left, cy=b.top+b.height/2-R.top;
+      if(side==='top'||side==='bottom'){
+        const y = side==='top' ? (b.top-R.top)-th-GAP : (b.bottom-R.top)+GAP;
+        return {x:cx-tw/2+slide, y, cx, cy, horiz:true};
+      }
+      const x = side==='right' ? (b.right-R.left)+GAP : (b.left-R.left)-tw-GAP;
+      return {x, y:cy-th/2+slide, cx, cy, horiz:false};
+    }
+    const toVP=(q,R,tw,th)=>({left:R.left+q.x, top:R.top+q.y, right:R.left+q.x+tw, bottom:R.top+q.y+th});
+    const caretFor=q=> q.horiz ? q.cx-q.x : q.cy-q.y;
+    function solve(side,b,R,tw,th,obs,el,relax,lim){
+      let best=null;
+      for(let step=0; step<=14; step++){
+        for(const dir of (step===0?[0]:[-1,1])){
+          const q=place(side,b,R,tw,th,dir*step*14);
+          const caret=caretFor(q), span=q.horiz?tw:th;
+          if(caret<14||caret>span-14) continue;
+          const rect=toVP(q,R,tw,th);
+          if(!(relax ? (rect.left>=4&&rect.right<=innerWidth-4) : fitsV(rect))) continue;
+          if(lim && (rect.top<lim.top||rect.bottom>lim.bottom)) continue;
+          const cost=costOf(rect,obs,el);
+          if(!best||cost<best.cost) best={x:q.x,y:q.y,caret,side,cost};
+          if(cost===0) return best;
+        }
+      }
+      return best;
+    }
+    /* rail labels are measured glyph by glyph: a rotated label's bounding rect is the
+       whole diagonal, which would rule out the empty middle of the V for no reason */
+    function obstacles(){
+      const out=[];
+      if(defsBtn) out.push({el:defsBtn, r:defsBtn.getBoundingClientRect()});
+      /* the table of contents lives to the left of the content column */
+      const toc=document.querySelector('.toc-inner');
+      if(toc && getComputedStyle(toc).display!=='none') out.push({el:toc, r:toc.getBoundingClientRect(), w:8});
+      fxStage.querySelectorAll('.nd-star,.nd-card,.nd-term').forEach(n=>out.push({el:n,r:n.getBoundingClientRect()}));
+      fxStage.querySelectorAll('text.rail').forEach(t=>{
+        const m=t.getScreenCTM(); if(!m) return;
+        const owner=t.closest('.rail-g');
+        let n=0; try{ n=t.getNumberOfChars(); }catch(e){ return; }
+        for(let i=0;i<n;i++){
+          let e; try{ e=t.getExtentOfChar(i); }catch(err){ continue; }
+          const pts=[[e.x,e.y],[e.x+e.width,e.y],[e.x,e.y+e.height],[e.x+e.width,e.y+e.height]]
+            .map(([x,y])=>new DOMPoint(x,y).matrixTransform(m));
+          const xs=pts.map(p=>p.x), ys=pts.map(p=>p.y);
+          out.push({el:owner, r:{left:Math.min(...xs),right:Math.max(...xs),top:Math.min(...ys),bottom:Math.max(...ys)}});
+        }
+      });
+      return out;
+    }
+
+    function fxLayout(){
+      const svg=fxStage.querySelector('svg.fx'), R=fxStage.getBoundingClientRect();
+      if(!R.width) return;                                  /* page not visible yet */
+      svg.setAttribute('viewBox','0 0 '+R.width+' '+R.height);
+      const q=sel=>{ const b=fxStage.querySelector(sel).getBoundingClientRect();
+        return {l:b.left-R.left,r:b.right-R.left,t:b.top-R.top,b:b.bottom-R.top,cx:b.left+b.width/2-R.left}; };
+      const hum=q('[data-node=humanity]'), str=q('[data-node=strategy]'),
+            pro=q('[data-node=product]'), gro=q('[data-node=growth]'), prg=q('[data-node=progress]');
+      const set=(n,d)=>{ const el=fxStage.querySelector('[data-ln='+n+']'); if(el) el.setAttribute('d',d); };
+      const aY=str.t-12;
+      set('stem','M '+hum.cx+' '+(hum.b+10)+' L '+hum.cx+' '+aY+
+                 ' M '+(hum.cx-5.5)+' '+(aY-8)+' L '+hum.cx+' '+aY+' L '+(hum.cx+5.5)+' '+(aY-8));
+      const barY=str.b+(pro.t-str.b)/2, barL=pro.l-16, barR=gro.r+16;
+      set('bracket','M '+str.cx+' '+(str.b+8)+' L '+str.cx+' '+barY+
+                    ' M '+barL+' '+(barY+15)+' L '+barL+' '+barY+' L '+barR+' '+barY+' L '+barR+' '+(barY+15));
+      const apexX=(pro.l+gro.r)/2, apexY=prg.t-14;
+      /* both cards drop into a collector bar and the funnel descends from its ends,
+         so the rails visibly carry both workstreams rather than one each */
+      const floorY=pro.b+26, fL=pro.l-16, fR=gro.r+16;
+      set('floor','M '+pro.cx+' '+pro.b+' L '+pro.cx+' '+floorY+
+                  ' M '+gro.cx+' '+gro.b+' L '+gro.cx+' '+floorY+
+                  ' M '+fL+' '+floorY+' L '+fR+' '+floorY);
+      const lD='M '+fL+' '+floorY+' L '+apexX+' '+apexY;
+      const rD='M '+fR+' '+floorY+' L '+apexX+' '+apexY;
+      set('vl',lD); set('vr',rD);
+      fxStage.querySelector('[data-hit=vl]').setAttribute('d',lD);
+      fxStage.querySelector('[data-hit=vr]').setAttribute('d',rD);
+      /* left rail runs down-right, right rail runs up-right, so both labels read L→R */
+      fxStage.querySelector('#tp-l').setAttribute('d',lD);
+      fxStage.querySelector('#tp-r').setAttribute('d','M '+apexX+' '+apexY+' L '+fR+' '+floorY);
+    }
+    function light(key){
+      const on=key?(LIT[key]||[]):[];
+      lines.forEach(l=>l.dataset.lit = on.includes(l.dataset.ln)?'1':'0');
+      if(key) fxStage.dataset.lit='1'; else delete fxStage.dataset.lit;
+    }
+    function fill(key){
+      const t=TIPS[key], box=tips[key];
+      box.innerHTML = t.text ? '<span class="tip-b"></span>'
+        : '<span class="tip-empty">1–2 sentences on what you mean by this — not written yet.</span>';
+      if(t.text) box.querySelector('.tip-b').innerHTML = t.text;
+    }
+    function placeTip(key, extra, bounded){
+      const t=TIPS[key], el=nodeOf(key), box=tips[key];
+      if(!t||!el) return null;
+      const R=fxStage.getBoundingClientRect();
+      const narrow = innerWidth<=760;
+      box.style.width = narrow ? Math.min(R.width-16,360)+'px' : '';
+      box.style.left='0px'; box.style.top='0px'; box.classList.add('is-on');
+      const anchor = el.classList.contains('rail-g') ? el.querySelector('.rail') : el;
+      const b=anchor.getBoundingClientRect(), tw=box.offsetWidth, th=box.offsetHeight;
+      const cx=b.left+b.width/2-R.left;
+      let sol;
+      if(narrow){
+        const below=(b.bottom+th+GAP)<=innerHeight-4;
+        sol={side:below?'bottom':'top', x:Math.max(8,Math.min(cx-tw/2,R.width-tw-8)),
+             y: below?(b.bottom-R.top)+GAP:(b.top-R.top)-th-GAP};
+        sol.caret=cx-sol.x;
+      } else {
+        const obs=obstacles().concat(extra||[]);
+        const order=[].concat(t.place||'top');
+        const lim = bounded ? {top:R.top-4, bottom:R.bottom+4} : null;
+        for(const relax of [false,true]){
+          for(const sd of order){
+            const r=solve(sd,b,R,tw,th,obs,el,relax,lim);
+            if(r && (!sol||r.cost<sol.cost)) sol=r;
+          }
+          if(sol && sol.cost===0) break;
+        }
+        if(!sol){ const qq=place(order[0],b,R,tw,th,0);
+          sol={side:order[0], x:Math.max(8,Math.min(qq.x,R.width-tw-8)), y:qq.y, caret:caretFor(qq)}; }
+      }
+      box.dataset.side=sol.side; box.style.left=sol.x+'px'; box.style.top=sol.y+'px';
+      box.style.setProperty('--caret', Math.max(14, Math.min(sol.caret,(sol.side==='top'||sol.side==='bottom'?tw:th)-14))+'px');
+      box.setAttribute('aria-hidden','false');
+      return {left:R.left+sol.x, top:R.top+sol.y, right:R.left+sol.x+tw, bottom:R.top+sol.y+th};
+    }
+    function hideTip(k){ const b=tips[k]; if(!b) return; b.classList.remove('is-on'); b.setAttribute('aria-hidden','true'); }
+    function fxShow(el,key){ if(allOn){ light(key); return; } if(openKey&&openKey!==key) hideTip(openKey);
+      openKey=key; fill(key); placeTip(key); light(key); }
+    function fxHide(){ if(allOn){ light(null); return; } if(openKey){ hideTip(openKey); openKey=null; } light(null); }
+    const ALL_ORDER=['science','operations','product','growth','strategy','north-star'];
+    function setAll(on){
+      allOn=on;
+      if(on) fxStage.dataset.all='1'; else delete fxStage.dataset.all;
+      defsBtn.textContent = on?'Hide definitions':'Show definitions';
+      defsBtn.setAttribute('aria-pressed', String(on));
+      if(openKey){ hideTip(openKey); openKey=null; }
+      light(null);
+      if(!on){ Object.keys(tips).forEach(hideTip); return; }
+      const placed=[];
+      for(const k of ALL_ORDER){ fill(k); const r=placeTip(k,placed,true); if(r) placed.push({el:tips[k],r}); }
+    }
+
+    fxStage.querySelectorAll('[data-tip]').forEach(el=>{
+      const key=el.dataset.tip;
+      el.addEventListener('mouseenter',()=>fxShow(el,key));
+      el.addEventListener('mouseleave',fxHide);
+      el.addEventListener('focus',()=>fxShow(el,key));
+      el.addEventListener('blur',fxHide);
+      el.addEventListener('click',e=>{ e.stopPropagation(); if(allOn) return; openKey===key?fxHide():fxShow(el,key); });
+    });
+    defsBtn.addEventListener('click',e=>{ e.stopPropagation(); setAll(!allOn); });
+    document.addEventListener('click',()=>{ if(openKey) fxHide(); });
+    document.addEventListener('keydown',e=>{ if(e.key!=='Escape') return; if(allOn) setAll(false); else if(openKey) fxHide(); });
+
+    /* screen readers get the same text, without the floating box */
+    for(const [key,t] of Object.entries(TIPS)){
+      if(!t.text) continue;
+      const el=nodeOf(key); if(!el) continue;
+      const id='desc-'+key;
+      const sp=document.createElement('span'); sp.className='sr-only'; sp.id=id; sp.innerHTML=t.text;
+      el.appendChild(sp); el.setAttribute('aria-describedby',id);
+    }
+
+    /* the About page is display:none until routed to, so measure when it becomes active */
+    const aboutPage = fxStage.closest('.page');
+    if (aboutPage) new MutationObserver(()=>{
+      if (aboutPage.classList.contains('is-active')) requestAnimationFrame(fxLayout);
+    }).observe(aboutPage,{attributes:true, attributeFilter:['class']});
+    addEventListener('resize', ()=>{ fxLayout(); if(allOn) setAll(true); else if(openKey) fxHide(); });
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(fxLayout);
+    requestAnimationFrame(fxLayout);
+  })();
+
 
   /* ════════ Easter eggs ════════ */
 
@@ -1475,15 +1662,6 @@ body.night .horus-note{background:oklch(0.258 0.020 152 / .84)}
   }
   window.addEventListener('scroll', updateRead, { passive: true });
   window.addEventListener('resize', updateRead);
-
-  /* 2. Cursor-aware sheen on the capability cards */
-  if (!reduce) qCaps.forEach(card => {
-    card.addEventListener('pointermove', e => {
-      const r = card.getBoundingClientRect();
-      card.style.setProperty('--mx', (e.clientX - r.left) + 'px');
-      card.style.setProperty('--my', (e.clientY - r.top) + 'px');
-    });
-  });
 
   /* 3. North Star — click to twinkle + draw a tiny constellation */
   const nsStar = $('.northstar .jit'), nsFig = $('.northstar');

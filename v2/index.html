@@ -389,10 +389,9 @@ body.night .horus-note{background:oklch(0.258 0.020 152 / .84)}
 
 /* ══════════════ ABOUT — the framework ══════════════ */
 .sr-only{position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0}
-.fx-stage{position:relative; margin:var(--s6) 0 0; --vdrop:150px}
+.fx-stage{position:relative; margin:var(--s6) 0 0}
 .fx{position:absolute; inset:0; width:100%; height:100%; overflow:visible; pointer-events:none}
-.fx .hit{pointer-events:auto}
-/* the nodes layer spans the whole stage, so it must not swallow events aimed at the rails */
+/* the nodes layer spans the whole stage; only the nodes themselves take events */
 .fx-nodes{position:relative; display:flex; flex-direction:column; align-items:center; pointer-events:none}
 .fx-nodes .nd{pointer-events:auto}
 .fx-row{display:grid; grid-template-columns:1fr 1fr; gap:var(--s3); width:100%; max-width:32rem}
@@ -400,14 +399,9 @@ body.night .horus-note{background:oklch(0.258 0.020 152 / .84)}
 [data-tip]{cursor:help}
 .fx-nodes .gap-arrow{margin-bottom:84px}
 .fx-nodes .gap-bracket{margin-bottom:44px}
-.fx-nodes .gap-v{margin-bottom:var(--vdrop)}
+.fx-nodes .gap-v{margin-bottom:44px}
 
 .fx .ln{fill:none; stroke:var(--line-2); stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round; transition:stroke .3s ease, stroke-width .3s ease}
-.fx .rail{font-family:var(--body); font-size:10.5px; letter-spacing:.13em; text-transform:uppercase; font-weight:600; fill:var(--ink-3); transition:fill .3s ease}
-/* generous invisible target so the whole rail is hoverable, not just the glyphs */
-.fx .lnhit{fill:none; stroke:transparent; stroke-width:30; pointer-events:stroke}
-.fx .rail-g{cursor:help}
-.fx .rail-g:hover .rail,.fx .rail-g:focus-visible .rail{fill:var(--clay-deep)}
 .fx-stage[data-lit] .ln:not([data-lit="1"]){stroke:var(--line)}
 .fx .ln[data-lit="1"]{stroke:var(--clay); stroke-width:2.1}
 
@@ -424,6 +418,8 @@ body.night .horus-note{background:oklch(0.258 0.020 152 / .84)}
 .nd-card:hover,.nd-card:focus-visible{transform:translateY(-3px); border-color:var(--clay); box-shadow:var(--shadow-lift)}
 /* one column of .fx-row: (40rem minus the 1.5rem gap) / 2 */
 .nd-strategy{width:100%; max-width:15.5rem}
+/* Operations mirrors Strategy: the bracket that split the work rejoins it here */
+.nd-ops{width:100%; max-width:15.5rem; margin-bottom:72px}
 /* the category name leads; the tagline takes the small-caps kicker treatment */
 .nd-card .cl{font-family:var(--display); font-size:1.2rem; font-weight:400; letter-spacing:-.01em; line-height:1.1;
   text-transform:none; color:var(--ink); display:block; margin-bottom:.4rem; transition:color .3s ease}
@@ -461,7 +457,6 @@ body.night .horus-note{background:oklch(0.258 0.020 152 / .84)}
 @media (max-width:1150px){ .tip{max-width:10rem} }
 @media (max-width:760px){
   .defs-toggle{display:none}
-  .fx-stage{--vdrop:120px}
   .fx-row{max-width:none; gap:var(--s2)}
   .nd-card{padding:var(--s3)}
   .nd-card .cl{font-size:1.2rem}
@@ -567,19 +562,8 @@ body.night .horus-note{background:oklch(0.258 0.020 152 / .84)}
           <svg class="fx">
             <path class="ln" data-ln="stem"></path>
             <path class="ln" data-ln="bracket"></path>
-            <path class="ln" data-ln="floor"></path>
-            <path id="tp-l" fill="none" stroke="none"></path>
-            <path id="tp-r" fill="none" stroke="none"></path>
-            <g class="rail-g hit" data-tip="science" tabindex="0" role="img" aria-label="Experimentation">
-              <path class="ln" data-ln="vl"></path>
-              <path class="lnhit" data-hit="vl"></path>
-              <text class="rail" dy="-10"><textPath href="#tp-l" startOffset="50%" text-anchor="middle">Experimentation</textPath></text>
-            </g>
-            <g class="rail-g hit" data-tip="operations" tabindex="0" role="img" aria-label="Operations">
-              <path class="ln" data-ln="vr"></path>
-              <path class="lnhit" data-hit="vr"></path>
-              <text class="rail" dy="-10"><textPath href="#tp-r" startOffset="50%" text-anchor="middle">Operations</textPath></text>
-            </g>
+            <path class="ln" data-ln="join"></path>
+            <path class="ln" data-ln="tail"></path>
           </svg>
 
           <div class="fx-nodes">
@@ -600,6 +584,10 @@ body.night .horus-note{background:oklch(0.258 0.020 152 / .84)}
                 <span class="cl">Growth</span>
                 <h3>Turning attention into adoption</h3></button>
             </div>
+
+            <button type="button" class="nd nd-card nd-ops" data-node="operations" data-tip="operations">
+              <span class="cl">Operations</span>
+              <h3>Turning process into leverage</h3></button>
 
             <div class="nd nd-term" data-node="progress">Someone better off</div>
           </div>
@@ -1445,13 +1433,11 @@ body.night .horus-note{background:oklch(0.258 0.020 152 / .84)}
       text:'Building, designing, and iterating answers around user pain points and systemic bottlenecks.' },
     'growth':     { place:['bottom','right','top','left'],
       text:'Uniting sales, business development, and marketing into a go-to-market engine.' },
-    'science':    { place:['left','bottom','right','top'],
-      text:'Harnessing hypothesis-led, data-driven experimentation to safely navigate reality and imagination.' },
     'operations': { place:['right','bottom','left','top'],
       text:'Tailoring infrastructure, processes, and workflows that make everything repeatable.' }
   };
   const LIT = { 'north-star':['stem'], 'strategy':['stem','bracket'],
-                'product':['bracket','floor'], 'growth':['bracket','floor'], 'science':['vl'], 'operations':['vr'] };
+                'product':['bracket','join'], 'growth':['bracket','join'], 'operations':['join','tail'] };
 
   const fxStage = $('.fx-stage');
   if (fxStage) (function(){
@@ -1503,8 +1489,6 @@ body.night .horus-note{background:oklch(0.258 0.020 152 / .84)}
       }
       return best;
     }
-    /* rail labels are measured glyph by glyph: a rotated label's bounding rect is the
-       whole diagonal, which would rule out the empty middle of the V for no reason */
     function obstacles(){
       const out=[];
       if(defsBtn) out.push({el:defsBtn, r:defsBtn.getBoundingClientRect()});
@@ -1512,18 +1496,6 @@ body.night .horus-note{background:oklch(0.258 0.020 152 / .84)}
       const toc=document.querySelector('.toc-inner');
       if(toc && getComputedStyle(toc).display!=='none') out.push({el:toc, r:toc.getBoundingClientRect(), w:8});
       fxStage.querySelectorAll('.nd-star,.nd-card,.nd-term').forEach(n=>out.push({el:n,r:n.getBoundingClientRect()}));
-      fxStage.querySelectorAll('text.rail').forEach(t=>{
-        const m=t.getScreenCTM(); if(!m) return;
-        const owner=t.closest('.rail-g');
-        let n=0; try{ n=t.getNumberOfChars(); }catch(e){ return; }
-        for(let i=0;i<n;i++){
-          let e; try{ e=t.getExtentOfChar(i); }catch(err){ continue; }
-          const pts=[[e.x,e.y],[e.x+e.width,e.y],[e.x,e.y+e.height],[e.x+e.width,e.y+e.height]]
-            .map(([x,y])=>new DOMPoint(x,y).matrixTransform(m));
-          const xs=pts.map(p=>p.x), ys=pts.map(p=>p.y);
-          out.push({el:owner, r:{left:Math.min(...xs),right:Math.max(...xs),top:Math.min(...ys),bottom:Math.max(...ys)}});
-        }
-      });
       return out;
     }
 
@@ -1534,7 +1506,8 @@ body.night .horus-note{background:oklch(0.258 0.020 152 / .84)}
       const q=sel=>{ const b=fxStage.querySelector(sel).getBoundingClientRect();
         return {l:b.left-R.left,r:b.right-R.left,t:b.top-R.top,b:b.bottom-R.top,cx:b.left+b.width/2-R.left}; };
       const hum=q('[data-node=humanity]'), str=q('[data-node=strategy]'),
-            pro=q('[data-node=product]'), gro=q('[data-node=growth]'), prg=q('[data-node=progress]');
+            pro=q('[data-node=product]'), gro=q('[data-node=growth]'),
+            ops=q('[data-node=operations]'), prg=q('[data-node=progress]');
       const set=(n,d)=>{ const el=fxStage.querySelector('[data-ln='+n+']'); if(el) el.setAttribute('d',d); };
       const aY=str.t-12;
       set('stem','M '+hum.cx+' '+(hum.b+10)+' L '+hum.cx+' '+aY+
@@ -1542,21 +1515,13 @@ body.night .horus-note{background:oklch(0.258 0.020 152 / .84)}
       const barY=str.b+(pro.t-str.b)/2, barL=pro.l-16, barR=gro.r+16;
       set('bracket','M '+str.cx+' '+(str.b+8)+' L '+str.cx+' '+barY+
                     ' M '+barL+' '+(barY+15)+' L '+barL+' '+barY+' L '+barR+' '+barY+' L '+barR+' '+(barY+15));
-      const apexX=(pro.l+gro.r)/2, apexY=prg.t-14;
-      /* both cards drop into a collector bar and the funnel descends from its ends,
-         so the rails visibly carry both workstreams rather than one each */
-      const floorY=pro.b+26, fL=pro.l-16, fR=gro.r+16;
-      set('floor','M '+pro.cx+' '+pro.b+' L '+pro.cx+' '+floorY+
-                  ' M '+gro.cx+' '+gro.b+' L '+gro.cx+' '+floorY+
-                  ' M '+fL+' '+floorY+' L '+fR+' '+floorY);
-      const lD='M '+fL+' '+floorY+' L '+apexX+' '+apexY;
-      const rD='M '+fR+' '+floorY+' L '+apexX+' '+apexY;
-      set('vl',lD); set('vr',rD);
-      fxStage.querySelector('[data-hit=vl]').setAttribute('d',lD);
-      fxStage.querySelector('[data-hit=vr]').setAttribute('d',rD);
-      /* left rail runs down-right, right rail runs up-right, so both labels read L→R */
-      fxStage.querySelector('#tp-l').setAttribute('d',lD);
-      fxStage.querySelector('#tp-r').setAttribute('d','M '+apexX+' '+apexY+' L '+fR+' '+floorY);
+      /* the same bracket, flipped: Product and Growth rejoin into Operations */
+      const joinY=pro.b+(ops.t-pro.b)/2;
+      set('join','M '+barL+' '+(joinY-15)+' L '+barL+' '+joinY+' L '+barR+' '+joinY+' L '+barR+' '+(joinY-15)+
+                 ' M '+ops.cx+' '+joinY+' L '+ops.cx+' '+(ops.t-8));
+      const tY=prg.t-12;
+      set('tail','M '+ops.cx+' '+(ops.b+10)+' L '+ops.cx+' '+tY+
+                 ' M '+(ops.cx-5.5)+' '+(tY-8)+' L '+ops.cx+' '+tY+' L '+(ops.cx+5.5)+' '+(tY-8));
     }
     function light(key){
       const on=key?(LIT[key]||[]):[];
@@ -1576,8 +1541,7 @@ body.night .horus-note{background:oklch(0.258 0.020 152 / .84)}
       const narrow = innerWidth<=760;
       box.style.width = narrow ? Math.min(R.width-16,360)+'px' : '';
       box.style.left='0px'; box.style.top='0px'; box.classList.add('is-on');
-      const anchor = el.classList.contains('rail-g') ? el.querySelector('.rail') : el;
-      const b=anchor.getBoundingClientRect(), tw=box.offsetWidth, th=box.offsetHeight;
+      const b=el.getBoundingClientRect(), tw=box.offsetWidth, th=box.offsetHeight;
       const cx=b.left+b.width/2-R.left;
       let sol;
       if(narrow){
@@ -1608,7 +1572,7 @@ body.night .horus-note{background:oklch(0.258 0.020 152 / .84)}
     function fxShow(el,key){ if(allOn){ light(key); return; } if(openKey&&openKey!==key) hideTip(openKey);
       openKey=key; fill(key); placeTip(key); light(key); }
     function fxHide(){ if(allOn){ light(null); return; } if(openKey){ hideTip(openKey); openKey=null; } light(null); }
-    const ALL_ORDER=['science','operations','product','growth','strategy','north-star'];
+    const ALL_ORDER=['operations','product','growth','strategy','north-star'];
     function setAll(on){
       allOn=on;
       if(on) fxStage.dataset.all='1'; else delete fxStage.dataset.all;

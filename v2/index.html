@@ -445,6 +445,7 @@ body.night .horus-note{background:oklch(0.258 0.020 152 / .84)}
 .tip.is-on{opacity:1; transform:translateY(0); visibility:visible}
 .tip .tip-empty{font-style:italic; color:var(--ink-3)}
 .tip em{font-style:italic; color:var(--ink)}
+.tip b{font-weight:600; color:var(--ink)}
 .tip::after{content:""; position:absolute; width:9px; height:9px; background:var(--note); border:1px solid var(--note-line); border-top:0; border-left:0}
 .tip[data-side="top"]::after   {bottom:-5.5px; left:calc(var(--caret) - 4.5px); transform:rotate(45deg)}
 .tip[data-side="bottom"]::after{top:-5.5px;    left:calc(var(--caret) - 4.5px); transform:rotate(225deg)}
@@ -574,20 +575,20 @@ body.night .horus-note{background:oklch(0.258 0.020 152 / .84)}
 
             <button type="button" class="nd nd-card nd-strategy gap-bracket" data-node="strategy" data-tip="strategy">
               <span class="cl">Strategy</span>
-              <h3>Turning complexity into direction</h3></button>
+              <h3>Where to go</h3></button>
 
             <div class="fx-row gap-v">
               <button type="button" class="nd nd-card" data-node="product" data-tip="product">
                 <span class="cl">Product</span>
-                <h3>Turning signal into solutions</h3></button>
+                <h3>What to build<br>How to build it</h3></button>
               <button type="button" class="nd nd-card" data-node="growth" data-tip="growth">
                 <span class="cl">Growth</span>
-                <h3>Turning attention into adoption</h3></button>
+                <h3>Who to reach<br>How to win them</h3></button>
             </div>
 
             <button type="button" class="nd nd-card nd-ops" data-node="operations" data-tip="operations">
               <span class="cl">Operations</span>
-              <h3>Turning process into leverage</h3></button>
+              <h3>How to get there</h3></button>
 
             <div class="nd nd-term" data-node="progress">Someone better off</div>
           </div>
@@ -1428,13 +1429,13 @@ body.night .horus-note{background:oklch(0.258 0.020 152 / .84)}
     'north-star': { place:['top','bottom','right','left'],
       text:'What do people need <em>now</em>? And how do we fulfill that need in the next 5 years instead of 50?' },
     'strategy':   { place:['right','left','top','bottom'],
-      text:'Using research, evidence, and ontologies to uncover the truth and communicate our next steps.' },
+      text:'<b>Turning complexity into direction.</b> Using research, evidence, and ontologies to uncover the truth and communicate our next steps.' },
     'product':    { place:['bottom','left','top','right'],
-      text:'Building, designing, and iterating answers around user pain points and systemic bottlenecks.' },
+      text:'<b>Turning signal into solutions.</b> Building, designing, and iterating answers around user pain points and systemic bottlenecks.' },
     'growth':     { place:['bottom','right','top','left'],
-      text:'Uniting sales, business development, and marketing into a go-to-market engine.' },
+      text:'<b>Turning attention into adoption.</b> Uniting sales, business development, and marketing into a go-to-market engine.' },
     'operations': { place:['right','bottom','left','top'],
-      text:'Tailoring infrastructure, processes, and workflows that make everything repeatable.' }
+      text:'<b>Turning process into leverage.</b> Tailoring infrastructure, processes, and workflows that make everything repeatable.' }
   };
   const LIT = { 'north-star':['stem'], 'strategy':['stem','bracket'],
                 'product':['bracket','join'], 'growth':['bracket','join'], 'operations':['join','tail'] };
